@@ -1,3 +1,10 @@
+Important Note
+==============
+
+This a port from bitbucket and currently completely broken. Find the working version of
+[PyMbs here](https://bitbucket.org/pymbs/pymbs/src/master/?at=default).
+
+
 About
 =====
 
