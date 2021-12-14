@@ -1,0 +1,3 @@
+LIBRARY "symbolics.pyd"
+EXPORTS 
+PyInit_symbolics

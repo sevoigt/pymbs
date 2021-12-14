@@ -1,0 +1,8 @@
+
+.vscode/*
+build/*
+
+*.pyc
+*.pyo
+
+Thumbs.db
