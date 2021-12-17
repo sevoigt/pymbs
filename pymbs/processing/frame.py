@@ -1,37 +1,7 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.common.abstractframe import AbstractFrame
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+import pymbs.symbolics as symbolics
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 30.06.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Common.AbstractFrame import AbstractFrame
-
-from . import Body
-from . import Joint
-
-import PyMbs.Symbolics as Symbolics
 
 class Frame(AbstractFrame):
     '''
@@ -39,7 +9,7 @@ class Frame(AbstractFrame):
     '''
 
 
-    def __init__(self, name, parentBody, p=Symbolics.zeros((3,)), R=Symbolics.eye((3,3)), graph = None):
+    def __init__(self, name, parentBody, p=symbolics.zeros((3,)), R=symbolics.eye((3,3)), graph = None):
         '''
         Constructor
         parentBody: Reference to ParentBody (Body)
@@ -47,8 +17,11 @@ class Frame(AbstractFrame):
         R: Orientation (3x3 Vector)
         '''
 
+        # TODO bad design, need this here to avoid circular import
+        from pymbs.processing import Body, FlexibleBody
+
         # Assertions
-        assert( isinstance(parentBody, (Body.Body,Body.FlexibleBody) ))
+        assert( isinstance(parentBody, (Body, FlexibleBody) ))
 
         # Constructor
         assert graph is not None
@@ -81,17 +54,20 @@ class Frame(AbstractFrame):
         axis: Axis of Translation/Rotation (normalised 3x1 vector)
         '''
 
+        # TODO bad design, need this here to avoid circular import
+        from pymbs.processing import Joint
+
         # Name of Bodies Involved
-        pName = self.parentBody.name;
-        cName = body.name;
+        pName = self.parentBody.name
+        cName = body.name
 
         # Create a Joint Object
         if ((type == 'Rot') or (type == 'Rotation')):
             if (name is None): name = 'Rot_%s_%s' % (pName, cName)
-            j = Joint.Joint(name, self, body, Symbolics.zeros((3,)), axis, q0, qd0, self.graph)
+            j = Joint(name, self, body, symbolics.zeros((3,)), axis, q0, qd0, self.graph)
         elif ((type == 'Trans') or (type == 'Translation')):
             if (name is None): name = 'Trans_%s_%s' % (pName, cName)
-            j = Joint.Joint(name, self, body, axis, Symbolics.zeros((3,)), q0, qd0, self.graph)
+            j = Joint(name, self, body, axis, symbolics.zeros((3,)), q0, qd0, self.graph)
         else:
             raise NameError('Unknown Joint Type: %s' % type)
 
@@ -100,3 +76,4 @@ class Frame(AbstractFrame):
         body.joint = j
 
         return j
+        

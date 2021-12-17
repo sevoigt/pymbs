@@ -1,30 +1,17 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.processing.generator import *
+from pymbs.processing.loads.constraint import Constraint
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.common.functions import skew, transpose, solve, der, scalar, scalar_if_possible,\
+                                    blockMatrix, blockVector, outer, vector_if_possible
+from pymbs.common.state import State
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+from pymbs.symbolics import zeros, Matrix, jacobian, eye, Graph
 
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
+import pymbs.processing.sensors
 
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
+from pymbs.processing import Body, FlexibleBody
+import pymbs.symbolics as sym
 
-'''
-Created on 01.07.2009
-
-@author: Christian Schubert
-'''
 
 BETA_STAR = 'int_beta_star_%s'
 RR = 'int_RR_%s_%s'
@@ -75,21 +62,6 @@ inert = 'int_inertia_%s'
 
 FAST_ACCESS = True  # Use Fast Access, i.e. instead of e^T*b, directly access b(e_index)
 
-from PyMbs.Processing.Generator import *
-from PyMbs.Processing.LoadElements.Constraint import Constraint
-
-from PyMbs.Symbolics import Graph, SymmetricMatrix, eye
-
-from PyMbs.Common.Functions import skew, transpose, solve, der, scalar, scalar_if_possible,\
-                                    blockMatrix, blockVector, outer, vector_if_possible
-from PyMbs.Common.State import State
-
-from PyMbs.Symbolics import zeros, Matrix, jacobian
-
-import PyMbs.Processing.Sensors.EnergySensor
-
-from PyMbs.Processing.Body import FlexibleBody
-from PyMbs.Processing.Body import Body
 
 import numpy as np
 
@@ -146,8 +118,8 @@ class Generator_OrderN(Generator):
         # Calculate Sensors (before accelerations)
         for sens in self.sensors:
             if (not sens.delayCalc):
-                if (isinstance(sens, PyMbs.Processing.Sensors.EnergySensor)):
-                    sens.gravity = -self.inertial._alpha_C;
+                if (isinstance(sens, pymbs.processing.sensors.EnergySensor)):
+                    sens.gravity = -self.inertial._alpha_C
                 sens.calc(graph)
 
         if (self.kinematicsOnly):
@@ -164,8 +136,8 @@ class Generator_OrderN(Generator):
         # Calculate Sensors (after accelerations)
         for sens in self.sensors:
             if (sens.delayCalc):
-                if (isinstance(sens, PyMbs.Processing.Sensors.EnergySensor)):
-                    sens.gravity = -self.inertial._alpha_C;
+                if (isinstance(sens, pymbs.processing.sensors.EnergySensor)):
+                    sens.gravity = -self.inertial._alpha_C
                 sens.calc(graph)
 
         # Temporary Workaround
@@ -195,16 +167,16 @@ class Generator_OrderN(Generator):
 
             if (body.joint is None):
                 # Set Position and Angular Velocity to Zero, Rotational Matrix = Identity
-                body.I_r = graph.addEquation(I_p%bName, Symbolics.zeros((3,)), shape=(3,))
-                body.I_v = graph.addEquation(I_v%bName, Symbolics.zeros((3,)), shape=(3,))
+                body.I_r = graph.addEquation(I_p%bName, sym.zeros((3,)), shape=(3,))
+                body.I_v = graph.addEquation(I_v%bName, sym.zeros((3,)), shape=(3,))
 
                 if (not self.kinematicsOnly):
-                    body.I_a = graph.addEquation(I_a%bName, Symbolics.zeros((3,)), shape=(3,))
+                    body.I_a = graph.addEquation(I_a%bName, sym.zeros((3,)), shape=(3,))
 
-                body.I_R = graph.addEquation(T1%bName, Symbolics.eye((3,3)), shape=(3,3))
+                body.I_R = graph.addEquation(T1%bName, sym.eye((3,3)), shape=(3,3))
                 body._R_ih = body.I_R
-                body.K_om = graph.addEquation(omega%bName, Symbolics.zeros((3,)), shape=(3,))
-                body.I_om = Symbolics.zeros((3,))
+                body.K_om = graph.addEquation(omega%bName, sym.zeros((3,)), shape=(3,))
+                body.I_om = sym.zeros((3,))
                 body._K_om_tilde = graph.addEquation(omega_tilde%bName, zeros((3,3)), shape=(3,3))
                 body._a = Matrix([0,0,0,-self.g[0], -self.g[1], -self.g[2]])
                 if (self.hasKinematicLoops):
@@ -212,13 +184,13 @@ class Generator_OrderN(Generator):
                     body._a_gamma = zeros( (6,self.n_gamma) )
 
                 if (not self.kinematicsOnly):
-                    body.K_al = graph.addEquation(omegad%bName, Symbolics.zeros((3,)), shape=(3,))
-                    body.I_al = Symbolics.zeros((3,))
-                    body._K_al_tilde = graph.addEquation(omegad_tilde%bName, Symbolics.zeros((3,3)))
+                    body.K_al = graph.addEquation(omegad%bName, sym.zeros((3,)), shape=(3,))
+                    body.I_al = sym.zeros((3,))
+                    body._K_al_tilde = graph.addEquation(omegad_tilde%bName, sym.zeros((3,3)))
                     body._beta_star = graph.addEquation(BETA_STAR%bName, zeros((3,3)))
 
                 # Initial Values
-                body._omegad_C = graph.addEquation(omegad_C%bName, Symbolics.zeros((3,)), shape=(3,))
+                body._omegad_C = graph.addEquation(omegad_C%bName, sym.zeros((3,)), shape=(3,))
                 body._beta_C = graph.addEquation(beta_C%bName, zeros((3,3)), shape=(3,3))
                 body._alpha_C = graph.addEquation(alpha_C%bName, -self.g, shape=(3,))
 
@@ -322,7 +294,7 @@ class Generator_OrderN(Generator):
                 body.I_om = graph.addEquation("_I_"+omega%bName, body.I_R*body.K_om) # compatibility
                 body._K_om_tilde = graph.addEquation(omega_tilde%bName, skew(body.K_om), shape=(3,3))
                 # eq.(6.248) Wallrap "Dynamik flexibler Mehrkörpersysteme"
-                omegaq = Symbolics.zeros((6,))
+                omegaq = sym.zeros((6,))
                 omegaq[0] = body.K_om[0,0]*body.K_om[0,0]
                 omegaq[1] = body.K_om[1,0]*body.K_om[1,0]
                 omegaq[2] = body.K_om[2,0]*body.K_om[2,0]
@@ -543,13 +515,13 @@ class Generator_OrderN(Generator):
             if (not isinstance(load, Constraint)):  # Normal Load
                 # Force
                 if (load.force is None):
-                    load._F = Symbolics.zeros((3,))
+                    load._F = sym.zeros((3,))
                 else:
                     Wf = graph.addEquation(WF%lName, load.Wf)
                     load._F = graph.addEquation(F%lName, Wf*load.force, shape=(3,))
                 # Torque
                 if (load.torque is None):
-                    load._L = Symbolics.zeros((3,))
+                    load._L = sym.zeros((3,))
                 else:
                     Wt = graph.addEquation(WT%lName, load.Wt)
                     load._L = graph.addEquation(L%lName, Wt*load.torque, shape=(3,))
@@ -558,13 +530,13 @@ class Generator_OrderN(Generator):
                 # self.state.mu dictates in which column which information is stored
                 # Force
                 if (load.force is None):
-                    load._Wf = Symbolics.zeros((3,n))
+                    load._Wf = sym.zeros((3,n))
                 else:
                     Wf = load.Wf*jacobian(load.force,Lambda)
                     load._Wf = graph.addEquation(WF%lName, Wf)
                 # Torque
                 if (load.torque is None):
-                    load._Wt = Symbolics.zeros((3,n))
+                    load._Wt = sym.zeros((3,n))
                 else:
                     Wt = load.Wt*jacobian(load.torque,Lambda)
                     load._Wt = graph.addEquation(WT%lName, Wt)
@@ -628,13 +600,13 @@ class Generator_OrderN(Generator):
                                 Wf_constraint -= Wf_local
                                 Wt_constraint -= Wt_local
 
-                if (f_ext == 0): f_ext = Symbolics.zeros((3,))
-                if (l_ext == 0): l_ext = Symbolics.zeros((3,))
+                if (f_ext == 0): f_ext = sym.zeros((3,))
+                if (l_ext == 0): l_ext = sym.zeros((3,))
                 body._F_ext = graph.addEquation(F_EXT%bName, f_ext)
                 body._L_ext = graph.addEquation(L_EXT%bName, l_ext)
                 if (self.hasKinematicLoops):
-                    if (Wf_constraint == 0): Wf_constraint = Symbolics.zeros((3,len(self.state.Lambda)))
-                    if (Wt_constraint == 0): Wt_constraint = Symbolics.zeros((3,len(self.state.Lambda)))
+                    if (Wf_constraint == 0): Wf_constraint = sym.zeros((3,len(self.state.Lambda)))
+                    if (Wt_constraint == 0): Wt_constraint = sym.zeros((3,len(self.state.Lambda)))
                     body._WF_constraint = graph.addEquation(WF_CONSTR%bName, Wf_constraint)
                     body._WT_constraint = graph.addEquation(WT_CONSTR%bName, Wt_constraint)
                 body._Q = 0     # Joint load, could be used for implementing a better jointLoad later
@@ -771,15 +743,15 @@ class Generator_OrderN(Generator):
                                 Wf_constraint -= Wf_local
                                 Wt_constraint -= Wt_local
 
-                if (f_ext == 0): f_ext = Symbolics.zeros((3,))
-                if (l_ext == 0): l_ext = Symbolics.zeros((3,))
-                if (h_d_e == 0): h_de = Symbolics.zeros((body.sid.nModes,))
+                if (f_ext == 0): f_ext = sym.zeros((3,))
+                if (l_ext == 0): l_ext = sym.zeros((3,))
+                if (h_d_e == 0): h_de = sym.zeros((body.sid.nModes,))
                 body._F_ext = graph.addEquation(F_EXT%bName, f_ext)
                 body._L_ext = graph.addEquation(L_EXT%bName, l_ext)
                 h_de = graph.addEquation(hde%bName,h_d_e)
                 if (self.hasKinematicLoops):
-                    if (Wf_constraint == 0): Wf_constraint = Symbolics.zeros((3,len(self.state.Lambda)))
-                    if (Wt_constraint == 0): Wt_constraint = Symbolics.zeros((3,len(self.state.Lambda)))
+                    if (Wf_constraint == 0): Wf_constraint = sym.zeros((3,len(self.state.Lambda)))
+                    if (Wt_constraint == 0): Wt_constraint = sym.zeros((3,len(self.state.Lambda)))
                     body._WF_constraint = graph.addEquation(WF_CONSTR%bName, Wf_constraint)
                     body._WT_constraint = graph.addEquation(WT_CONSTR%bName, Wt_constraint)
                 body._Q = 0     # Joint load, could be used for implementing a better jointLoad later
@@ -854,7 +826,7 @@ class Generator_OrderN(Generator):
                 KSIGMA = self.get_SID_matrix('kSigma',bName,kSigma_M0,kSigma_M1,body)
 
                 # Inertia of flexible body (symetric inertia tensor)
-                Y = Symbolics.Matrix([[I[0,0], I[3,0], I[4,0]],
+                Y = sym.Matrix([[I[0,0], I[3,0], I[4,0]],
                                  [I[3,0], I[1,0], I[5,0]],
                                  [I[4,0], I[5,0], I[2,0]]])
 
@@ -1136,8 +1108,8 @@ class Generator_OrderN(Generator):
         '''
 
         # Generate empty matrices
-        G = Symbolics.zeros( (len(self.state.mu), n) )
-        Gdqd = Symbolics.zeros( (len(self.state.mu),) )
+        G = sym.zeros( (len(self.state.mu), n) )
+        Gdqd = sym.zeros( (len(self.state.mu),) )
         row = 0
 
         # Go through all constraints
@@ -1187,8 +1159,8 @@ class Generator_OrderN(Generator):
         if (joint is None):
             return 0, 0
 
-        G = Symbolics.Matrix( (6,n) )
-        Gdqd = Symbolics.Matrix( (6,) )
+        G = sym.Matrix( (6,n) )
+        Gdqd = sym.Matrix( (6,) )
 
         parentBody = joint.coordSys.parentBody
         pName = parentBody.name

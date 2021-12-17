@@ -1,41 +1,12 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.processing.loops.loop import Loop
+from pymbs.common.functions import sqrt
+from pymbs.processing import Frame
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.processing.loads.constraint import Constraint
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+from numpy import pi
 
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 13.07.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Processing.Loops.Loop import Loop
-from PyMbs.Common.Functions import sqrt
-from PyMbs.Processing.Joint import Joint
-from PyMbs.Processing.Frame import Frame
-
-from PyMbs.Processing.LoadElements import Constraint
-
-from scipy import pi
-
-from PyMbs.Symbolics import Matrix, eye, cos, sin, atan, atan2, acos, zeros, transpose
+from pymbs.symbolics import Matrix, eye, cos, sin, atan, atan2, acos, zeros, transpose
 
 AL = 'FB_%s_AL'
 BE = 'FB_%s_BE'
@@ -59,7 +30,7 @@ D = 'FB_%s_D'
 E = 'FB_%s_E'
 F = 'FB_%s_F'
 
-from PyMbs.Symbolics import Graph
+from pymbs.symbolics import Graph
 
 class FourBar(Loop):
     '''

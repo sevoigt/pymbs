@@ -1,49 +1,17 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.common.mbselement import MbsElement
+from pymbs.common.state import State
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.common.functions import transpose, element, norm
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+from pymbs.processing.sensors.sensor import Sensor
+from pymbs.processing.loops.loop import Loop
+from pymbs.processing.loops.exp_joint import ExpJoint
+from pymbs.processing.loads.constraint import Constraint
+from pymbs.processing import Body
 
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
+import pymbs.symbolics as symbolics
+from pymbs.symbolics import jacobian
 
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 01.07.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Common.MbsElement import MbsElement
-from PyMbs.Symbolics import VarKind
-from PyMbs.Common.State import State
-
-from PyMbs.Common.Functions import transpose, element, norm
-
-import PyMbs.Processing.Body
-from PyMbs.Processing.Body import FlexibleBody
-
-
-
-from PyMbs.Processing.Sensors.Sensor import Sensor
-from PyMbs.Processing.Loops.Loop import Loop
-from PyMbs.Processing.Loops.ExpJoint import ExpJoint
-from PyMbs.Processing.LoadElements.Constraint import Constraint
-
-import PyMbs.Symbolics as Symbolics
-from PyMbs.Symbolics import jacobian
 
 omega = 'int_omega_%s'
 omega_tilde = 'int_omega_tilde_%s'
@@ -140,7 +108,7 @@ Taylor_m1_activ = 'int_%s_Taylor_M1_order_%i_%s'
 V_NODE = 'int_V_%s_node%i'
 V = 'int_V_%s_node_%i'
 
-from PyMbs.Processing import Body
+
 
 class Generator(MbsElement):
     '''
@@ -160,13 +128,13 @@ class Generator(MbsElement):
         if (loops is None): loops = []
 
         # Type Conversion
-        if (isinstance(g, list)): g = Symbolics.Matrix(g)
+        if (isinstance(g, list)): g = symbolics.Matrix(g)
         if (isinstance(diff, int)): diff = [diff]
 
         # Assertions
         # Todo: py3 error
         #assert( isinstance(inertial, Body.Body) )
-        assert isinstance(g, Symbolics.Basic) and (g.shape() in ((3,),(3,1)))
+        assert isinstance(g, symbolics.Basic) and (g.shape() in ((3,),(3,1)))
         assert ( isinstance(sensors, list) )
         for s in sensors:
             assert( isinstance(s, Sensor) )
@@ -225,11 +193,11 @@ class Generator(MbsElement):
             '''
 
         # Save Matrices
-        self.q = Symbolics.Matrix(q)
-        self.q0 = Symbolics.Matrix(q0)
-        self.qd = Symbolics.Matrix(qd)
-        self.qd0 = Symbolics.Matrix(qd0)
-        self.qdd = Symbolics.Matrix(qdd)
+        self.q = symbolics.Matrix(q)
+        self.q0 = symbolics.Matrix(q0)
+        self.qd = symbolics.Matrix(qd)
+        self.qd0 = symbolics.Matrix(qd0)
+        self.qdd = symbolics.Matrix(qdd)
 
         # Set Up State
         self.state = State(q, qd, qdd, None)
@@ -442,10 +410,10 @@ class Generator(MbsElement):
             # Stop Criterion
             if (len(L) == 0):
                 assert( len(p) == len(qe) )
-                p_mat = Symbolics.Matrix(p)
-                qe_mat = Symbolics.Matrix(qe)
+                p_mat = symbolics.Matrix(p)
+                qe_mat = symbolics.Matrix(qe)
                 J = jacobian(p_mat,qe_mat)
-                d = Symbolics.Matrix( p_mat.shape() )
+                d = symbolics.Matrix( p_mat.shape() )
                 return J, d
 
             # Extract Loop
@@ -453,12 +421,12 @@ class Generator(MbsElement):
             L = L[1:]
 
             # get 'local' (in-)dependent coordinates
-            u_loc = Symbolics.Matrix(loop.u)
-            w_loc = Symbolics.Matrix(loop.v)
+            u_loc = symbolics.Matrix(loop.u)
+            w_loc = symbolics.Matrix(loop.v)
 
             qa = qe + loop.v
-            qa_mat = Symbolics.Matrix(qa)
-            qe_mat = Symbolics.Matrix(qe)
+            qa_mat = symbolics.Matrix(qa)
+            qe_mat = symbolics.Matrix(qe)
 
 
             # Distribution of u and v w.r.t. u_loc and w_loc
@@ -487,10 +455,10 @@ class Generator(MbsElement):
             for i in range(len(loop.v)):
                 graph.addEquation(loop.v[i], w_exp[i])
                 # This Line is a complicated expression for obtaining a vector full of zeros except for the i-th position which is one
-                wd_pick = Symbolics.Matrix((1,len(loop.v)))
+                wd_pick = symbolics.Matrix((1,len(loop.v)))
                 wd_pick[0,i] = 1
-                graph.addEquation(loop.vd[i], (wd_pick*Bwu_loc*Symbolics.Matrix(loop.ud))[0])
-                tmp = (wd_pick*(Bwu_loc*Symbolics.Matrix(loop.udd)+b_prime_loc))
+                graph.addEquation(loop.vd[i], (wd_pick*Bwu_loc*symbolics.Matrix(loop.ud))[0])
+                tmp = (wd_pick*(Bwu_loc*symbolics.Matrix(loop.udd)+b_prime_loc))
                 graph.addEquation(loop.vdd[i], tmp[0])
 
             # Assemble J
@@ -526,12 +494,12 @@ class Generator(MbsElement):
         for item in self.w: self.state.q.remove(item)
         for item in wd: self.state.qd.remove(item)
         oldq = self.q
-        self.q = Symbolics.Matrix(self.state.q)
+        self.q = symbolics.Matrix(self.state.q)
         oldqd = self.qd
-        self.qd = Symbolics.Matrix(self.state.qd)
+        self.qd = symbolics.Matrix(self.state.qd)
 
         for item in wdd: self.state.qdd.remove(item)
-        self.qdd = Symbolics.Matrix(self.state.qdd)
+        self.qdd = symbolics.Matrix(self.state.qdd)
 
         self.q0 = jacobian(self.q,oldq)*self.q0
         self.qd0 = jacobian(self.qd,oldqd)*self.qd0
@@ -550,13 +518,13 @@ class Generator(MbsElement):
         # ToDo: convert var_name into a symbol if a string has been passed
 
 		# Test if mat has shape of Matrix
-        assert( isinstance(mat, Symbolics.Matrix) )
-        assert( isinstance(symbol, Symbolics.Symbol) )
+        assert( isinstance(mat, symbolics.Matrix) )
+        assert( isinstance(symbol, symbolics.Symbol) )
 
         # get Dimension
         shape = mat.shape()
         assert( len(shape) > 0 )
-        new_var = Symbolics.Matrix(shape)
+        new_var = symbolics.Matrix(shape)
 
         if len(shape) == 1:
             for i in range(shape[0]):

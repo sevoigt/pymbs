@@ -1,34 +1,5 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 02.07.2009
-
-@author: Christian Schubert
-'''
-
-import PyMbs.Symbolics as Symbolics
-import numpy
-import scipy
+import pymbs.symbolics as symbolics
+import numpy as np
 
 
 def sqrt(arg):
@@ -41,9 +12,9 @@ def sin(arg):
     calculate sine
     """
     if isinstance(arg, (int,float)):
-        return scipy.sin(arg)
+        return np.sin(arg)
     else:
-        return Symbolics.sin(arg)
+        return symbolics.sin(arg)
 
 
 
@@ -52,9 +23,9 @@ def asin(arg):
     calculate arc sine
     """
     if isinstance(arg, (int,float)):
-        return scipy.arcsin(arg)
+        return np.arcsin(arg)
     else:
-        return Symbolics.asin(arg)
+        return symbolics.asin(arg)
 
 
 
@@ -63,9 +34,9 @@ def cos(arg):
     calculate cosine
     """
     if isinstance(arg, (int,float)):
-        return scipy.cos(arg)
+        return np.cos(arg)
     else:
-        return Symbolics.cos(arg)
+        return symbolics.cos(arg)
 
 
 
@@ -74,9 +45,9 @@ def acos(arg):
     calculate arc cosine
     """
     if isinstance(arg, (int,float)):
-        return scipy.arccos(arg)
+        return np.arccos(arg)
     else:
-        return Symbolics.acos(arg)
+        return symbolics.acos(arg)
 
 
 
@@ -85,9 +56,9 @@ def tan(arg):
     calculate tangent
     """
     if isinstance(arg, (int,float)):
-        return scipy.tan(arg)
+        return np.tan(arg)
     else:
-        return Symbolics.tan(arg)
+        return symbolics.tan(arg)
 
 
 
@@ -96,9 +67,9 @@ def atan(arg):
     calculate arc tangent
     """
     if isinstance(arg, (int,float)):
-        return scipy.arctan(arg)
+        return np.arctan(arg)
     else:
-        return Symbolics.atan(arg)
+        return symbolics.atan(arg)
 
 
 
@@ -107,9 +78,9 @@ def atan2(arg1, arg2):
     calculate arc tangent with two arguments
     """
     if isinstance(arg1, (int,float)) and isinstance(arg2, (int,float)):
-        return scipy.arctan2(arg1,arg2)
+        return np.arctan2(arg1,arg2)
     else:
-        return Symbolics.atan2(arg1,arg2)
+        return symbolics.atan2(arg1,arg2)
 
 
 
@@ -117,7 +88,7 @@ def outer(arg1, arg2):
     """
     outer or dyadic product
     """
-    return Symbolics.outer(arg1, arg2)
+    return symbolics.outer(arg1, arg2)
 
 
 
@@ -128,22 +99,22 @@ def der(arg):
     if isinstance(arg, (int,float)):
         return 0
     else:
-        return Symbolics.der(arg)
+        return symbolics.der(arg)
 
 
 
 def diag(vect):
     """
-    PyMbs.Symbolics diagonal matrix
+    pymbs.symbolics diagonal matrix
     """
     if (isinstance(vect, list)):
         L=len(vect)
-    elif (isinstance(vect, Symbolics.Matrix)):
+    elif (isinstance(vect, symbolics.Matrix)):
         assert(len(vect.shape()) == 1)
         L=vect.shape()[0]
     else:
-        raise ValueError('vect should be a list or a vector (PyMbs.Symbolics.Matrix) but an %s was encountered'%str(vect.__class__))
-    M=Symbolics.Matrix((L,L))
+        raise ValueError('vect should be a list or a vector (pymbs.symbolics.Matrix) but an %s was encountered'%str(vect.__class__))
+    M=symbolics.Matrix((L,L))
     for i in range(L):
         v = vect[i]
         M[i,i] = v
@@ -156,14 +127,14 @@ def norm(vec):
     Calculate norm
     """
 
-    if (isinstance(vec, Symbolics.zeros)):
+    if (isinstance(vec, symbolics.zeros)):
         return 0
 
-    assert isinstance(vec, Symbolics.Basic), "vec must be a symbolic type not a %s"%vec.__class__
+    assert isinstance(vec, symbolics.Basic), "vec must be a symbolic type not a %s"%vec.__class__
     assert (vec.shape() in ((3,), (3,1))), "vec must be a 3x1 vector but has shape %s"%vec.shape()
 
     n = sqrt(vec[0]**2+vec[1]**2+vec[2]**2)
-    if (isinstance(n, Symbolics.Basic)):
+    if (isinstance(n, symbolics.Basic)):
         n.simplify()
 
     return n
@@ -177,8 +148,8 @@ def symmetricMatrix(seq):
     with 6 elements
     """
 
-    assert isinstance(seq, (list, tuple, Symbolics.Matrix))
-    M=Symbolics.Matrix([[seq[0], seq[1], seq[3]],
+    assert isinstance(seq, (list, tuple, symbolics.Matrix))
+    M=symbolics.Matrix([[seq[0], seq[1], seq[3]],
                         [seq[1], seq[2], seq[4]],
                         [seq[3], seq[4], seq[5]]])
 
@@ -201,7 +172,7 @@ def blockMatrix(elements):
         assert len(i) > 0, "element list must not be empty"
 
         for a in i:
-            assert isinstance(a, (Symbolics.Matrix, Symbolics.Variable, Symbolics.zeros)), \
+            assert isinstance(a, (symbolics.Matrix, symbolics.Variable, symbolics.zeros)), \
                 "only Matrices and Variables are allowed, not %s (%s)"%(a, a.__class__)
             assert len(a.shape())==2, "Elements must be matrices themselves, but %s has shape %s"%\
                                             (a, a.shape())
@@ -217,7 +188,7 @@ def blockMatrix(elements):
         cols += shape[1]
 
     # Set up Matrix
-    M = Symbolics.Matrix((rows,cols))
+    M = symbolics.Matrix((rows,cols))
 
     # Fill it
     m = 0
@@ -259,8 +230,8 @@ def blockVector(elements):
                                             (elements, elements.__class__)
     assert len(elements) > 0, "element list must not be empty"
     for a in elements:
-        assert isinstance(a, (Symbolics.Matrix, Symbolics.Variable, Symbolics.zeros)), \
-            "only Matrices and Variables are allowed, not %s (%s)%"(a, a.__class__)
+        assert isinstance(a, (symbolics.Matrix, symbolics.Variable, symbolics.zeros)), \
+            "Only Matrices and Variables are allowed, not %s (%s)" % (a, a.__class__)
         assert len(a.shape())==1, "Elements must be vectors themselves, but %s has shape %s"%\
                                     (a, a.shape())
 
@@ -271,7 +242,7 @@ def blockVector(elements):
         rows += shape[0]
 
     # Set up Matrix
-    v = Symbolics.Matrix((rows,))
+    v = symbolics.Matrix((rows,))
 
     # Fill it
     m = 0
@@ -299,8 +270,8 @@ def transpose(arg):
 
     if isinstance(arg, (int,float)):
         return arg
-    elif isinstance(arg, Symbolics.Basic):
-        return Symbolics.transpose(arg)
+    elif isinstance(arg, symbolics.Basic):
+        return symbolics.transpose(arg)
     else:
         raise TypeError("Type %s not supported in transpose!"%str(arg.__class__))
 
@@ -312,17 +283,17 @@ def skew(arg):
     w=skew(v) returns a w, such that w*p = v x p
     '''
 
-    if isinstance(arg, Symbolics.Matrix):
+    if isinstance(arg, symbolics.Matrix):
         v = arg
         assert v.shape() == (3,)
 
         # we already know the what the skew thing is:
-        return Symbolics.Matrix([[0, -v[2], v[1]],
+        return symbolics.Matrix([[0, -v[2], v[1]],
                                  [v[2], 0, -v[0]],
                                  [-v[1], v[0], 0]])
 
-    if (isinstance(arg, Symbolics.Basic)):
-        return Symbolics.skew(arg)
+    if (isinstance(arg, symbolics.Basic)):
+        return symbolics.skew(arg)
 
     raise TypeError("skew is not defined for %s (%s)"%(arg, str(arg.__class__)))
 
@@ -331,11 +302,11 @@ def skew_numpy(arg):
     w=skew(v) returns a w, such that w*p = v x p
     numpy matrices only
     '''
-    if isinstance(arg, numpy.matrix):
+    if isinstance(arg, np.matrix):
         v = arg
         assert v.shape == (3,1)
 
-        return numpy.matrix([[0, -v[2], v[1]],
+        return np.matrix([[0, -v[2], v[1]],
                                  [v[2], 0, -v[0]],
                                  [-v[1], v[0], 0]])
 
@@ -346,12 +317,12 @@ def scalar_if_possible(arg):
     '''
     Try to make the given expression scalar, i.e. if it is a matrix
     '''
-    if (isinstance(arg, Symbolics.Matrix)):
+    if (isinstance(arg, symbolics.Matrix)):
         if (arg.shape() == (1,)):
             return arg[0]
         elif (arg.shape() == (1,1)):
             return arg[0,0]
-    elif (isinstance(arg, Symbolics.Basic)):
+    elif (isinstance(arg, symbolics.Basic)):
         if ((arg.shape() == (1,)) or (arg.shape() == (1,1))):
             return scalar(arg)
 
@@ -363,7 +334,7 @@ def vector_if_possible(arg):
     '''
     Try to make the given expression a vector, i.e. if it is a matrix
     '''
-    if (isinstance(arg, numpy.matrix)):
+    if (isinstance(arg, np.matrix)):
         if (arg.shape[1] == 1):
             arg = [el[0] for el in arg.tolist()]
 
@@ -379,7 +350,7 @@ def scalar(arg):
     if (isinstance(arg, (int,float))):
         return arg
     else:
-        return Symbolics.scalar(arg)
+        return symbolics.scalar(arg)
 
 
 
@@ -389,7 +360,7 @@ def solve(A,b):
     '''
     Given Ax=b, one can write x = solve(A,b)
     '''
-    return Symbolics.solve(A,b)
+    return symbolics.solve(A,b)
 
 
 
@@ -398,24 +369,24 @@ def element(A,row,col):
     '''
     Returns a special element from a vector/matrix
     '''
-    return Symbolics.element(A,row,col)
+    return symbolics.element(A,row,col)
 
 
 
 def rotMat(angle, axis):
     # x-Axis
     if (axis in (1, 'x', 'X', 'Rx')):
-        return Symbolics.Matrix([[1,           0,          0],
+        return symbolics.Matrix([[1,           0,          0],
                        [0,  cos(angle), sin(angle)],
                        [0, -sin(angle), cos(angle)]])
     # y-Axis
     if (axis in (2, 'y', 'Y', 'Ry')):
-        return Symbolics.Matrix([[cos(angle), 0, -sin(angle)],
+        return symbolics.Matrix([[cos(angle), 0, -sin(angle)],
                                  [         0, 1,           0],
                                  [sin(angle), 0,  cos(angle)]])
     # z-Axis
     if (axis in (3, 'z', 'Z', 'Rz')):
-        return Symbolics.Matrix([[ cos(angle), sin(angle), 0],
+        return symbolics.Matrix([[ cos(angle), sin(angle), 0],
                                  [-sin(angle), cos(angle), 0],
                                  [          0,          0, 1]])
 

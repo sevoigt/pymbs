@@ -1,46 +1,16 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from .input_element import MbsInputElement
+from .frame import Frame
+from .joint import Joint
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+import pymbs.symbolics as symbolics
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 05.07.2009
-
-@author: knoll
-
-
-Module containing classes modelling mechanical loads
-'''
-
-from .MbsInputElement import MbsInputElement
-from .Frame import Frame
-from .Joint import Joint
-
-import PyMbs.Symbolics as Symbolics
 
 class Constraint(MbsInputElement):
 
     def __init__(self, name, CS1, CS2, transLock, rotLock):
 
-        assert isinstance(transLock, Symbolics.Matrix)
-        assert isinstance(rotLock, Symbolics.Matrix)
+        assert isinstance(transLock, symbolics.Matrix)
+        assert isinstance(rotLock, symbolics.Matrix)
 
         assert transLock.shape() == (3,)
         assert rotLock.shape() == (3,)
@@ -50,8 +20,6 @@ class Constraint(MbsInputElement):
 
         self.transLock=transLock
         self.rotLock=rotLock
-
-
 
 
 class AbstractLoadElement(MbsInputElement):
@@ -105,11 +73,8 @@ class JointLoad(MbsInputElement):
     def __init__(self, name, joint, loadsymb):
 
         assert isinstance(joint, Joint)
-        assert isinstance(loadsymb, Symbolics.Symbol)
+        assert isinstance(loadsymb, symbolics.Symbol)
         self.joint = joint
         self.loadsymb = loadsymb
 
         MbsInputElement.__init__(self, name, None)
-
-
-

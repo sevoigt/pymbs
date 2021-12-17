@@ -1,36 +1,9 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+import pymbs.symbolics as symbolics
+from pymbs.symbolics import zeros, eye
+from .frame import Frame
+from pymbs.common.sidfilereader import SID, SIDFormatException
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 05.07.2009
-
-@author: knoll
-'''
-import PyMbs.Symbolics as Symbolics
-from PyMbs.Symbolics import zeros, eye
-from .Frame import Frame
-from PyMbs.Common.SIDfilereader import SID
-
-from PyMbs.Common.AbstractBody import AbstractBody
+from pymbs.common.abstractbody import AbstractBody
 
 import numpy as np
 
@@ -97,7 +70,7 @@ class FlexibleBody(AbstractBody, Frame):
 
 
         cg = [0,0,0]
-        inertia=Symbolics.zeros((3,3))
+        inertia=symbolics.zeros((3,3))
         mass = 0
 
         # super constructor (AbstractBody)

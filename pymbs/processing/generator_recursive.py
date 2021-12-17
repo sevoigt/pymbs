@@ -1,46 +1,15 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 01.07.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Processing.Generator import *
-from PyMbs.Processing.LoadElements.Constraint import Constraint
-
-from PyMbs.Symbolics import Graph, SymmetricMatrix
-
-from PyMbs.Common.Functions import skew, transpose, solve, der, scalar_if_possible, scalar, vector_if_possible
-
-from PyMbs.Symbolics import zeros, Matrix
-
-from PyMbs.Processing.Body import Body
-from PyMbs.Processing.Body import FlexibleBody
-
-import PyMbs.Processing.Sensors.EnergySensor
-
 import numpy as np
+
+import pymbs.symbolics as sym
+from pymbs.processing.generator import *
+from pymbs.common.functions import skew, transpose, solve, der, \
+                                   scalar_if_possible, vector_if_possible
+
+from pymbs.symbolics import zeros, Matrix, Graph
+from pymbs.processing import Body, FlexibleBody
+
+import pymbs.processing.sensors.energy_sensor
+
 
 
 class Generator_Recursive(Generator):
@@ -72,7 +41,7 @@ class Generator_Recursive(Generator):
         # Calculate Sensors (before accelerations)
         for sens in self.sensors:
             if (not sens.delayCalc):
-                if (isinstance(sens, PyMbs.Processing.Sensors.EnergySensor)):
+                if (isinstance(sens, pymbs.Processing.Sensors.EnergySensor)):
                     sens.gravity = -self.inertial._alpha_C;
                 sens.calc(graph)
 
@@ -86,7 +55,7 @@ class Generator_Recursive(Generator):
         # Calculate Sensors (after accelerations)
         for sens in self.sensors:
             if (sens.delayCalc):
-                if (isinstance(sens, PyMbs.Processing.Sensors.EnergySensor)):
+                if (isinstance(sens, pymbs.Processing.Sensors.EnergySensor)):
                     sens.gravity = -self.inertial._alpha_C;
                 sens.calc(graph)
 
@@ -116,23 +85,23 @@ class Generator_Recursive(Generator):
 
             if (body.joint is None):
                 # Set Position and Angular Velocity to Zero, Rotational Matrix = Identity
-                body.I_r = graph.addEquation(I_p%bName, Symbolics.zeros((3,)), shape=(3,))
-                body.I_v = graph.addEquation(I_v%bName, Symbolics.zeros((3,)), shape=(3,))
+                body.I_r = graph.addEquation(I_p%bName, sym.zeros((3,)), shape=(3,))
+                body.I_v = graph.addEquation(I_v%bName, sym.zeros((3,)), shape=(3,))
 
                 if (not self.kinematicsOnly):
-                    body.I_a = graph.addEquation(I_a%bName, Symbolics.zeros((3,)), shape=(3,))
+                    body.I_a = graph.addEquation(I_a%bName, sym.zeros((3,)), shape=(3,))
 
-                body.I_R = graph.addEquation(T1%bName, Symbolics.eye((3,3)), shape=(3,3))
+                body.I_R = graph.addEquation(T1%bName, sym.eye((3,3)), shape=(3,3))
                 # K_om is written w.r.t. the Inertial Frame!!!
-                body.I_om = graph.addEquation(omega%bName, Symbolics.zeros((3,)), shape=(3,))
+                body.I_om = graph.addEquation(omega%bName, sym.zeros((3,)), shape=(3,))
                 body._I_om_tilde = graph.addEquation(omega_tilde%bName, zeros((3,3)), shape=(3,3))
 
                 if (not self.kinematicsOnly):
-                    body.I_al = graph.addEquation(omegad%bName, Symbolics.zeros((3,)), shape=(3,))
+                    body.I_al = graph.addEquation(omegad%bName, sym.zeros((3,)), shape=(3,))
                     body._I_al_tilde = graph.addEquation(omegad_tilde%bName, zeros((3,3)), shape=(3,3))
 
                 # Initial Values
-                body._omegad_C = graph.addEquation(omegad_C%bName, Symbolics.zeros((3,)), shape=(3,))
+                body._omegad_C = graph.addEquation(omegad_C%bName, sym.zeros((3,)), shape=(3,))
                 body._beta_C = graph.addEquation(beta_C%bName, zeros((3,3)), shape=(3,3))
                 body._alpha_C = graph.addEquation(alpha_C%bName, -self.g, shape=(3,))
             elif isinstance(body, Body):
@@ -500,13 +469,13 @@ class Generator_Recursive(Generator):
 
             # Force
             if (load.force is None):
-                load._F = Symbolics.zeros((3,))
+                load._F = sym.zeros((3,))
             else:
                 Wf = graph.addEquation(WF%lName, load.Wf)
                 load._F = graph.addEquation(F%lName, T_cs*Wf*load.force, shape=(3,))
             # Torque
             if (load.torque is None):
-                load._L = Symbolics.zeros((3,))
+                load._L = sym.zeros((3,))
             else:
                 Wt = graph.addEquation(WT%lName, load.Wt)
                 load._L = graph.addEquation(L%lName, T_cs*Wt*load.torque, shape=(3,))
@@ -542,8 +511,8 @@ class Generator_Recursive(Generator):
                         f_ext -= f_local
                         l_ext -= l_local
 
-            if (f_ext == 0): f_ext = Symbolics.zeros((3,))
-            if (l_ext == 0): l_ext = Symbolics.zeros((3,))
+            if (f_ext == 0): f_ext = sym.zeros((3,))
+            if (l_ext == 0): l_ext = sym.zeros((3,))
             body._F_ext = graph.addEquation(F_EXT%bName, f_ext, shape=(3,))
             body._L_ext = graph.addEquation(L_EXT%bName, l_ext, shape=(3,))
 
@@ -674,7 +643,7 @@ class Generator_Recursive(Generator):
         q = graph.addVariable(name='q', shape=self.reduce_shape( self.q.shape() ), initialValue=scalar_if_possible(self.q0) )
         qd = graph.addVariable(name='qd', shape=self.reduce_shape( self.qd.shape() ), initialValue=scalar_if_possible(self.qd0) )
         if (self.kinematicsOnly):
-            qdd = graph.addVariable(name='qdd', shape=self.reduce_shape( self.qdd.shape() ),varKind=VarKind.Input)
+            qdd = graph.addVariable(name='qdd', shape=self.reduce_shape( self.qdd.shape() ),varKind=sym.VarKind.Input)
         else:
             qdd = graph.addVariable(name='qdd', shape=self.reduce_shape( self.qdd.shape() ) )
         graph.addEquation(self.state.q, q)
@@ -686,10 +655,10 @@ class Generator_Recursive(Generator):
 #            der_qd = graph.addEquation(qdd, zeros(qdd.shape()), varKind = VarKind.Der_State)
         else:
             if (len(self.state.q) > 1):
-                der_qd = graph.addEquation(qdd, solve(M_, -C_), varKind = VarKind.Der_State)
+                der_qd = graph.addEquation(qdd, solve(M_, -C_), varKind = sym.VarKind.Der_State)
                 #der_qd = graph.addEquation(C_, -M_*qdd, varKind = VarKind.Der_State)
             else:
-                der_qd = graph.addEquation(qdd, -C_/M_, varKind = VarKind.Der_State)
+                der_qd = graph.addEquation(qdd, -C_/M_, varKind = sym.VarKind.Der_State)
 
         graph.addEquation(der(q), qd)
         graph.addEquation(der(qd), qdd)

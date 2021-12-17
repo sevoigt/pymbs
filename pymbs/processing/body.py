@@ -1,40 +1,11 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.common.abstractbody import AbstractBody
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.symbolics import Matrix
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+from .frame import Frame
 
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
+import pymbs.symbolics as symbolics
 
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 30.06.2009
-
-@author: Christian Schubert
-'''
-
-
-
-from PyMbs.Common.AbstractBody import AbstractBody
-
-from PyMbs.Symbolics import Matrix
-
-from . import Frame
-import PyMbs.Symbolics as Symbolics
-##from PyMbs.Common.SIDfilereader import SID
 
 class Body(AbstractBody):
     '''
@@ -42,7 +13,7 @@ class Body(AbstractBody):
     '''
 
 
-    def __init__(self, name, mass=0, cg=Symbolics.zeros((3,)), inertia=Symbolics.zeros((3,3)), graph=None):
+    def __init__(self, name, mass=0, cg=symbolics.zeros((3,)), inertia=symbolics.zeros((3,3)), graph=None):
         '''
         Constructor
         name: Name of the Body
@@ -73,7 +44,7 @@ class Body(AbstractBody):
         self.CS_0 = self.addFrame('_int_CS_0')
 
 
-    def addFrame(self, name, p=Symbolics.zeros((3,)), R=Symbolics.eye((3,3))):
+    def addFrame(self, name, p=symbolics.zeros((3,)), R=symbolics.eye((3,3))):
         '''
         Add A New Coordinate System To The List Of Children
         name: Name of the Coordinate System
@@ -81,10 +52,10 @@ class Body(AbstractBody):
         R: Orientation of the Coordinate System (3x3 Matrix)
         '''
         # Create a New Coordinate System
-        cs = Frame.Frame(name=name, parentBody=self, p=p, R=R, graph=self.graph);
+        cs = Frame(name=name, parentBody=self, p=p, R=R, graph=self.graph)
 
         # Append it to the List of Children
-        self.children += [cs];
+        self.children += [cs]
 
         # return new Coordinate System
         return cs
@@ -96,8 +67,7 @@ class FlexibleBody(AbstractBody):
     Body holding mass and inertia properties
     '''
 
-
-    def __init__(self, sid, name, mass=0, cg=Symbolics.zeros((3,)), inertia=Symbolics.zeros((3,3)), graph=None):
+    def __init__(self, sid, name, mass=0, cg=symbolics.zeros((3,)), inertia=symbolics.zeros((3,3)), graph=None):
         '''
         Constructor
         name: Name of the Body
@@ -134,7 +104,6 @@ class FlexibleBody(AbstractBody):
                 raise NotImplementedError('the values of nelastq and nq (SID-File) must be equal')
 
 
-
         name_flexible_coordinates = 'flexible_coordinates'
         name_flexible_velocity = 'flexible_velocity'
         name_flexible_acceleration = 'flexible_acceleration'
@@ -147,12 +116,7 @@ class FlexibleBody(AbstractBody):
         self.qd0 = [0]*self.sid.modal.refmod.nelastq
 
 
-
-
-
-
-
-    def addFrame(self, name, p=Symbolics.zeros((3,)), R=Symbolics.eye((3,3))):
+    def addFrame(self, name, p=symbolics.zeros((3,)), R=symbolics.eye((3,3))):
         '''
         Add A New Coordinate System To The List Of Children
         name: Name of the Coordinate System
@@ -160,10 +124,10 @@ class FlexibleBody(AbstractBody):
         R: Orientation of the Coordinate System (3x3 Matrix)
         '''
         # Create a New Coordinate System
-        cs = Frame.Frame(name=name, parentBody=self, p=p, R=R, graph=self.graph);
+        cs = Frame(name=name, parentBody=self, p=p, R=R, graph=self.graph)
 
         # Append it to the List of Children
-        self.children += [cs];
+        self.children += [cs]
 
         # return new Coordinate System
         return cs

@@ -1,38 +1,6 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.common.mbselement import MbsElement
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 08.08.2009
-
-@author: knoll
-
-
-Module containing classes modelling different types
-of graphical representations of coordinate systems and bodies
-'''
-
-from PyMbs.Common.MbsElement import MbsElement
-
-import PyMbs.Symbolics as Symbolics
+import pymbs.symbolics as symbolics
 
 
 # Questions:
@@ -63,7 +31,7 @@ class File(AbstractGraphRep):
 
         assert isinstance(pathToFile, str)
         #assert isinstance(scale, (int, float))
-        assert isinstance(scale, (int, float, Symbolics.Basic))
+        assert isinstance(scale, (int, float, symbolics.Basic))
 
         AbstractGraphRep.__init__(self, name, r, T)
 
@@ -78,9 +46,9 @@ class Box(AbstractGraphRep):
 
     def __init__(self, name, r, T, lx, ly, lz):
 
-        assert isinstance(lx, (float, int, Symbolics.Symbol))
-        assert isinstance(ly, (float, int, Symbolics.Symbol))
-        assert isinstance(lz, (float, int, Symbolics.Symbol))
+        assert isinstance(lx, (float, int, symbolics.Symbol))
+        assert isinstance(ly, (float, int, symbolics.Symbol))
+        assert isinstance(lz, (float, int, symbolics.Symbol))
 
         AbstractGraphRep.__init__(self, name, r, T)
 
@@ -96,13 +64,13 @@ class Cylinder(AbstractGraphRep):
 
     def __init__(self, name, r, T, radius, l, res=None):
 
-        assert isinstance(radius, (float, int, Symbolics.Symbol))
-        assert isinstance(l, (float, int, Symbolics.Symbol))
+        assert isinstance(radius, (float, int, symbolics.Symbol))
+        assert isinstance(l, (float, int, symbolics.Symbol))
 
         if res == None:
             res=20
 
-        assert isinstance(res, (float, int, Symbolics.Symbol))
+        assert isinstance(res, (float, int, symbolics.Symbol))
 
         AbstractGraphRep.__init__(self, name, r, T)
 
@@ -118,12 +86,12 @@ class Sphere(AbstractGraphRep):
 
     def __init__(self, name, r, T, radius, res=None):
 
-        assert isinstance(radius, (float, int, Symbolics.Symbol))
+        assert isinstance(radius, (float, int, symbolics.Symbol))
 
         if res == None:
             res=50
 
-        assert isinstance(res, (float, int, Symbolics.Symbol))
+        assert isinstance(res, (float, int, symbolics.Symbol))
 
         AbstractGraphRep.__init__(self, name, r, T)
 
@@ -139,7 +107,7 @@ class Line(AbstractGraphRep):
 
     def __init__(self, name, r, T, L):
 
-        assert( isinstance(L, (float, int, Symbolics.Symbol) ) )
+        assert( isinstance(L, (float, int, symbolics.Symbol) ) )
 
         AbstractGraphRep.__init__(self, name, r, T)
 
@@ -153,7 +121,7 @@ class Frame(AbstractGraphRep):
 
     def __init__(self, name, r, T, size):
 
-        assert isinstance(size, (float, int, Symbolics.Symbol))
+        assert isinstance(size, (float, int, symbolics.Symbol))
 
         AbstractGraphRep.__init__(self, name, r, T)
 
@@ -166,7 +134,7 @@ class Arrow(AbstractGraphRep):
 
     def __init__(self, name, r, T, size):
 
-        assert isinstance(size, (float, int, Symbolics.Symbol))
+        assert isinstance(size, (float, int, symbolics.Symbol))
 
         AbstractGraphRep.__init__(self, name, r, T)
 

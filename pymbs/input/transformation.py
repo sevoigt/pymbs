@@ -22,10 +22,10 @@ from pymbs.input.constraints import ExpJoint as iExpJoint
 from pymbs.input.constraints import Hexapod as iHexapod
 from pymbs.input.constraints import Hexapod_m_AV as iHexapod_m_AV
 
-from . import Loads as iLoads
+from . import loads as iLoads
 
 from pymbs.common.functions import transpose, skew, skew_numpy
-from pymbs.common.pymbserror import pymbsError
+from pymbs.common.pymbserror import PyMbsError
 
 from pymbs.processing.body import Body as pBody
 from pymbs.processing.body import FlexibleBody as pFlexibleBody
@@ -45,7 +45,7 @@ from pymbs.processing.generator_explicit import Generator_Explicit
 from pymbs.processing.generator_recursive import Generator_Recursive
 from pymbs.processing.generator_order_n import Generator_OrderN
 
-from . import Sensors as iSensors
+from . import sensors as iSensors
 import pymbs.processing.sensors as pSensors
 import pymbs.processing.loads as pLoads
 
@@ -883,14 +883,14 @@ class PublicMethods(object):
         try:
             _Graph
         except NameError:
-            raise pymbsError('Cannot export graph reps. You have to call ' \
+            raise PyMbsError('Cannot export graph reps. You have to call ' \
                              'the <genEquations()> method of your MbsSystem-'\
                              'instance before calling <exportGraphReps()>.')
 
         grList = list(model.graphRepDict.values())
 
         if not grList:
-            raise pymbsError('Cannot export graphics. There are no '\
+            raise PyMbsError('Cannot export graphics. There are no '\
                              'visualisation objects defined. Call '\
                              '<addVisualisation.xyz()> of your MbsSystem-'\
                              'instance to add 3d objects representing the '\

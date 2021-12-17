@@ -1,39 +1,11 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.processing.generator import *
+from pymbs.processing.loads.constraint import Constraint
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.common.functions import *
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+from pymbs.common.simple import simple
 
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 01.07.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Processing.Generator import *
-from PyMbs.Processing.LoadElements.Constraint import Constraint
-
-from PyMbs.Common.Functions import *
-
-from PyMbs.Common.Simple import simple
-
-from PyMbs.Symbolics import Matrix, zeros, jacobian
+from pymbs.symbolics import Matrix, zeros, jacobian
 
 
 class Generator_Explicit(Generator):
@@ -97,12 +69,12 @@ class Generator_Explicit(Generator):
             # Is it the Inertial Frame itself?
             if (body.joint is None):
                 # Set Position and Angular Velocity to Zero, Rotational Matrix = Identity
-                body.I_r = Symbolics.zeros((3,))
-                body.I_v = Symbolics.zeros((3,))
-                body.I_a = Symbolics.zeros((3,))
-                body.I_R = Symbolics.eye((3,3))
-                body.K_om = Symbolics.zeros((3,))
-                body.K_al = Symbolics.zeros((3,))
+                body.I_r = symbolics.zeros((3,))
+                body.I_v = symbolics.zeros((3,))
+                body.I_a = symbolics.zeros((3,))
+                body.I_R = symbolics.eye((3,3))
+                body.K_om = symbolics.zeros((3,))
+                body.K_al = symbolics.zeros((3,))
             else:
                 # Get Reference to Parent Body
                 joint = body.joint
@@ -119,7 +91,7 @@ class Generator_Explicit(Generator):
     #            I_om = body.I_R*body.K_om
     #            I_al = I_om.jacobian(self.state.q)*self.state.qd + I_om.jacobian(self.state.qd)*self.state.qdd
     #            body.K_al = body.I_R.transpose()*I_al
-    #            body.K_al = body.K_al.applyfunc(lambda x: PyMbs.Symbolics.trigsimp(x, recursive=True))
+    #            body.K_al = body.K_al.applyfunc(lambda x: pymbs.Symbolics.trigsimp(x, recursive=True))
                 body.K_al = jacobian(body.K_om, self.q)*self.qd + jacobian(body.K_om, self.qd)*self.qdd
 
             # Update cg
@@ -164,7 +136,7 @@ class Generator_Explicit(Generator):
             i = body.index * 3
 
             # Mass Matrices
-            M1[i:i+3,i:i+3] = body.mass*Symbolics.eye((3,3))
+            M1[i:i+3,i:i+3] = body.mass*symbolics.eye((3,3))
             M2[i:i+3,i:i+3] = body.inertia
 
             # Jacobian Matrices
@@ -207,7 +179,7 @@ class Generator_Explicit(Generator):
 
             # Calculate Force/Torque Distribution Matrices
             if (fel.ref is None):
-                Rref = Symbolics.eye((3,3))
+                Rref = symbolics.eye((3,3))
             else:
                 Rref = fel.ref.I_R
 

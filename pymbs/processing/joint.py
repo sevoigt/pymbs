@@ -1,39 +1,10 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.common.mbselement import MbsElement
+from pymbs.common.functions import transpose, sin, cos
+from pymbs.symbolics import Basic, Matrix, zeros, eye
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from .frame import Frame
+from .body import Body, FlexibleBody
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 30.06.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Common.MbsElement import MbsElement
-from PyMbs.Common.Functions import transpose, sin, cos
-from . import Frame
-from . import Body
-
-from PyMbs.Symbolics import Graph
-
-from PyMbs.Symbolics import Basic, Matrix, zeros, eye
 
 class Joint(MbsElement):
     '''
@@ -57,8 +28,8 @@ class Joint(MbsElement):
         assert graph is not None
 
         # Assertions
-        assert isinstance(coordSys, Frame.Frame)
-        assert isinstance(body, (Body.Body,Body.FlexibleBody))
+        assert isinstance(coordSys, Frame)
+        assert isinstance(body, (Body, FlexibleBody))
         assert isinstance(Psi, Basic) and (Psi.shape() in ((3,), (3,1)) ), "Psi - Type: %s, Shape %s, Value %s"%(str(Psi.__class__), str(Psi.shape()), str(Psi))
         assert isinstance(Phi, Basic) and (Phi.shape() in ((3,), (3,1)) )
         assert isinstance(q0, (int, float, Basic))
@@ -85,8 +56,8 @@ class Joint(MbsElement):
             self.qd = 0
             self.qdd = 0
 
-        self.q0 = q0;
-        self.qd0 = qd0;
+        self.q0 = q0
+        self.qd0 = qd0
 
         if (Phi == zeros((3,))):
             self.R = eye((3,3))

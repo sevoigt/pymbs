@@ -1,40 +1,11 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.common.state import State
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.processing.loads.load import Load
+from pymbs.common.functions import transpose, element
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+from pymbs.common.simple import simple
 
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 07.07.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Common.State import State
-
-from PyMbs.Processing.LoadElements.Load import Load
-from PyMbs.Processing.Frame import Frame
-from PyMbs.Common.Functions import transpose, element
-
-from PyMbs.Common.Simple import simple
-
-from PyMbs.Symbolics import Matrix, eye
+from pymbs.symbolics import Matrix, eye
 
 
 class Constraint(Load):

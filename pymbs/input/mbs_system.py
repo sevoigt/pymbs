@@ -1,102 +1,95 @@
-# -*- coding: utf-8 -*-
 '''
-PyMbs.Input.MbsSystem provides the user interface for PyMbs.
+pymbs.input.MbsSystem provides the user interface for pymbs.
 
 The task of setting up a multibody system is divided into six parts, to
 which the corresponding functions are given below.
 
 #. Initialisation
 
-    * :class:`PyMbs.Input.MbsSystem`
-    * :meth:`PyMbs.Input.MbsSystem.addParam`
-    * :meth:`PyMbs.Input.MbsSystem.addInput`
-    * :meth:`PyMbs.Input.MbsSystem.setGravity`
+    * :class:`pymbs.input.MbsSystem`
+    * :meth:`pymbs.input.MbsSystem.addParam`
+    * :meth:`pymbs.input.MbsSystem.addInput`
+    * :meth:`pymbs.input.MbsSystem.setGravity`
 
 #. Create Bodies and Coordinate Systems, i.e. Frames or Connectors
 
-    * :meth:`PyMbs.Input.MbsSystem.addBody`
-    * :meth:`PyMbs.Input.MbsSystem.addFrame`
+    * :meth:`pymbs.input.MbsSystem.addBody`
+    * :meth:`pymbs.input.MbsSystem.addFrame`
 
 #. Connect Bodies
 
-    * :meth:`PyMbs.Input.MbsSystem.addJoint`
-    * :meth:`PyMbs.Input.MbsSystem.addConstraint`
-    * :class:`PyMbs.Input.MbsSystem.addLoop`
+    * :meth:`pymbs.input.MbsSystem.addJoint`
+    * :meth:`pymbs.input.MbsSystem.addConstraint`
+    * :class:`pymbs.input.MbsSystem.addLoop`
 
 #. Add Load Elements, Sensors, Expressions and Controllers
 
-    * :class:`PyMbs.Input.MbsSystem.addLoad`
-    * :class:`PyMbs.Input.MbsSystem.addSensor`
-    * :meth:`PyMbs.Input.MbsSystem.addExpression`
-    * :meth:`PyMbs.Input.MbsSystem.addController`
+    * :class:`pymbs.input.MbsSystem.addLoad`
+    * :class:`pymbs.input.MbsSystem.addSensor`
+    * :meth:`pymbs.input.MbsSystem.addExpression`
+    * :meth:`pymbs.input.MbsSystem.addController`
 
 #. Add Visualisation
 
-    * :class:`PyMbs.Input.MbsSystem.addVisualisation`
+    * :class:`pymbs.input.MbsSystem.addVisualisation`
 
 #. Calculate Equations of Motion and Generate Code
 
-    * :class:`PyMbs.Input.MbsSystem.genEquations`
-    * :class:`PyMbs.Input.MbsSystem.genCode`
-    * :meth:`PyMbs.Input.MbsSystem.show`
-    * :meth:`PyMbs.Input.MbsSystem.simulate`
+    * :class:`pymbs.input.MbsSystem.genEquations`
+    * :class:`pymbs.input.MbsSystem.genCode`
+    * :meth:`pymbs.input.MbsSystem.show`
+    * :meth:`pymbs.input.MbsSystem.simulate`
 
-In the following the members of the module PyMbs.Input are explained in more
+In the following the members of the module pymbs.Input are explained in more
 detail.
-
 '''
+
+import sys
+import tempfile
 
 from numpy import inf
 from math import pi
-from os.path import splitext
-import sys
-import scipy
 import numpy as np
-import tempfile
-import PyMbs.Symbolics as Symbolics
 
-import PyMbs.Common.Functions as Functions
-from PyMbs.Common.MbsElement import MbsElement
+import pymbs.symbolics as symbolics
+import pymbs.common.functions as functions
 
-from .Frame import Frame
+from .frame import Frame
 
-from PyMbs.Symbolics import Graph, VarKind, zeros
-from .Body import Body
-from .Body import FlexibleBody
-from .Joint import Joint
-from .Loads import PtPForce, CmpForce, CmpTorque, JointLoad,\
+from pymbs.symbolics import Graph, VarKind, zeros
+from .body import Body, FlexibleBody
+from .joint import Joint
+from .loads import PtPForce, CmpForce, CmpTorque, JointLoad,\
                   Constraint#, AbstractLoadElement
 
-from .Sensors import AbstractSensor, DistanceSensor,\
+from .sensors import AbstractSensor, DistanceSensor,\
                     PositionSensor, VelocitySensor,\
                     AccelerationSensor, OrientationSensor,\
                     AngVelocitySensor, AngAccelerationSensor,\
                     JointSensor, EnergySensor, \
                     ConstraintForceSensor, ConstraintTorqueSensor
 
-import PyMbs.Common.GraphReps as gr #  STLFile, Box, Cylinder, Sphere, Frame
-from PyMbs.Common.GraphReps import File, Box, Cylinder, Sphere, Line, Arrow
+import pymbs.common.graphreps as gr
+from pymbs.common.functions import diag, transpose
 
-from PyMbs.Common.Functions import diag, transpose
+from .constraints import FourBar, ThreeBarTrans, CrankSlider, FourBarTrans, \
+                         Transmission, ExpJoint, Hexapod, Hexapod_m_AV, \
+                         Steering
 
-from .Constraints import FourBar, ThreeBarTrans, CrankSlider, FourBarTrans, Transmission, ExpJoint, Hexapod, Hexapod_m_AV, Steering
-
-from PyMbs.Input.transformation import PublicMethods as trafo, \
+from pymbs.input.transformation import PublicMethods as trafo, \
                                        setMbsSystemType
 
-from PyMbs.Common.SIDfilereader import SID
-from PyMbs.Common.SIDfilereader import Node
-
-from PyMbs.Graphics.Integrator import Integrator
+from pymbs.ui.integrator import Integrator
 
 
 class MbsSystem(Body):
     """
-    The "world", which is a kind of body, manages (mainly collects) all these
-    Elements: Bodies, joints, loads, loops, sensors, constraints and
-    expressions. It gives access to the transformation module which is the user
-    interface to the functionality of PyMbs.
+    The 'world', which is a kind of body, manages (mainly collects) all 
+    these elements: bodies, joints, loads, loops, sensors, constraints and
+    expressions. It gives access to the transformation module which is the 
+    user interface to the functionality of pymbs.
     """
+    
     def __init__(self, gravity_vect=[0,0,-1], name="world"):
         # create Frame (without position and orientation)
 
@@ -133,44 +126,46 @@ class MbsSystem(Body):
         self.graph=Graph()
         self.state=None
 
-        self.gravity_vect=Symbolics.Matrix(gravity_vect)
-        # make sure that the gravity direction vector has a length of one or zero
-        # assert(self.gravity_vect.norm() in [0,1])
+        self.gravity_vect=symbolics.Matrix(gravity_vect)
+        # make sure that the gravity direction vector has a length of one or 
+        # zero
+        #  assert(self.gravity_vect.norm() in [0,1])
 
-        self.gravity_const = self.addParam(name='gravity', symbol_str='g', defaultValue=9.81, positive=True)
+        self.gravity_const = self.addParam(name='gravity', symbol_str='g', 
+                                           defaultValue=9.81, positive=True)
         self.time = self.graph.getVariable('time')
 
         self.validDofStrings = ('Tx', 'Ty', 'Tz',  'Rx', 'Ry', 'Rz')
 
         # submodules for sensors, load elements, loops and visualisations
-        #: addSensor contains a :class:`PyMbs.Input.MbsSystem.AddSensor`
+        #: addSensor contains a :class:`pymbs.input.MbsSystem.AddSensor`
         #: instance, see :ref:`sensors` for the different sensors available
         #:
         #: >>> world.addSensors.Acceleration('a', CS1, CS2)
         self.addSensor = AddSensor(self)
-        #: addLoad contains a :class:`PyMbs.Input.MbsSystem.AddLoad` instance,
+        #: addLoad contains a :class:`pymbs.input.MbsSystem.AddLoad` instance,
         #: see :ref:`loads` for the different load types available
         #:
         #: >>> world.addLoad.PtPForce(F, body_one, body_two)
         self.addLoad = AddLoad(self)
-        #: addLoop contains a :class:`PyMbs.Input.MbsSystem.AddLoop` instance,
+        #: addLoop contains a :class:`pymbs.input.MbsSystem.AddLoop` instance,
         #: see :ref:`loops` for the different loops available
         #:
         #: >>> world.addLoop.FourBar(body_one, body_two)
         self.addLoop = AddLoop(self)
         #: addVisualisation contains a
-        #: :class:`PyMbs.Input.MbsSystem.AddVisualisation` instance, see
+        #: :class:`pymbs.input.MbsSystem.AddVisualisation` instance, see
         #: :ref:`visualisation` for the various visualisation options
         #:
         #: >>> world.addVisualisation.Box(body, length=1, width=1, height=1)
         self.addVisualisation = AddVisualisation(self)
-        #: genEquations contains a :class:`PyMbs.Input.MbsSystem.GenEqns`
+        #: genEquations contains a :class:`pymbs.input.MbsSystem.GenEqns`
         #: instance, see :ref:`equations` for the different equation generators
         #: and their options
         #:
         #: >>> world.genEquations.Recursive()
         self.genEquations = GenEqns(self)
-        #: genCode contains a :class:`PyMbs.Input.MbsSystem.GenCode` instance,
+        #: genCode contains a :class:`pymbs.input.MbsSystem.GenCode` instance,
         #: see :ref:`code_generation` for all the writers and options available
         #:
         #: >>> world.genCode.Python()
@@ -202,17 +197,17 @@ class MbsSystem(Body):
 
         .. note:: With this function only the value but not the direction of
                   gravity can be changed. Changing direction can be achieved
-                  through the constructor of :class:`PyMbs.Input.MbsSystem`
+                  through the constructor of :class:`pymbs.input.MbsSystem`
 
 
         '''
         # cast to float should be possible
         assert isinstance(float(value), float)
 
-        self.expressionDict['gravity'].exp = Symbolics.sympify(value)
+        self.expressionDict['gravity'].exp = symbolics.sympify(value)
 
-    def addBody(self, mass, cg=Symbolics.zeros((3,)), \
-                        inertia=Symbolics.zeros((3,3)), \
+    def addBody(self, mass, cg=symbolics.zeros((3,)), \
+                        inertia=symbolics.zeros((3,3)), \
                         name=None):
         '''
          With *addBody* you can insert a rigid body to your multibody system.
@@ -222,12 +217,12 @@ class MbsSystem(Body):
         :type name: String.
 
         :param mass: Mass of the body in kg.
-        :type mass: float/int or :class:`PyMbs.Symbolics.Symbol` as returned by
-                    :meth:`PyMbs.Input.MbsSystem.addParam`
+        :type mass: float/int or :class:`pymbs.Symbolics.Symbol` as returned by
+                    :meth:`pymbs.input.MbsSystem.addParam`
 
         :param cg: Vector, describing the position of the Centre of Gravity
                    with respect to the body fixed frame.
-        :type cg: 3x1 Vector (:class:`PyMbs.Symbolics.Matrix` or list of float/int).
+        :type cg: 3x1 Vector (:class:`pymbs.Symbolics.Matrix` or list of float/int).
 
         :param inertia: Tensor of inertia at the centre of gravity for this body
                         written with respect to the body fixed frame.
@@ -237,10 +232,10 @@ class MbsSystem(Body):
                        :math:`I_{xz}`, :math:`I_{yz}`, :math:`I_{zz}`]
 
         :return: Reference to the generated Body object
-        :rtype: :class:`PyMbs.Input.Body`
+        :rtype: :class:`pymbs.input.Body`
 
         .. note:: A newly generated body needs to be connected to other bodies
-                  via a joint. (:meth:`PyMbs.Input.MbsSystem.addJoint`)
+                  via a joint. (:meth:`pymbs.input.MbsSystem.addJoint`)
 
         '''
         if (name is None):
@@ -266,12 +261,12 @@ class MbsSystem(Body):
         :type name: String.
 
         :param mass: Mass of the body in kg.
-        :type mass: float/int or :class:`PyMbs.Symbolics.Symbol` as returned by
-                    :meth:`PyMbs.Input.MbsSystem.addParam`
+        :type mass: float/int or :class:`pymbs.Symbolics.Symbol` as returned by
+                    :meth:`pymbs.input.MbsSystem.addParam`
 
         :param cg: Vector, describing the position of the Centre of Gravity
                    with respect to the body fixed frame.
-        :type cg: 3x1 Vector (:class:`PyMbs.Symbolics.Matrix` or list of float/int).
+        :type cg: 3x1 Vector (:class:`pymbs.Symbolics.Matrix` or list of float/int).
 
         :param inertia: Tensor of inertia at the centre of gravity for this body
                         written with respect to the body fixed frame.
@@ -281,10 +276,10 @@ class MbsSystem(Body):
                        :math:`I_{xz}`, :math:`I_{yz}`, :math:`I_{zz}`]
 
         :return: Reference to the generated Body object
-        :rtype: :class:`PyMbs.Input.Body`
+        :rtype: :class:`pymbs.input.Body`
 
         .. note:: A newly generated body needs to be connected to other bodies
-                  via a joint. (:meth:`PyMbs.Input.MbsSystem.addJoint`)
+                  via a joint. (:meth:`pymbs.input.MbsSystem.addJoint`)
 
         '''
         if (name is None):
@@ -342,11 +337,11 @@ class MbsSystem(Body):
         :type startVals_d: List of int/float. Dimension must be the same as *dofList*
 
         :return: Reference to the newly generated joint.
-        :rtype: :class:`PyMbs.Input.Joint`
+        :rtype: :class:`pymbs.input.Joint`
 
         .. note:: A joint may not be used to close a kinematic loop. This can only
                   be achieved by using Loops (:ref:`Kinematic-Loops`) or Constraints
-                  (:meth:`PyMbs.Input.MbsSystem.addConstraint`)
+                  (:meth:`pymbs.input.MbsSystem.addConstraint`)
         """
         if (name is None):
             name = self._getName('joint')
@@ -431,8 +426,8 @@ class MbsSystem(Body):
                 # can be connected
                 dummyBody=self.addBody(name=dummyName+dof,
                                          mass=0,
-                                         cg=Symbolics.Matrix([0,0,0]),
-                                         inertia = Functions.diag([0,0,0]))
+                                         cg=symbolics.Matrix([0,0,0]),
+                                         inertia = functions.diag([0,0,0]))
 
                 dummyBody.addFrame('CS_cg')
 
@@ -493,8 +488,8 @@ class MbsSystem(Body):
 
         assert ((dof in self.validDofStrings) or (dof is None))
 
-        assert isinstance(startVal, (type(None), int, float, Symbolics.Symbol))
-        assert isinstance(startVal_d, (type(None), int, float, Symbolics.Symbol))
+        assert isinstance(startVal, (type(None), int, float, symbolics.Symbol))
+        assert isinstance(startVal_d, (type(None), int, float, symbolics.Symbol))
 
 
         # test whether there already ends a joint on the parent Body of CS2
@@ -551,8 +546,8 @@ class MbsSystem(Body):
         assert isinstance(joint, Joint)
 
 
-        assert isinstance(minVal, (int, float, Symbolics.Symbol))
-        if isinstance(minVal, Symbolics.Symbol):
+        assert isinstance(minVal, (int, float, symbolics.Symbol))
+        if isinstance(minVal, symbolics.Symbol):
             par = self.symbolDict.get(minVal, None)
             if par == None:
                 raise ValueError("Unknown Symbol passed as minVal: %s" % minVal)
@@ -565,8 +560,8 @@ class MbsSystem(Body):
             # use the value itself
             minVal_ = minVal
 
-        assert isinstance(maxVal, (int, float, Symbolics.Symbol))
-        if isinstance(maxVal, Symbolics.Symbol):
+        assert isinstance(maxVal, (int, float, symbolics.Symbol))
+        if isinstance(maxVal, symbolics.Symbol):
             par = self.symbolDict.get(maxVal, None)
             if par == None:
                 raise ValueError("Unknown Symbol passed as maxVal: %s" % maxVal)
@@ -611,8 +606,8 @@ class MbsSystem(Body):
         :type limits: List of (int/float), e.g. [-10, 10]
 
         :return: Symbol representing the input, which may consequently be used
-                 in expressions (:meth:`PyMbs.Input.MbsSystem.addExpression`) and loads (ref:'Loads').
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+                 in expressions (:meth:`pymbs.input.MbsSystem.addExpression`) and loads (ref:'Loads').
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         """
         if (name is None):
             name = symbol_str
@@ -638,9 +633,9 @@ class MbsSystem(Body):
         if (len(shape) == 0):
             defaultValue = 0
         elif (len(shape) == 1):
-            defaultValue = Symbolics.zeros( (shape[0],1) )
+            defaultValue = symbolics.zeros( (shape[0],1) )
         else:
-            defaultValue = Symbolics.zeros( shape )
+            defaultValue = symbolics.zeros( shape )
 
         #exprSymb = self.addExpression(name=name, symbol_str=symbol, exp=defaultValue, limits=limits)
         #self.inputSymbolList.append(exprSymb)
@@ -668,10 +663,10 @@ class MbsSystem(Body):
         :type shape: Tuple of two numbers (int/float).
 
         :return: Symbol representing the controller, which may consequently be
-            used in expressions (:meth:`PyMbs.Input.MbsSystem.addExpression`)
+            used in expressions (:meth:`pymbs.input.MbsSystem.addExpression`)
             and loads (ref:'Loads').
 
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         """
         if (name is None):
             name = symbol_str
@@ -726,7 +721,7 @@ class MbsSystem(Body):
                          for a mass, for example.
         :type positive: Boolean.
         :returns: Symbol to the parameter.
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         """
         assert isinstance(symbol_str, str)
         assert defaultValue is not None
@@ -739,7 +734,7 @@ class MbsSystem(Body):
 
         # symbol 'I' must not be used (Imaginary Unit)
         if (symbol_str == 'I'):
-            raise AttributeError('\'I\' may not be used as a symbol, since it is used as the Imaginary Unit within PyMbs.Symbolics!')
+            raise AttributeError('\'I\' may not be used as a symbol, since it is used as the Imaginary Unit within pymbs.Symbolics!')
 
         if isinstance(defaultValue, (list, tuple)):
             L=len(defaultValue)
@@ -749,7 +744,7 @@ class MbsSystem(Body):
             suffixes=['x', 'y', 'z']
 
             if L == 3:
-                p = Symbolics.Matrix((3,))
+                p = symbolics.Matrix((3,))
                 for v, suffix, idx in zip(defaultValue, suffixes, list(range(3))):
 
                     partName = "%s__%s" % (name, suffix)
@@ -763,7 +758,7 @@ class MbsSystem(Body):
             elif L == 6:
 
                 suffixes=['xx', 'xy', 'yy', 'xz', 'yz', 'zz']
-                p_temp = Symbolics.zeros((L,1))
+                p_temp = symbolics.zeros((L,1))
                 for v, suffix, idx in zip(defaultValue, suffixes, list(range(L))):
 
                     partName = "%s__%s" % (name, suffix)
@@ -772,12 +767,12 @@ class MbsSystem(Body):
                     # create scalar Parameters for eacht component
                     p_temp[idx]=self.addParam(name=partName, symbol_str=partSymbolString, defaultValue=v)
 
-                return Functions.symmetricMatrix(p_temp)
+                return functions.symmetricMatrix(p_temp)
 
 
         # End of <if isinstance(defaultValue, (list, tuple)):>
 
-        if isinstance(defaultValue, Symbolics.Matrix):
+        if isinstance(defaultValue, symbolics.Matrix):
             nr, nc = defaultValue.shape
 
             if defaultValue.shape == (3,3):
@@ -789,7 +784,7 @@ class MbsSystem(Body):
                 suffixes=["__%d_%d" % (a,b) for a in range(nr) for b in range(nc)]
 
 
-            p = Symbolics.zeros((nr,nc))
+            p = symbolics.zeros((nr,nc))
             defaultValueList = defaultValue[:]# matrix to list
             for v, suffix, idx in zip(defaultValueList,
                                          suffixes, list(range(nr*nc))):
@@ -844,13 +839,13 @@ class MbsSystem(Body):
         if isinstance(CSref, Body):
             CSref = CSref._CS_0
         if isinstance(loadSymb, list):
-            loadSymb = self.addExpression(symbol_str=name+'_load', exp=Symbolics.Matrix(loadSymb))
+            loadSymb = self.addExpression(symbol_str=name+'_load', exp=symbolics.Matrix(loadSymb))
 
 
         assert CS1.__class__ == Frame
         assert CS2.__class__ == Frame, "CS2 should be a Frame but is a '%s' with '%s'"%(str(CS2.__class__), str(CS2))
 
-        assert isinstance(loadSymb, Symbolics.Symbol)
+        assert isinstance(loadSymb, symbolics.Symbol)
         assert CSref.__class__ in  (Frame, type(None))
 
 
@@ -900,10 +895,10 @@ class MbsSystem(Body):
 
         # Falls wir fuer die JointLoad einen Ausdruck aber kein Symbol erhalten,
         # dann neue temporaere Variable anlegen
-        if (isinstance(loadSymb, Symbolics.Basic) and not isinstance(loadSymb, Symbolics.Symbol)):
+        if (isinstance(loadSymb, symbolics.Basic) and not isinstance(loadSymb, symbolics.Symbol)):
             loadSymb = self.addExpression(symbol_str=name+'_load', exp=loadSymb)
 
-        assert isinstance(loadSymb, Symbolics.Symbol),\
+        assert isinstance(loadSymb, symbolics.Symbol),\
             "loadSymb must be a Symbol, not a %s" % type(loadSymb)
 
         assert thejoint.jointLoad == None,\
@@ -920,7 +915,7 @@ class MbsSystem(Body):
         """
         Add an expression to the system of equations. Expressions allow the user
         to include calculations of, say, forces from sensors and inputs, or to
-        define own sensors. All symbols known to PyMbs may be used in such an
+        define own sensors. All symbols known to pymbs may be used in such an
         expression.
 
         :param name: Name of the expression.
@@ -928,17 +923,17 @@ class MbsSystem(Body):
         :param symbol: Symbol that shall be used for the parameter.
         :type symbol: String.
         :param exp: Term to calculate the expression, like c*x[0]+d*x[1]
-        :type exp: :class:`PyMbs.Symbolics.Basic`
+        :type exp: :class:`pymbs.Symbolics.Basic`
         :param category: (Optional) Each expression may be categorised. Use
-                        VarKind.Sensor, to let PyMbs recognise it as a sensor,
+                        VarKind.Sensor, to let pymbs recognise it as a sensor,
                         for example.
         :type category: (List of) Strings.
-        :param positive: (Optional) Let PyMbs.Symbolics assume that it is positive, which
+        :param positive: (Optional) Let pymbs.Symbolics assume that it is positive, which
                          makes it easier to simplify.
         :type positive: Boolean.
 
         :returns: Symbol of the expression.
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
 
         """
         # category is not an argument, because the user
@@ -954,14 +949,14 @@ class MbsSystem(Body):
 
         # TODO: getShape fuer eine Expression
         if (isinstance(exp,list)):
-            exp = Symbolics.Matrix(exp)
+            exp = symbolics.Matrix(exp)
         if (isinstance(exp,(float,int))):
             shape  = ()
         else:
             shape = exp.shape()
 
         symbol = self.graph.addVariable(symbol_str, shape=shape, varKind=category, pos=positive, neg=negative)
-        assert isinstance(exp, (int, float, Symbolics.Basic, Symbolics.Matrix, list))
+        assert isinstance(exp, (int, float, symbolics.Basic, symbolics.Matrix, list))
 
         assert( (limits is None) or isinstance(limits, list) )
         if (isinstance(limits, list)):
@@ -969,9 +964,9 @@ class MbsSystem(Body):
 
         # let the shape be set:
         if (isinstance(exp, list)):
-            exp = Symbolics.Matrix(exp)
-        if (not isinstance(exp, (Symbolics.Basic, Symbolics.Matrix, float, int))):
-            exp = Symbolics.sympify(exp)
+            exp = symbolics.Matrix(exp)
+        if (not isinstance(exp, (symbolics.Basic, symbolics.Matrix, float, int))):
+            exp = symbolics.sympify(exp)
         self.graph.addEquation( lhs=symbol, rhs=exp  )
 
         return symbol
@@ -1060,11 +1055,11 @@ class MbsSystem(Body):
         assert isinstance(CS1, Frame)
         assert isinstance(CS2, Frame)
 
-        assert isinstance(transLock, (list, Symbolics.Matrix))
-        assert isinstance(rotLock, (list, Symbolics.Matrix))
+        assert isinstance(transLock, (list, symbolics.Matrix))
+        assert isinstance(rotLock, (list, symbolics.Matrix))
 
-        transLock=Symbolics.Matrix(transLock)
-        rotLock=Symbolics.Matrix(rotLock)
+        transLock=symbolics.Matrix(transLock)
+        rotLock=symbolics.Matrix(rotLock)
 
         # TODO: check whether the the constraint is meaningful
         # CS1.parentBody != CS2.parentBody
@@ -1108,7 +1103,7 @@ class MbsSystem(Body):
 
         # shortcut to elementFunction:
 
-        elem=Functions.element
+        elem=functions.element
 
         if typeString == "Distance":
             symbol = self.graph.addVariable(name=symb, shape=(2,), varKind=category)
@@ -1184,8 +1179,8 @@ class MbsSystem(Body):
         self.usedNameDict[name]=newSensor
         #self.symbolDict[symb]=newSensor
 
-        elem=Functions.element # convenience
-        retObject = Symbolics.Matrix([elem(symb,0,0),
+        elem=functions.element # convenience
+        retObject = symbolics.Matrix([elem(symb,0,0),
                                elem(symb,1,0)])
 
         return retObject
@@ -1225,8 +1220,8 @@ class MbsSystem(Body):
         self.symbolDict[symb]=newSensor
 
 
-        elem=Functions.element # convenience
-        retObject = Symbolics.Matrix([elem(symb,0,0),
+        elem=functions.element # convenience
+        retObject = symbolics.Matrix([elem(symb,0,0),
                                elem(symb,1,0),
                                elem(symb,2,0)])
 
@@ -1273,7 +1268,7 @@ class MbsSystem(Body):
         :param category: May be used to manually override the category \(not recommended\)
         :type category: list of Strings.
         :returns: list of symbols for position and orientation.
-        :rtype: list of :class:`PyMbs.Symbolics.Symbol`
+        :rtype: list of :class:`pymbs.Symbolics.Symbol`
 
         .. note: If you use addVisualisation, then these sensors are added
                  automatically.
@@ -1626,7 +1621,7 @@ class MbsSystem(Body):
         """
         raises an exception if the symbol already exists
         """
-        assert isinstance(symbol, Symbolics.Symbol)
+        assert isinstance(symbol, symbolics.Symbol)
 
         if symbol in self.symbolDict:
             raise ValueError("Symbol %s already exists" % symbol)
@@ -1678,7 +1673,7 @@ class MbsSystem(Body):
         if isinstance(arg, (int, float)):
             return True
 
-        if isinstance(arg, Symbolics.Symbol):
+        if isinstance(arg, symbolics.Symbol):
             # test whether the symbol is known by Graph
             try:
                 shape = self.graph.getShape(arg)
@@ -1693,7 +1688,7 @@ class MbsSystem(Body):
             else:
                 return False
 
-        if isinstance(arg, Symbolics.Matrix):
+        if isinstance(arg, symbolics.Matrix):
             return False
 
         raise TypeError("arg has an unexpected type: %s (not int, float, Symbol)"\
@@ -1744,8 +1739,8 @@ class MbsSystem(Body):
         '''
         # CS 27.06.2011, En-/Disable simplify
         assert isinstance(mode,str)
-        import PyMbs.Common.Simple
-        PyMbs.Common.Simple.DO_NOT_SIMPLIFY = not simplify
+        import pymbs.common.simple
+        pymbs.common.simple.DO_NOT_SIMPLIFY = not simplify
 
         return trafo.genEquations(self, mode, diff, kinematicsOnly,
                 graphOptimizations)
@@ -1755,13 +1750,13 @@ class MbsSystem(Body):
         '''
         Produces a GUI (graphical user interface) in which your model will be
         displayed as long as you provided graphic objects using
-        :meth:`PyMbs.Input.MbsSystem.addVisualisation`.
+        :meth:`pymbs.input.MbsSystem.addVisualisation`.
         Next to the model there will be sliders with which you can manipulate
         each joint coordinate directly and thus test your assembly.
 
         .. note::
 
-            You must call :meth:`PyMbs.Input.MbsSystem.genEquations`
+            You must call :meth:`pymbs.input.MbsSystem.genEquations`
             before you may call show!
 
         :param modelname: Name of the model - will be displayed in the title bar.
@@ -1787,7 +1782,7 @@ class MbsSystem(Body):
         '''
 
         if (modelname is None):
-            modelname = 'PyMbsModel'
+            modelname = 'pymbsModel'
 
         # make sure that there is no space in the modelname
         testSource = "%s = 0" % modelname
@@ -1820,7 +1815,7 @@ class MbsSystem(Body):
         '''
 
         if modelname is None:
-            modelname = 'PyMbsModel'
+            modelname = 'pymbsModel'
 
         _Graph = self.graph
         _Graph.writeCode('py', modelname, tempfile.gettempdir())
@@ -1838,7 +1833,7 @@ class MbsSystem(Body):
                 % (modelname,sys.exc_info()), file=sys.stderr)
             return
 
-        qd0 = list(scipy.zeros(len(q0)))
+        qd0 = list(np.zeros(len(q0)))
         integrator = Integrator(mod_der_state, q0, qd0)
         curr_time = 0
         values = np.array(q0 + qd0)
@@ -1974,7 +1969,7 @@ class AddSensor(object):
         :type name: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2003,7 +1998,7 @@ class AddSensor(object):
         :type name: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
 
         # generate name if necessary
@@ -2032,7 +2027,7 @@ class AddSensor(object):
         :type name: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2060,7 +2055,7 @@ class AddSensor(object):
         :type name: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2085,7 +2080,7 @@ class AddSensor(object):
         :type name: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2113,7 +2108,7 @@ class AddSensor(object):
         :type name: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2141,7 +2136,7 @@ class AddSensor(object):
         :type name: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2162,7 +2157,7 @@ class AddSensor(object):
         :type symbol: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
 
         .. note: Only the kinetic and the potential energy of a body is considered.
                  The potential energy stored in springs or energy "lost" in dampers
@@ -2206,7 +2201,7 @@ class AddSensor(object):
         :type symbol: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
 
         .. note: Only the kinetic and the potential energy of a body is considered.
                  The potential energy stored in springs or energy "lost" in dampers
@@ -2249,7 +2244,7 @@ class AddSensor(object):
         :type symbol: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2268,7 +2263,7 @@ class AddSensor(object):
         :type symbol: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2287,7 +2282,7 @@ class AddSensor(object):
         :type symbol: String.
 
         :return: Symbol of the sensor
-        :rtype: :class:`PyMbs.Symbolics.Symbol`
+        :rtype: :class:`pymbs.Symbolics.Symbol`
         '''
         # generate name if necessary
         if (name is None): name = self._getName()
@@ -2963,7 +2958,7 @@ class GenEqns(object):
         :type kinematicsOnly: Boolean
         :param simplify: If set to true, simplification of expression is
                          performed which can be very time consuming. Especially
-                         the simplifications done by PyMbs.Symbolics are not
+                         the simplifications done by pymbs.Symbolics are not
                          very efficient.
         :type simplify: Boolean
         :param graphOptimizations: If set to False, Graph simplification is
@@ -3000,7 +2995,7 @@ class GenEqns(object):
                                are generated, only position and velocities are available
         :type kinematicsOnly: Boolean
         :param simplify: If set to true, simplification of expression is performed which can
-                         be very time consuming. Especially the simplifications done by PyMbs.Symbolics
+                         be very time consuming. Especially the simplifications done by pymbs.Symbolics
                          are not very efficient.
         :type simplify: Boolean
         :param graphOptimizations: If set to False, Graph simplification is skipped.
@@ -3036,7 +3031,7 @@ class GenEqns(object):
                                are generated, only position and velocities are available
         :type kinematicsOnly: Boolean
         :param simplify: If set to true, simplification of expression is performed which can
-                         be very time consuming. Especially the simplifications done by PyMbs.Symbolics
+                         be very time consuming. Especially the simplifications done by pymbs.Symbolics
                          are not very efficient.
         :type simplify: Boolean
         :param graphOptimizations: If set to False, Graph simplification is skipped.
@@ -3133,12 +3128,12 @@ class GenCode(object):
                 f.write('  Modelica.Mechanics.MultiBody.Visualizers.Advanced.Shape shape%s(\n'%i)
                 f.write('    r=%s[:, 1],\n'%gr.r)
                 f.write('    R=Modelica.Mechanics.MultiBody.Frames.Orientation(T=transpose(%s), w={0,0,0}),\n'%gr.T)
-                if (isinstance(gr,Cylinder)):
+                if (isinstance(gr,gr.Cylinder)):
                     f.write('    shapeType="cylinder",\n')
                     f.write('    height=%s,\n'%gr.radius)
                     f.write('    length=%s,\n'%gr.l)
                     f.write('    width=%s,\n'%gr.radius)
-                elif (isinstance(gr,Sphere)):
+                elif (isinstance(gr,gr.Sphere)):
                     f.write('    shapeType="sphere",\n')
                     f.write('    height=%s,\n'%gr.radius)
                     f.write('    length=%s,\n'%gr.radius)

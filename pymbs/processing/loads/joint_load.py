@@ -1,37 +1,9 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.processing.loads.load import Load
+from pymbs.common.functions import transpose, norm
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.processing import Joint
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 02.07.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Processing.LoadElements.Load import Load
-from PyMbs.Common.Functions import transpose, norm
-
-from PyMbs.Processing.Joint import Joint
-
-from PyMbs.Symbolics import eye
+from pymbs.symbolics import eye
 
 
 class JointLoad(Load):
@@ -50,11 +22,11 @@ class JointLoad(Load):
 
         # Get Type of Joint
         if ((norm(joint.Phi) == 1) and (norm(joint.Psi) == 0)):
-            torque = load;
-            force = None;
+            torque = load
+            force = None
         elif ((norm(joint.Phi) == 0) and (norm(joint.Psi) == 1)):
-            torque = None;
-            force = load;
+            torque = None
+            force = load
         else:
             raise AttributeError('Joint %s is neither pure rotational nor translational!'%joint.name)
 

@@ -1,45 +1,11 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from numpy import pi
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.processing.loops.loop import Loop, eps
+from pymbs.common.functions import sqrt, norm, transpose, rotMat
+from pymbs.processing import Frame
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 14.07.2011
-
-@author: Jens Scheffler
-
-edited on 2012/03/21: Sebastian Voigt
-'''
-
-
-
-from PyMbs.Processing.Loops.Loop import Loop, eps
-from PyMbs.Common.Functions import sqrt, norm, transpose, rotMat
-
-from PyMbs.Processing.Joint import Joint
-from PyMbs.Processing.Frame import Frame
-
-
-from PyMbs.Symbolics import Matrix, jacobian, inv, der, zeros, eye, \
+from pymbs.symbolics import Matrix, jacobian, inv, der, zeros, eye, \
                             sin, cos , tan, asin, acos, atan, atan2
-from scipy import pi
 
 
 
@@ -105,7 +71,7 @@ class Hexapod(Loop):
             self.csC3 = csCa
             self.csC4 = csCb
 
-            self.jB = csC3.parentBody.joint
+            self.jB = self.csC3.parentBody.joint
 
 
         self.jA1 = self.jB.coordSys.parentBody.joint
