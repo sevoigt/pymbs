@@ -46,33 +46,6 @@ detail.
 
 '''
 
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 05.07.2009
-
-@author: knoll
-'''
-
 from numpy import inf
 from math import pi
 from os.path import splitext
@@ -162,7 +135,7 @@ class MbsSystem(Body):
 
         self.gravity_vect=Symbolics.Matrix(gravity_vect)
         # make sure that the gravity direction vector has a length of one or zero
-#        assert(self.gravity_vect.norm() in [0,1])
+        # assert(self.gravity_vect.norm() in [0,1])
 
         self.gravity_const = self.addParam(name='gravity', symbol_str='g', defaultValue=9.81, positive=True)
         self.time = self.graph.getVariable('time')
@@ -1209,8 +1182,7 @@ class MbsSystem(Body):
         # !! CodeDuplication ;(
         self.sensorDict[name]=newSensor
         self.usedNameDict[name]=newSensor
-#        self.symbolDict[symb]=newSensor
-
+        #self.symbolDict[symb]=newSensor
 
         elem=Functions.element # convenience
         retObject = Symbolics.Matrix([elem(symb,0,0),
@@ -2209,7 +2181,7 @@ class AddSensor(object):
                 b = body.bodyDict[key]
 
                 # add an EnergySensor for each body
-                EName = 'E_%s'%b.name;
+                EName = 'E_%s'%b.name
                 E += body.addSensor.Energy(EName, b, name=EName)
 
             # Add a "sensor" for the total energy

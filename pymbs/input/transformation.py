@@ -1,90 +1,57 @@
-# -*- coding: utf-8 -*-
 '''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
+Module for the transformation of input-data-structures to
+processing-data-structures
 '''
-
-'''
-Created on 08.07.2009
-
-@author: knoll
-
-Module for the Transformation of Input-Data-Structures to
-Processing-Data-Structures
-'''
-
-from PyMbs.Symbolics import Symbol, eye, Matrix
-from copy import deepcopy
 
 import os
 import tempfile
 
-from PyMbs.Input.Body import Body as iBody
-from PyMbs.Input.Body import FlexibleBody as iFlexibleBody
-from PyMbs.Input.Body import FlexibleBody
+from pymbs.symbolics import Symbol, eye, Matrix
 
-from PyMbs.Input.Constraints import FourBar as iFourBar
-from PyMbs.Input.Constraints import ThreeBarTrans as iThreeBarTrans
-from PyMbs.Input.Constraints import Steering as iSteering
-from PyMbs.Input.Constraints import CrankSlider as iCrankSlider
-from PyMbs.Input.Constraints import FourBarTrans as iFourBarTrans
-from PyMbs.Input.Constraints import Transmission as iTransmission
-from PyMbs.Input.Constraints import ExpJoint as iExpJoint
-from PyMbs.Input.Constraints import Hexapod as iHexapod
-from PyMbs.Input.Constraints import Hexapod_m_AV as iHexapod_m_AV
+from pymbs.input.body import Body as iBody
+from pymbs.input.body import FlexibleBody as iFlexibleBody
+from pymbs.input.body import FlexibleBody
+
+from pymbs.input.constraints import FourBar as iFourBar
+from pymbs.input.constraints import ThreeBarTrans as iThreeBarTrans
+from pymbs.input.constraints import Steering as iSteering
+from pymbs.input.constraints import CrankSlider as iCrankSlider
+from pymbs.input.constraints import FourBarTrans as iFourBarTrans
+from pymbs.input.constraints import Transmission as iTransmission
+from pymbs.input.constraints import ExpJoint as iExpJoint
+from pymbs.input.constraints import Hexapod as iHexapod
+from pymbs.input.constraints import Hexapod_m_AV as iHexapod_m_AV
 
 from . import Loads as iLoads
 
-from PyMbs.Common.Functions import transpose, skew, skew_numpy
-from PyMbs.Common.PyMbsError import PyMbsError
-from PyMbs.Processing.Body import Body as pBody
-from PyMbs.Processing.Body import FlexibleBody as pFlexibleBody
-from PyMbs.Processing.Frame import\
-                        Frame as pFrame
+from pymbs.common.functions import transpose, skew, skew_numpy
+from pymbs.common.pymbserror import pymbsError
 
+from pymbs.processing.body import Body as pBody
+from pymbs.processing.body import FlexibleBody as pFlexibleBody
+from pymbs.processing.frame import Frame as pFrame
 
-from PyMbs.Processing.Loops.FourBar import FourBar as pFourBar
-from PyMbs.Processing.Loops.ThreeBarTrans import ThreeBarTrans as pThreeBarTrans
-from PyMbs.Processing.Loops.Steering import Steering as pSteering
-from PyMbs.Processing.Loops.CrankSlider import CrankSlider as pCrankSlider
-from PyMbs.Processing.Loops.FourBarTrans import FourBarTrans as pFourBarTrans
-from PyMbs.Processing.Loops.Transmission import Transmission as pTransmission
-from PyMbs.Processing.Loops.ExpJoint import ExpJoint as pExpJoint
-from PyMbs.Processing.Loops.Hexapod import Hexapod as pHexapod
-from PyMbs.Processing.Loops.Hexapod_m_AV import Hexapod_m_AV as pHexapod_m_AV
+from pymbs.processing.loops.fourbar import FourBar as pFourBar
+from pymbs.processing.loops.threebar_trans import ThreeBarTrans as pThreeBarTrans
+from pymbs.processing.loops.steering import Steering as pSteering
+from pymbs.processing.loops.crank_slider import CrankSlider as pCrankSlider
+from pymbs.processing.loops.fourbar_trans import FourBarTrans as pFourBarTrans
+from pymbs.processing.loops.transmission import Transmission as pTransmission
+from pymbs.processing.loops.exp_joint import ExpJoint as pExpJoint
+from pymbs.processing.loops.hexapod import Hexapod as pHexapod
+from pymbs.processing.loops.hexapod_with_axes_offset import Hexapod_m_AV as pHexapod_m_AV
 
-from PyMbs.Processing.Generator_Explicit import Generator_Explicit
-from PyMbs.Processing.Generator_Recursive import Generator_Recursive
-from PyMbs.Processing.Generator_OrderN import Generator_OrderN
-
-from PyMbs.Symbolics import Graph, VarKind
+from pymbs.processing.generator_explicit import Generator_Explicit
+from pymbs.processing.generator_recursive import Generator_Recursive
+from pymbs.processing.generator_order_n import Generator_OrderN
 
 from . import Sensors as iSensors
-import PyMbs.Processing.Sensors as pSensors
+import pymbs.processing.sensors as pSensors
+import pymbs.processing.loads as pLoads
 
+from pymbs.processing.loads.constraint import Constraint as pConstraint
 
-
-from PyMbs.Processing.LoadElements.Constraint import Constraint \
-                                                        as pConstraint
-import  PyMbs.Processing.LoadElements as pLoads
-
-from PyMbs.Graphics.Gui import launchGui
+from pymbs.ui.gui import launchGui
 import numpy as np
 
 
@@ -115,12 +82,12 @@ def setMbsSystemType(t):
 
 def _transformModel(model):
     """
-    model: MbsSystem instance (Input Model)
+    model: MbsSystem instance (input model)
 
-    returns Processing.Body instance (Processing Model)
+    returns processing.Body instance (processing model)
     """
 
-    print("start Transformation")
+    print("start transformation")
 
     # globals of this module:
     global _userExpressions
@@ -166,7 +133,7 @@ def _transformModel(model):
 
     # Bodies are reduced by "Fixed Bodies"
     bodies = [model]+list(model.bodyDict.values())
-    # Generate Processing Bodies and CS
+    # Generate processing Bodies and CS
     for i_body in bodies:
         if i_body is model:
             pWorld=pBody(model.name, graph=_Graph)
@@ -303,7 +270,7 @@ def _transformModel(model):
         # -> adapt all following Frametems, the cg and the inertia tensor
 
         # JointEndFrame ^= "jef"
-        # BodyInertialFrame (of the InputBody) ^= "bif"
+        # BodyInertialFrame (of the inputBody) ^= "bif"
         jef=i_joint.child
         p=jef.p
         R=jef.R
@@ -354,7 +321,7 @@ def _transformModel(model):
     _userExpressions = list(model.expressionDict.values())
     _gravity = model.gravity_vect*model.gravity_const
     _pInertialBody = pWorld
-    _loops = convertLoops(list(model.loopDict.values()))
+    _loops = convertloops(list(model.loopDict.values()))
     _loads = convertLoads(list(model.loadDict.values()))
     _sensors = convertSensors(list(model.sensorDict.values()))
     #_inputs=model.inputSymbolList
@@ -380,7 +347,7 @@ def convertConstraints(constrList):
 
 def convertLoads(loadList):
     """
-    converts loads from Input to Processing form
+    converts loads from input to processing form
     """
 
 
@@ -439,7 +406,7 @@ def convertLoads(loadList):
 
 def convertSensors(sensorList):
     """
-    converts Sensors from Input to Processing form
+    converts Sensors from input to processing form
     """
 
     # special treating of JointSensors (analog to JointLoads):
@@ -516,9 +483,9 @@ def convertSensors(sensorList):
 
     return newSensorList
 
-def convertLoops(loopList):
+def convertloops(loopList):
     """
-    converts Loops from Input to Processing form
+    converts loops from input to processing form
     """
     newLoopList=[]
     for i_loop in loopList:
@@ -784,6 +751,7 @@ def applyFixedJoints(iBody, stage):
 
 
 # avoid importing * in MbsSystem nor every function by its own
+# todo: is this needed any longer? Seems to be deprecated, see __init__.py here
 class PublicMethods(object):
     """
     Collects all functions that are ought to be used by other modules
@@ -861,8 +829,8 @@ class PublicMethods(object):
 
     @staticmethod
     def show( model, modelname, options, **kwargs):
-        import PyMbs.Input.MbsSystem
-        assert isinstance(model, PyMbs.Input.MbsSystem)
+        import pymbs.input.MbsSystem
+        assert isinstance(model, pymbs.input.MbsSystem)
 
         _Graph = model.graph
 
@@ -915,14 +883,14 @@ class PublicMethods(object):
         try:
             _Graph
         except NameError:
-            raise PyMbsError('Cannot export graph reps. You have to call ' \
+            raise pymbsError('Cannot export graph reps. You have to call ' \
                              'the <genEquations()> method of your MbsSystem-'\
                              'instance before calling <exportGraphReps()>.')
 
         grList = list(model.graphRepDict.values())
 
         if not grList:
-            raise PyMbsError('Cannot export graphics. There are no '\
+            raise pymbsError('Cannot export graphics. There are no '\
                              'visualisation objects defined. Call '\
                              '<addVisualisation.xyz()> of your MbsSystem-'\
                              'instance to add 3d objects representing the '\

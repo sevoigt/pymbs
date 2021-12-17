@@ -39,7 +39,7 @@ namespace Symbolics
         // toString
         std::string toString() const;
 
-        // Vereinfachen, wenn unverändert, dann NULL
+        // Vereinfachen, wenn unveraendert, dann NULL
         BasicPtr simplify();
 
         static BasicPtr New(BasicPtr const& e);

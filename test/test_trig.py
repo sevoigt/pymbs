@@ -1,35 +1,7 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+from pymbs.common.functions import sym
+from pymbs.common.expression import Expression
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 20.07.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Common.Functions import sym
-from PyMbs.Common.Expression import Expression
-
-from PyMbs.Symbolics import sin, cos, symbols, Wild, trigsimp, sympify, Symbol
+from pymbs.symbolics import sin, cos, Wild, trigsimp, sympify, Symbol
 
 #x,y = symbols('xy')
 x = Symbol('x')

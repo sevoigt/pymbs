@@ -1,15 +1,15 @@
 '''
-Test case for solving a nonlinear system of equations within PyMbs-generated
+Test case for solving a nonlinear system of equations within pymbs-generated
 code.
 '''
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 
-from PyMbs.Common.Functions import newton, sym
-from PyMbs.Common.Expression import Expression, VarKind
+from pymbs.common.functions import newton, sym
+from pymbs.symbolics import Expression, VarKind
 
-from PyMbs.Output.PythonWriter import PythonWriter
+from pymbs.output.PythonWriter import PythonWriter
 
 
 # dummy mbs system to get some equations

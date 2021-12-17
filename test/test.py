@@ -1,51 +1,22 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-#from ipHelp import IPS, ip_syshook, ST
-#ip_syshook(1)
-
-
-
-# Unitests
-
 import unittest
 
 print("-------- Unittests --------------\n")
-import PyMbs.Common.Functions
-from PyMbs.Common.Functions import skew, subs, element, solve, symmetricMatrix
-import PyMbs.Common.Simple
-from PyMbs.Symbolics import __version__, eye, Matrix, Symbol, cos, sin
+import pymbs.common.functions
+from pymbs.common.functions import skew, subs, element, solve, symmetricMatrix
+import pymbs.common.simple
+from pymbs.symbolics import __version__, eye, Matrix, Symbol, cos, sin
 from numpy import cross
 
 from math import pi as math_pi
 
 
 
-from PyMbs.Common.Expression import Expression, VarKind
-from PyMbs.Common.MbsEquations import MbsEquations
-from PyMbs.Common.State import State
-from PyMbs.Graph.Graph import Graph
+from pymbs.symbolics import Expression, VarKind
+from pymbs.common.MbsEquations import MbsEquations
+from pymbs.common.state import State
+from pymbs.symbolics.graph import Graph
 
-import PyMbs.Common.GraphReps as gr
+import pymbs.common.graphreps as gr
 
 # flag used to skip slow tests
 FASTRUN = False
@@ -59,14 +30,14 @@ class TestFunctions(unittest.TestCase):
 
         global a, b, c, d
         #a, b, c, d = symbols("abcd", commutative = False)
-        a = PyMbs.Symbolics.Symbol('a', commutative = False)
-        b = PyMbs.Symbolics.Symbol('b', commutative = False)
-        c = PyMbs.Symbolics.Symbol('c', commutative = False)
-        d = PyMbs.Symbolics.Symbol('d', commutative = False)
+        a = pymbs.symbolics.Symbol('a', commutative = False)
+        b = pymbs.symbolics.Symbol('b', commutative = False)
+        c = pymbs.symbolics.Symbol('c', commutative = False)
+        d = pymbs.symbolics.Symbol('d', commutative = False)
 
-    def testPyMbs_Symbolicsversion(self):
-        # if this test fails, maybe some PyMbs.Symbolics behavior has changed
-#        print "PyMbs.Symbolics Version: %s"%__version__
+    def testpymbs_symbolicsversion(self):
+        # if this test fails, maybe some pymbs.symbolics behavior has changed
+#        print "pymbs.symbolics version: %s"%__version__
         self.assertTrue(__version__ in ('0.6.5', '0.6.6', '0.6.7', '0.6.8', '0.7.0') )
 
     def testsubs_mul(self):
@@ -96,13 +67,13 @@ class TestFunctions(unittest.TestCase):
         # tests whether specifying a local variable helps
         
         # sympify without locals
-        tmp1 = PyMbs.Symbolics.sympify('transpose(a)')
+        tmp1 = pymbs.symbolics.sympify('transpose(a)')
 
         # sympify with locals
         local_dict = {}
-        exec('from PyMbs.Common.Functions import *', local_dict)
-        tmp2 = PyMbs.Symbolics.sympify('transpose(a)', locals=local_dict)
-        tmp3 = PyMbs.Common.Functions.transpose(a)
+        exec('from pymbs.common.Functions import *', local_dict)
+        tmp2 = pymbs.symbolics.sympify('transpose(a)', locals=local_dict)
+        tmp3 = pymbs.common.Functions.transpose(a)
         
         # Testen
         # self.assertTrue( tmp1.__class__ != tmp2.__class__ )
@@ -111,7 +82,7 @@ class TestFunctions(unittest.TestCase):
 
     def test_transpose(self):
         # transposes a Symbol:
-        transpose = PyMbs.Common.Functions.transpose
+        transpose = pymbs.common.Functions.transpose
         exp=a*transpose(b)
 
         # transpose a Matrix
@@ -126,11 +97,11 @@ class TestFunctions(unittest.TestCase):
 
         self.assertTrue( transpose(5) == 5 )
         self.assertTrue( transpose(0) == 0 )
-        Zero = PyMbs.Symbolics.sympify(0)
+        Zero = pymbs.symbolics.sympify(0)
         self.assertTrue( transpose(Zero) == Zero )
 
-        A = PyMbs.Common.Functions.sym('A')
-        B = PyMbs.Common.Functions.sym('B')
+        A = pymbs.common.Functions.sym('A')
+        B = pymbs.common.Functions.sym('B')
 
         t = transpose(A)*B - B*transpose(A)
         self.assertFalse(t == 0)
@@ -159,8 +130,8 @@ class TestFunctions(unittest.TestCase):
         a = Matrix(a)
         self.assertTrue( s*a == cp )
 
-        A = PyMbs.Common.Functions.sym('A')
-        B = PyMbs.Common.Functions.sym('B')
+        A = pymbs.common.Functions.sym('A')
+        B = pymbs.common.Functions.sym('B')
 
         t = skew(A)*B - B*skew(A)
         self.assertFalse(t == 0)
@@ -183,9 +154,9 @@ class TestFunctions(unittest.TestCase):
         # check that subs(skew, s, v) == [[...],[...],[...]]
         s = Symbol('s')
         t = Symbol('t')
-        exp = PyMbs.Common.Functions.transpose(s)
+        exp = pymbs.common.Functions.transpose(s)
 
-        self.assertTrue( subs(exp, PyMbs.Common.Functions.transpose(s), t) == t )
+        self.assertTrue( subs(exp, pymbs.common.Functions.transpose(s), t) == t )
 
     def test_element(self):
         # check that subs(skew, s, v) == [[...],[...],[...]]
@@ -218,12 +189,12 @@ class TestFunctions(unittest.TestCase):
         self.assertTrue(x_exp == Matrix([1,2,3]))
 
 #        a,b,c,d,e,f = symbols('abcdef')
-        a = PyMbs.Symbolics.Symbol('a')
-        b = PyMbs.Symbolics.Symbol('b')
-        c = PyMbs.Symbolics.Symbol('c')
-        d = PyMbs.Symbolics.Symbol('d')
-        e = PyMbs.Symbolics.Symbol('e')
-        f = PyMbs.Symbolics.Symbol('f')
+        a = pymbs.symbolics.Symbol('a')
+        b = pymbs.symbolics.Symbol('b')
+        c = pymbs.symbolics.Symbol('c')
+        d = pymbs.symbolics.Symbol('d')
+        e = pymbs.symbolics.Symbol('e')
+        f = pymbs.symbolics.Symbol('f')
 
 
         A_sym = Matrix([[a,b],
@@ -239,12 +210,12 @@ class TestFunctions(unittest.TestCase):
 
     def test_symmetricMatrix(self):
 
-        a = PyMbs.Symbolics.Symbol('a')
-        b = PyMbs.Symbolics.Symbol('b')
-        c = PyMbs.Symbolics.Symbol('c')
-        d = PyMbs.Symbolics.Symbol('d')
-        e = PyMbs.Symbolics.Symbol('e')
-        f = PyMbs.Symbolics.Symbol('f')
+        a = pymbs.symbolics.Symbol('a')
+        b = pymbs.symbolics.Symbol('b')
+        c = pymbs.symbolics.Symbol('c')
+        d = pymbs.symbolics.Symbol('d')
+        e = pymbs.symbolics.Symbol('e')
+        f = pymbs.symbolics.Symbol('f')
 
 
         M=symmetricMatrix([a, b, c, d, e, f])
@@ -274,7 +245,7 @@ class TestFunctions(unittest.TestCase):
         exp0 = Expression("Test1", Symbol("exp0"), Matrix([1,1]))
         exp1 = Expression("Test1", Symbol("exp1"), Matrix([5,5]))
         exp2 = Expression("Test2", Symbol("exp2"), exp0.symbol-exp1.symbol, VarKind.STATE)
-        exp3 = Expression("Test2", Symbol("exp3"), exp0.symbol*PyMbs.Common.Functions.transpose(exp1.symbol), [VarKind.STATE, VarKind.Sensor])
+        exp3 = Expression("Test2", Symbol("exp3"), exp0.symbol*pymbs.common.Functions.transpose(exp1.symbol), [VarKind.STATE, VarKind.Sensor])
         exp4 = Expression("Test2", Symbol("exp4"), exp3.symbol**2, [VarKind.STATE, VarKind.Sensor])
 
         g = Graph()
@@ -292,13 +263,13 @@ class TestFunctions(unittest.TestCase):
         exp0 = Expression("Test0", Symbol("exp0"), Matrix([1,1]), VarKind.PARAMS)
         exp1 = Expression("Test1", Symbol("exp1"), Matrix([5,5]), VarKind.PARAMS)
         exp2 = Expression("Test2", Symbol("exp2"), exp0.symbol-exp1.symbol, VarKind.PARAMS)
-        exp3 = Expression("Test3", Symbol("exp3"), exp0.symbol*PyMbs.Common.Functions.transpose(exp1.symbol), VarKind.PARAMS)
+        exp3 = Expression("Test3", Symbol("exp3"), exp0.symbol*pymbs.common.Functions.transpose(exp1.symbol), VarKind.PARAMS)
         exp4 = Expression("Test4", Symbol("exp4"), exp3.symbol**2, VarKind.PARAMS)
 
         exp5 = Expression("Test5", Symbol("exp5"), exp0.symbol)
         exp6 = Expression("Test6", Symbol("exp6"), exp1.symbol)
         exp7 = Expression("Test7", Symbol("exp7"), exp5.symbol-exp6.symbol)
-        exp8 = Expression("Test8", Symbol("exp8"), exp5.symbol*PyMbs.Common.Functions.transpose(exp6.symbol), [VarKind.Sensor])
+        exp8 = Expression("Test8", Symbol("exp8"), exp5.symbol*pymbs.common.Functions.transpose(exp6.symbol), [VarKind.Sensor])
         exp9 = Expression("Test9", Symbol("exp9"), exp8.symbol**2, [VarKind.STATE, VarKind.Sensor])
 
         s = State()
@@ -399,9 +370,9 @@ class TestFunctions(unittest.TestCase):
         q0 = Symbol("q0")
         q1 = Symbol("q1")
         #state expression
-        sexpq = Expression("sexp0", q, PyMbs.Symbolics.Matrix([0,0]))
+        sexpq = Expression("sexp0", q, pymbs.symbolics.Matrix([0,0]))
         sexp0 = Expression("sexp0", q0, element(q,0,0))
-        sexp1 = Expression("sexp1", q1, element(q,PyMbs.Symbolics.sympify(1),PyMbs.Symbolics.sympify(0)))
+        sexp1 = Expression("sexp1", q1, element(q,pymbs.symbolics.sympify(1),pymbs.symbolics.sympify(0)))
         s = State([q0,q1])
 
         exp5 = Expression("Test5", Symbol("exp5"), exp0.symbol + q0)
@@ -424,7 +395,7 @@ class TestFunctions(unittest.TestCase):
         self.assertTrue( g.getValue(exp9.symbol) == 4)
         self.assertTrue( g.getValue(exp10.symbol) == 68)
 
-        g.changeValue(q, PyMbs.Symbolics.Matrix([1,1]))
+        g.changeValue(q, pymbs.symbolics.Matrix([1,1]))
         self.assertTrue( g.getValue(exp10.symbol) == 73)
 
         g.changeValue(q0, 0)
@@ -435,15 +406,15 @@ class TestFunctions(unittest.TestCase):
 
     def test_trigsimp(self):
 
-#        simp = lambda x: PyMbs.Symbolics.trigsimp(x, deep=True, recursive=True)
+#        simp = lambda x: pymbs.symbolics.trigsimp(x, deep=True, recursive=True)
 #        simp = ownTrigSimp
 #        simp = simpleTrigSimp
 #        s = SimpleMATLAB()
-        simp = PyMbs.Common.Simple.simple
+        simp = pymbs.common.Simple.simple
 
         #x,y = symbols('xy')
-        x = PyMbs.Symbolics.Symbol('x')
-        y = PyMbs.Symbolics.Symbol('y')
+        x = pymbs.symbolics.Symbol('x')
+        y = pymbs.symbolics.Symbol('y')
 
         # some trivial tests:
         self.assertTrue(simp(x) == x)
@@ -498,7 +469,7 @@ class TestFunctions(unittest.TestCase):
         self.assertTrue(res7 == v)
 
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 class TestInput(unittest.TestCase):
     """
