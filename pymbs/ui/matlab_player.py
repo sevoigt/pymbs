@@ -3,7 +3,7 @@ from tkinter.filedialog import askopenfilename
 import time
 import numpy as np
 from copy import deepcopy
-import h5py
+#import h5py
 from functools import partial
 from numpy import array, ndarray
 
@@ -59,6 +59,7 @@ class MatlabPlayer(object):
             print('result file has been loaded successfully')
         except NotImplementedError:
             print('mat file seems to have new HDF5 format ...')
+            raise NotImplementedError("hdf5-based mat-files not supported")
             channels = h5py.File(fileName)
             channels = dict(channels)
             print('result file has been loaded successfully')

@@ -41,8 +41,8 @@ class Generator_Recursive(Generator):
         # Calculate Sensors (before accelerations)
         for sens in self.sensors:
             if (not sens.delayCalc):
-                if (isinstance(sens, pymbs.Processing.Sensors.EnergySensor)):
-                    sens.gravity = -self.inertial._alpha_C;
+                if (isinstance(sens, pymbs.processing.sensors.EnergySensor)):
+                    sens.gravity = -self.inertial._alpha_C
                 sens.calc(graph)
 
         # Calculate Load Values
@@ -55,8 +55,8 @@ class Generator_Recursive(Generator):
         # Calculate Sensors (after accelerations)
         for sens in self.sensors:
             if (sens.delayCalc):
-                if (isinstance(sens, pymbs.Processing.Sensors.EnergySensor)):
-                    sens.gravity = -self.inertial._alpha_C;
+                if (isinstance(sens, pymbs.processing.sensors.EnergySensor)):
+                    sens.gravity = -self.inertial._alpha_C
                 sens.calc(graph)
 
         # return all equations

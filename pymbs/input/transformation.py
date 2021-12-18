@@ -829,8 +829,8 @@ class PublicMethods(object):
 
     @staticmethod
     def show( model, modelname, options, **kwargs):
-        import pymbs.input.MbsSystem
-        assert isinstance(model, pymbs.input.MbsSystem)
+        from pymbs.input import MbsSystem
+        assert isinstance(model, MbsSystem)
 
         _Graph = model.graph
 

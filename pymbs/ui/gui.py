@@ -7,18 +7,18 @@ import tempfile
 import numpy as np
 from numpy import zeros
 
-from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
+from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
         QHBoxLayout, QCheckBox, QLineEdit, QPushButton, QSlider, QDialog, \
         QMainWindow, QFileDialog, \
         QApplication, QLineEdit
 
 
-from PyQt6.QtGui import QDoubleValidator, QIcon, QPixmap
+from PyQt5.QtGui import QDoubleValidator, QIcon, QPixmap
 
-from PyQt6.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
+from PyQt5.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
                         QApplication, QTabWidget, QVBoxLayout,\
                         QScrollArea, QHBoxLayout, QLabel, QCheckBox, QSlider
-from PyQt6.QtCore import Qt, QSize, QMetaObject, QTimer
+from PyQt5.QtCore import Qt, QSize, QMetaObject, QTimer
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from vtk.util.colors import light_grey
 
@@ -38,7 +38,7 @@ from pymbs.common.graphreps import File, Box, Cylinder, Frame, Sphere, Line, \
 from pymbs.symbolics import VarKind
 from pymbs.common.pymbserror import PyMbsError
 
-from pymbs.ui.thread import pymbsThread
+from pymbs.ui.thread import PyMbsThread
 from pymbs.ui.integrator import Integrator
 from pymbs.ui.matlab_player import MatlabPlayer
 from pymbs.ui.pi_recorder import PIRecorder
@@ -136,7 +136,7 @@ class pymbsMainWindow(object):
         self.resultLayout.addWidget(tabScaling)
         self.trackNode = QCheckBox('Track Node')
         self.resultLayout.addWidget(self.trackNode)
-        self.resultLayout.addStretch(1.0)
+        #self.resultLayout.addStretch(1.0) # TODO does not work anymore - why?
 
 
         # add tabs to tabbar
@@ -809,13 +809,13 @@ class Gui(QMainWindow, pymbsMainWindow):
 
             init = float(str(initVals[i]))
             slider.setInitVal(init)
-            slider.slider.setValue(init)
+            slider.slider.setValue(int(init))  # TODO was float, requires int now
 
             self.kintestSliderGroupLayout.addWidget(slider)
             self.sliders.append(slider)
 
         # finalize scroll area layout
-        self.kintestSliderGroupLayout.addStretch(1.0)
+        #self.kintestSliderGroupLayout.addStretch(1.0) # TODO requires int
         self.kintestScrollArea.setWidget(self.kintestSliderGroup)
 
 
@@ -855,7 +855,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             self.inputSliders.append(slider)
 
         # finalize scroll area layout
-        self.simulationSliderGroupLayout.addStretch(1.0)
+        #self.simulationSliderGroupLayout.addStretch(1.0)  # TODO requires int
         self.simulationScrollArea.setWidget(self.simulationSliderGroup)
 
 
@@ -957,10 +957,10 @@ class Gui(QMainWindow, pymbsMainWindow):
 
 
         # Create simulation thread
-        self.SimThread = pymbsThread(self.simulate, realTime=True)
+        self.SimThread = PyMbsThread(self.simulate, realTime=True)
 
         # Create result thread
-        self.ResultThread = pymbsThread(self.playResults, realTime=True)
+        self.ResultThread = PyMbsThread(self.playResults, realTime=True)
 
 
         # create recorder instance and connect required signals and slots
