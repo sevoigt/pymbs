@@ -6,50 +6,48 @@ import tempfile
 
 import numpy as np
 from numpy import zeros
-from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
+
+from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
         QHBoxLayout, QCheckBox, QLineEdit, QPushButton, QSlider, QDialog, \
         QMainWindow, QFileDialog, \
         QApplication, QLineEdit
 
 
-from PyQt5.QtGui import QDoubleValidator, QIcon, QPixmap
+from PyQt6.QtGui import QDoubleValidator, QIcon, QPixmap
 
-from PyQt5.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
+from PyQt6.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
                         QApplication, QTabWidget, QVBoxLayout,\
                         QScrollArea, QHBoxLayout, QLabel, QCheckBox, QSlider
-from PyQt5.QtCore import Qt, QSize, QMetaObject, QTimer
+from PyQt6.QtCore import Qt, QSize, QMetaObject, QTimer
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from vtk.util.colors import light_grey
 
-from PyMbs.Graphics.matplotlibwidget import MatplotlibWidget
+from pymbs.ui.matplotlibwidget import MatplotlibWidget
 
 # Note: NavigationToolbar2QTAgg was removed in matplotlib 1.5.0
-# Now PyMbs imports NavigationToolbar2QT which should be compatible with older
+# Now pymbs imports NavigationToolbar2QT which should be compatible with older
 # matplotlib versions as well
-
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as \
-        NavigationToolbar
 
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as \
         NavigationToolbar
 
 from matplotlib.colors import ColorConverter
 
-from PyMbs.Common.GraphReps import File, Box, Cylinder, Frame, Sphere, Line, \
+from pymbs.common.graphreps import File, Box, Cylinder, Frame, Sphere, Line, \
         Arrow, Flexible_Body
-from PyMbs.Symbolics import VarKind
-from PyMbs.Common.PyMbsError import PyMbsError
+from pymbs.symbolics import VarKind
+from pymbs.common.pymbserror import PyMbsError
 
-from PyMbs.Graphics.PyMbsThread import PyMbsThread
-from PyMbs.Graphics.Integrator import Integrator
-from PyMbs.Graphics.MatlabPlayer import MatlabPlayer
-from PyMbs.Graphics.PIRecorder import PIRecorder
+from pymbs.ui.thread import pymbsThread
+from pymbs.ui.integrator import Integrator
+from pymbs.ui.matlab_player import MatlabPlayer
+from pymbs.ui.pi_recorder import PIRecorder
 
-from PyMbs.Graphics.Compile import compileF90, compileC
+from pymbs.ui.compile import compileF90, compileC
 
-from PyMbs import version as PYMBS_VERSION
+from pymbs import __version__ as pymbs_VERSION
 
-class PyMbsMainWindow(object):
+class pymbsMainWindow(object):
     '''
     Creates the main application window with group for sliders on the left and
     vtk-scene widget for interactive 3D-visualisation on the right
@@ -682,7 +680,7 @@ class Sensors(QDialog):
 
 
 
-class Gui(QMainWindow, PyMbsMainWindow):
+class Gui(QMainWindow, pymbsMainWindow):
     '''
     Create the user interface with sliders according to genCoords
     '''
@@ -755,7 +753,7 @@ class Gui(QMainWindow, PyMbsMainWindow):
         # Set up main window and reset button
         self.setupMainWindow(self, self.AAFrames)
         self.modelName = modelName
-        self.setWindowTitle('PyMbs %s - %s' % (PYMBS_VERSION,modelName))
+        self.setWindowTitle('pymbs %s - %s' % (pymbs_VERSION,modelName))
 
         # Obtain state and inital values
         self.graph = graph
@@ -959,10 +957,10 @@ class Gui(QMainWindow, PyMbsMainWindow):
 
 
         # Create simulation thread
-        self.SimThread = PyMbsThread(self.simulate, realTime=True)
+        self.SimThread = pymbsThread(self.simulate, realTime=True)
 
         # Create result thread
-        self.ResultThread = PyMbsThread(self.playResults, realTime=True)
+        self.ResultThread = pymbsThread(self.playResults, realTime=True)
 
 
         # create recorder instance and connect required signals and slots
@@ -1149,7 +1147,7 @@ class Gui(QMainWindow, PyMbsMainWindow):
 
         # ReInit Thread if already running
         if (self.playResultsButton.isChecked()):
-            # Start PyMbs Thread
+            # Start pymbs Thread
             self.ResultThread.reinit()
 
             p1 = self.ResultPlayer.get('%s[%s]'%(str(self.vtkObjects[0].r),str(1)))
@@ -1369,7 +1367,7 @@ class Gui(QMainWindow, PyMbsMainWindow):
         f.write('\'\'\'\n')
         f.write('Created on %s\n'%(time.strftime('%Y-%m-%d')))
         f.write('\n')
-        f.write('@author: TU-Dresden PyMbs Version %s\n'%PYMBS_VERSION)
+        f.write('@author: TU-Dresden pymbs Version %s\n'%pymbs_VERSION)
         f.write('\n')
         f.write('%s\n'%file)
         f.write('\'\'\'\n')

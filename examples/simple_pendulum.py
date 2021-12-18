@@ -28,4 +28,4 @@ world.addVisualisation.Box(pend, length=0.1, width=0.1, height=1.0)
 world.genEquations.Recursive()
 
 # show gui
-world.show('SimplePendulum')
+#world.show('SimplePendulum')
