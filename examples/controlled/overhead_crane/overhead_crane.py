@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
-from PyMbs.Input import *
+"""
+Model of an overhead crane with a trolley and load pendulum.
+"""
+
+from pymbs.input import *
 from controller import trolley_force, rope_force
 
 ropelength = 1

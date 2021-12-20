@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
-
 """
-Dieses Skript verdeutlich wie Carsten sich den Zugang zu den
-Bewegungsgleichungen und ggf. anderen relevanten Gleichungen vorstellt
-
+Shows how to get access to the symbolic equations of motion and to the 
+symbolic expressions for the sensors.
 """
 
+# set up PyMbs and the multibody-system
+from pymbs.input import *
 
-
-# set up PyMbs and the multi-body system
-from PyMbs.Input import *
 world = MbsSystem([0, 0, -1])
 
 # add parameters
@@ -21,12 +17,6 @@ d = world.addParam('d', 0.2)
 movingBody = world.addBody(m)
 movingBody2 = world.addBody(m)
 J1 = world.addJoint(world, movingBody, 'Tz', startVals=1)
-
-# nur zum Test
-#J2 = world.addJoint(world, movingBody2, ['Tx', 'Ty'], startVals=[3, 4])
-#from IPython import embed as IPS
-#IPS()
-
 
 # add force to simulate a spring-damper combination
 l = world.addSensor.Distance('l', movingBody, world)
@@ -42,9 +32,11 @@ world.genEquations.Recursive()
 
 
 
-#############################################################################
-# liefert die Symbole der (minimalen) Koordinaten, und der zugehörigen ersten zwei Zeitableitungen
-# Die Joint-Objekte haben nach der Ausführung von genEquations die zugehörigen Symbole als Attribute gesetzt:
+# -----------------------------------------------------------------------------
+# Get the  symbols of the minimal coordinates and their first two time
+# derivatives. After calling genEquations(), the joint-objects have the
+# corresponding symbols set as attributes:
+
 q = list()
 qd = list()
 qdd = list()
@@ -55,23 +47,26 @@ for joint in list(world.jointDict.values()):
         qdd.append(joint.acc)
 
 
+# Provides a list of symbolic expressions that can be used to calculate
+# qdd from given (q, qd). The goal here is to convert these expressions
+# to sympy, e.g. for linearisation.
+
 eqns_mo = world.getMotionEquations()
-# liefert eine Liste von symbolischen Ausdrücken aus denen man qdd für gegebene q, qd berechnen kann
-# Mein Ziel ist es, diese Ausdrücke nach sympy zu konvertieren und zum Beispiel auch zu linearisieren
+
 print('--- getMotionEquations ---')
 for eqn in eqns_mo:
     print(eqn.lhs, ' := ', eqn.rhs)
 
-# (optional)
+
+# (optional) provides a list of symbolic expressions to calculate all
+# sensor values for give q, qd
+
 eqns_sens = world.getSensorEquations()
+
 print('--- getSensorEquations ---')
 for eqn in eqns_sens:
     print(eqn.lhs, ' := ', eqn.rhs)
 
-# liefert eine Liste von symbolischen Ausdrücken aus denen man jeden Sensor-Wert für gegebene q, qd Werte berechnen kann
-
-
-#############################################################################
-
+# -----------------------------------------------------------------------------
 
 world.show('Pendulum')

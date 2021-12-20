@@ -1,36 +1,19 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+"""
+Model of a planar rope attaced to a sliding mass
+"""
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-from PyMbs.Input import *
+from pymbs.input import *
 from controller import controlForce
 
 world = MbsSystem([0, 0, -1])
 
-L = 3.0     # Total Length
-d = 0.2     # Rotational Damping
+L = 3.0     # total length
+d = 0.2     # rotational damping
 rho = 500.0 # 500 kg/m^3
 r = 0.1     # radius
 segments = 5
 
-# Initialize Lists
+# Initialize lists
 bodies = [None]*segments
 joints = [None]*segments
 
@@ -52,11 +35,11 @@ x = world.addSensor.Distance('x', world, trolley)
 
 # Create rope segments and connect them
 for i in range(0, segments):
-    # Create Body and Frame
+    # Create body and frame
     bodies[i] = world.addBody(m, cg=[l/2, 0, 0], inertia=I)
     bodies[i].addFrame(name='end', p=[l, 0, 0])
 
-    # Create Joints
+    # Create joints
     if (i==0):
         joints[i] = world.addJoint(trolley, bodies[i], 'Ry')
     else:
@@ -64,7 +47,7 @@ for i in range(0, segments):
 
     world.addVisualisation.Line(bodies[i], l)
 
-    # Add Damping
+    # Add damping
     if (i==0):
         # Name first sensor alpha0 for use in controller
         s = world.addSensor.Joint(symbol='alpha0', joint=joints[i])

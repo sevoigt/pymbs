@@ -1,4 +1,8 @@
-﻿# Warning: The source code of the examples is quoted in the documentation. If
+﻿"""
+Model for a 1D pendulum
+"""
+
+# Warning: The source code of the examples is quoted in the documentation. If
 # you change this file, you'll have to change the corresponding file in the
 # documentation (see doc/examples).
 
