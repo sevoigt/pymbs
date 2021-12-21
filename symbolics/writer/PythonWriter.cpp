@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include "PythonWriter.h"
 #include "str.h"
 #include <iostream>
@@ -113,13 +92,13 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl << std::endl;
 
-	f << "from __future__ import division" << std::endl;
-	f << "from scipy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
-	f << "from scipy import arctan2 as atan2" << std::endl;
-	f << "from scipy import arctan as atan" << std::endl;
-	f << "from scipy import arcsin as asin" << std::endl;
-	f << "from scipy import arccos as acos" << std::endl;
-	f << "from scipy import sign" << std::endl;
+	f << "from numpy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
+	f << "from numpy import arctan2 as atan2" << std::endl;
+	f << "from numpy import arctan as atan" << std::endl;
+	f << "from numpy import arcsin as asin" << std::endl;
+	f << "from numpy import arccos as acos" << std::endl;
+	f << "from numpy import sign" << std::endl;
+
     // import sensors function if there are any sensors
     if (!sensors.empty())
 	{
@@ -166,7 +145,7 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 			f << "y[" << str(i) << "]" << std::endl;
 		else
 			f << "matrix(y[" << str(n.getDimension(1) * i) << ":" 
-			  << str(n.getDimension(1) * (i+1)) << "]).T" 
+			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T" 
 			  << std::endl;
 	}
 	f << std::endl;
@@ -270,13 +249,12 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl << std::endl;
 
-	f << "from __future__ import division" << std::endl;
-	f << "from scipy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
-	f << "from scipy import arctan2 as atan2" << std::endl;
-	f << "from scipy import arctan as atan" << std::endl;
-	f << "from scipy import arcsin as asin" << std::endl;
-	f << "from scipy import arccos as acos" << std::endl;
-	f << "from scipy import sign" << std::endl;
+	f << "from numpy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
+	f << "from numpy import arctan2 as atan2" << std::endl;
+	f << "from numpy import arctan as atan" << std::endl;
+	f << "from numpy import arcsin as asin" << std::endl;
+	f << "from numpy import arccos as acos" << std::endl;
+	f << "from numpy import sign" << std::endl;
 	f << std::endl << std::endl;
 
 	if (! inputs.empty())
@@ -313,7 +291,7 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 			f << "y[" << str(i) << "]" << std::endl;
 		else
 			f << "matrix(y[" << str(n.getDimension(1) * i) << ":" 
-			  << str(n.getDimension(1) * (i+1)) << "]).T" 
+			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T" 
 			  << std::endl;
 	}
 	f << std::endl;
@@ -401,13 +379,12 @@ double PythonWriter::generateSensors(Graph::Graph &g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl << std::endl;
 
-	f << "from __future__ import division" << std::endl;
-	f << "from scipy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
-	f << "from scipy import arctan2 as atan2" << std::endl;
-	f << "from scipy import arctan as atan" << std::endl;
-	f << "from scipy import arcsin as asin" << std::endl;
-	f << "from scipy import arccos as acos" << std::endl;
-	f << "from scipy import sign" << std::endl;
+	f << "from numpy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
+	f << "from numpy import arctan2 as atan2" << std::endl;
+	f << "from numpy import arctan as atan" << std::endl;
+	f << "from numpy import arcsin as asin" << std::endl;
+	f << "from numpy import arccos as acos" << std::endl;
+	f << "from numpy import sign" << std::endl;
 	f << std::endl << std::endl;
 
 	if (! inputs.empty())
@@ -444,7 +421,7 @@ double PythonWriter::generateSensors(Graph::Graph &g)
 			f << "y[" << str(i) << "]" << std::endl;
 		else
 			f << "matrix(y[" << str(n.getDimension(1) * i) << ":" 
-			  << str(n.getDimension(1) * (i+1)) << "]).T" 
+			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T" 
 			  << std::endl;
 	}
 	f << std::endl;
@@ -508,13 +485,14 @@ std::string PythonWriter::writeEquations(std::vector<Graph::Assignment> const& e
 	{
         if (it->implizit)
             throw InternalError("Implicit equations are not yet implemented in Python!");
-		//Folgendes falls mehrere Gleichungen in einer verpackt sind (wird aber scheinbar kaum genutzt)
+		
+		// Multi-dimensional equation, i.e. matrix equation (seems to be hardly used)
 		for (size_t i=0; i < it->lhs.size(); ++i)
 		{
 			BasicPtr simple_exp = it->rhs[i]->simplify();
 			if (simple_exp.get() == NULL) throw InternalError("PythonWriter: Value of Rhs is not Valid!");
 
-			//Links Matrix (also mehrere Ergebnisse)
+			// Matrix at left hand side (= multiple results)
 			if (it->lhs[i]->getType() == Type_Matrix)
 			{
 				const Matrix *mat = Util::getAsConstPtr<Matrix>(it->lhs[i]);
