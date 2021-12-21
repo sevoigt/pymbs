@@ -3,12 +3,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.4)
 PROJECT(Symbolics)
 
 
-# gcc ab 4.7 ist echt unkooperativ mit Forward-Deklarationen und Templates
+# gcc from 4.7 is a bit uncooperativ with forward declarations and templated
 IF(NOT WIN32)
   ADD_DEFINITIONS("-fpermissive")
 ENDIF(NOT WIN32)
 
-# RootDirectory
+# Root directory
 SET(ROOTDIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Python 
@@ -42,10 +42,10 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/writer/include)
 SET(symbolics_headers   include/Basic.h
                         include/BinaryOp.h
                         include/Zero.h
-						include/Eye.h
-						include/Int.h
-						include/Real.h
-						include/Bool.h
+                        include/Eye.h
+                        include/Int.h
+                        include/Real.h
+                        include/Bool.h
                         include/Error.h
                         include/Factory.h
                         include/Matrix.h
@@ -62,10 +62,10 @@ SET(symbolics_headers   include/Basic.h
 SET(symbolics_sources   Basic.cpp 
                         BinaryOp.cpp
                         Zero.cpp
-						Eye.cpp
-						Int.cpp
-						Real.cpp
-						Bool.cpp
+                        Eye.cpp
+                        Int.cpp
+                        Real.cpp
+                        Bool.cpp
                         Factory.cpp
                         Matrix.cpp 
                         NaryOp.cpp 

@@ -83,7 +83,7 @@ ENDIF()
 
 ADD_LIBRARY( SympyWrapper SHARED ${SympyWrapper_headers} ${SympyWrapper_sources} )
 ADD_DEPENDENCIES( SympyWrapper Symbolics Functions Graph Writer )
-TARGET_LINK_LIBRARIES( SympyWrapper Symbolics Functions Graph Printer Writer ${Python_LIBRARIES}) #${PYTHON_LIBRARIES} )
+TARGET_LINK_LIBRARIES( SympyWrapper Symbolics Functions Graph Printer Writer ${Python_LIBRARIES})
 SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES     OUTPUT_NAME "symbolics" )
 IF(WIN32)
     SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES     SUFFIX ".pyd" )
@@ -91,11 +91,6 @@ ELSE(WIN32)
     SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES     PREFIX "" )
 ENDIF(WIN32)
 
-INSTALL( TARGETS SympyWrapper DESTINATION ${CMAKE_CURRENT_SOURCE_DIR} )
-
-IF(MSVC)
-    INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/Debug/symbolics.pdb DESTINATION ${CMAKE_CURRENT_SOURCE_DIR} CONFIGURATIONS Debug )
-    INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/RelWithDebInfo/symbolics.pdb DESTINATION ${CMAKE_CURRENT_SOURCE_DIR} CONFIGURATIONS RelWithDebInfo )
-ENDIF(MSVC)
+INSTALL( TARGETS SympyWrapper DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../../pymbs/symbolics )
 
 PYTHONTEST( test_symbolics ${CMAKE_CURRENT_SOURCE_DIR})

@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include "Printer.h"
 #include "str.h"
 #include <iostream>
@@ -527,7 +506,7 @@ std::string Printer::join( ConstBasicPtr const& arg,
 // Vektoren werden bei unterschiedlichem rowSep und colSep wie folgt ausgegeben:
 //     Spaltenvektor = <leftConstr> ... <rowSep> ... <rightConstr>
 //     Zeilenvektor  = <leftConstr> ... <colSep> ... <rightConstr>
-// Bei identischem rowSep und colSep werden Vektoren wie Matrizen ausgeben, außer es ist forceNoMatrixVectors gesetzt,
+// Bei identischem rowSep und colSep werden Vektoren wie Matrizen ausgeben, auï¿½er es ist forceNoMatrixVectors gesetzt,
 // womit allerdings die Information ob es sich um einen Zeilen oder Spaltenvektor handelt verloren geht.
 
 /*****************************************************************************/
@@ -553,15 +532,15 @@ std::string Printer::print_Matrix( const Matrix *mat,
 	{
 		// Gesamtgroesse
 		size_t size = mat->getShape().getNumEl();
-		char Sep= '§'; //irgendwas damit man es erkennt ;)
+		char Sep= 'ï¿½'; //irgendwas damit man es erkennt ;)
 		// Spalten oder Zeilenvektor?
 		if (mat->getShape().getDimension(1) > 1)
 			Sep = rowSep;
 		else if (mat->getShape().getDimension(2) > 1)
 			Sep = colSep;
 		//else throw InternalError("Printer: Unexpected error (Matrix is Vector but no dimension is > 1)");
-		//Es kann wohl auftreten wenn Skalare als Vektoren deklariert sind. Aber dann sollte der Seperator nicht gebraucht werden -> wenn ein § im Code auftaucht ist was faul
-		s += leftConstr; //TODO: Klammernunterscheidung (gibts überhaupt ne Sprache die sowas hat?)
+		//Es kann wohl auftreten wenn Skalare als Vektoren deklariert sind. Aber dann sollte der Seperator nicht gebraucht werden -> wenn ein ï¿½ im Code auftaucht ist was faul
+		s += leftConstr; //TODO: Klammernunterscheidung (gibts ï¿½berhaupt ne Sprache die sowas hat?)
 		for (size_t l=0;l<size;++l)
 		{
 			// Element anhaengen
