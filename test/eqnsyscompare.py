@@ -11,7 +11,7 @@ from sympy.core.sympify import SympifyError
 from sympy.core.basic import Basic
 from pymbs.common.functions import element
 
-# sympify with locals
+# Sympify with locals
 local_dict = {}
 exec('from pymbs.common.functions import *', local_dict)
 
@@ -407,8 +407,11 @@ def compareEqnSys(a,b):
     #    print '%s = %s'%(k,v)
 
 
-filea = 'D:/Programming/Libraries/PyMbs/PyMbs/Examples/Output/FreeBody.mo'
-fileb = 'D:/Programming/Libraries/PyMbsOld/PyMbs/Examples/Output/FreeBody_der_state.mo'
 
-compareEqnSys(filea, fileb)
+if __name__ == '__main__':
+    
+    filea = 'd:/temp/FreeBody.mo'
+    fileb = 'd:/temp/FreeBody_der_state.mo'
+    
+    compareEqnSys(filea, fileb)
 
