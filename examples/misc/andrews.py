@@ -1,38 +1,15 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+"""
+Model of an Andrews squeezing mechanism.
+"""
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+from pymbs.symbolics import VarKind
+from pymbs.input import *
 
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 01.10.2009
-
-@author: Christian Schubert
-'''
-
-from PyMbs.Symbolics import VarKind
-from PyMbs.Input import *
-
-# set up world
+# Set up world
 world = MbsSystem([0, 0, 0])
 
-# set up parameters (mass and inertia)
+# Set up parameters (mass and inertia)
 m1 = world.addParam('m1', 0.04325, name='Mass1', positive=True)
 I1 = world.addParam('I1', 2.194e-6, name='Inertia1', positive=True)
 m2 = world.addParam('m2', 0.00365, name='Mass2', positive=True)
@@ -48,7 +25,7 @@ I6 = world.addParam('I6', 5.667e-7, name='Inertia6', positive=True)
 m7 = world.addParam('m7', 0.05498, name='Mass7', positive=True)
 I7 = world.addParam('I7', 1.912e-5, name='Inertia7', positive=True)
 
-# set up parameters (positions)
+# Set up parameters (positions)
 xa = world.addParam('xa', -0.06934, negative=True)
 ya = world.addParam('ya', -0.00227, negative=True)
 xb = world.addParam('xb', -0.03635, negative=True)
@@ -56,7 +33,7 @@ yb = world.addParam('yb',  0.03273, positive=True)
 xc = world.addParam('xc',  0.014, positive=True)
 yc = world.addParam('yc',  0.072, positive=True)
 
-# set up parameters (lengths)
+# Set up parameters (lengths)
 d = world.addParam('d', 0.028, positive=True)
 da = world.addParam('da', 0.0115, positive=True)
 e = world.addParam('e', 0.02, positive=True)
@@ -82,7 +59,7 @@ l0 = world.addParam('l0', 0.07785, positive=True)
 fa = world.addParam('fa', 0.01421, positive=True)
 mom = world.addParam('mom', 0.033, positive=True)
 
-# add Bodies
+# Add Bodies
 world.addFrame('A', [xa, ya, 0])
 world.addFrame('B', [xb, yb, 0])
 world.addFrame('C', [xc, yc, 0])
@@ -141,13 +118,13 @@ else:
     world.addConstraint('Loop2', K2.C, K4, [1, 1, 0])
     world.addConstraint('Loop3', K2.C, K6, [1, 1, 0])
 
-# Kraftelemente
+# Force elements
 L = world.addSensor.Distance('L', K3.Spring, world.C, 'SpringLength')
 F = world.addExpression('F', -c0*(L[0]-l0), 'Force')
 world.addLoad.PtPForce(F, K3.Spring, world.C, 'Spring')
 world.addLoad.CmpTorque([0, 0, -mom], world, K1, name='DrivingTorque')
 
-# Visualisierung
+# Visualiation
 world.addVisualisation.Frame(world, 0.01)
 world.addVisualisation.Frame(world.A, 0.01)
 world.addVisualisation.Frame(world.B, 0.01)
@@ -165,7 +142,7 @@ world.addVisualisation.Line(K6.K7, 0.02) #zf
 K7.addFrame('Line', R=rotMat(3.141/2, 'z'))
 world.addVisualisation.Line(K7.Line, 0.04) #u
 
-# Generate Equations, Code and Show Assembly
+# Generate equations, code and show assembly
 E_K1 = world.addSensor.Energy('E_K1', K1)
 E_K2 = world.addSensor.Energy('E_K2', K2)
 E_K3 = world.addSensor.Energy('E_K3', K3)
@@ -178,11 +155,11 @@ E = world.addExpression('E', E_K1+E_K2+E_K3+E_K4+E_K5+E_K6+E_K7, name='Energy',
                         category=VarKind.Sensor)
 
 world.genEquations.Explicit(diff=[0, 1, 2], simplify=False)
-#world.genCode.Matlab('Andrew', './Output',  symbolic=False) #false setzen!
-world.genCode.Modelica('Andrew', './Output')     # Modelica
-#world.genCode.Python('Andrew', '.\Output')     # Python
-#world.genCode.Fortran('Andrew', '.\Output')      # Fortran
-#world.genCode.Cpp('Andrew', '.\Output')    # C++
-#world.genMatlabAnimation('Andrew', '.\Output',
+#world.genCode.Matlab('Andrew', './Output',  symbolic=False) # set false!
+#world.genCode.Modelica('Andrew', './Output')     # Modelica
+#world.genCode.Python('Andrew', './Output')     # Python
+#world.genCode.Fortran('Andrew', './Output')      # Fortran
+#world.genCode.Cpp('Andrew', './Output')    # C++
+#world.genMatlabAnimation('Andrew', './Output',
 #                         axislimits=(-0.07, 0.02, -0.02, 0.07, -0.01, 0.01))
 world.show('Andrews_Squeezing_Mechanism')

@@ -11,24 +11,24 @@ from pymbs.input import *
 
 world = MbsSystem([0, 0, -1])
 
-# add parameters
+# Add parameters
 m = world.addParam('m', 1)
 c = world.addParam('c', 10)
 d = world.addParam('d', 0.2)
 
-# add the body and constrain its movement
+# Add the body and constrain its movement
 movingBody = world.addBody(m)
 world.addJoint(world, movingBody, 'Tz', startVals=1)
 
-# add force to simulate a spring-damper combination
+# Add force to simulate a spring-damper combination
 l = world.addSensor.Distance('l', movingBody, world)
 F = world.addExpression('F', -(c*l[0] + d*l[1]))
 world.addLoad.PtPForce(F, movingBody, world)
 
-# add visualisations
+# Add visualisations
 world.addVisualisation.Box(movingBody, 1, 1, 1)
 world.addVisualisation.Frame(world)
 
-# generate equations and show the system
+# Generate equations and show the system
 world.genEquations.Recursive()
 world.show('MassSpringDamper')

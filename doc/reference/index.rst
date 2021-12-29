@@ -13,4 +13,3 @@ Command Reference
    Visualisation.rst
    Equations.rst
    Code.rst
-   PyTrajectoryInteraction.rst

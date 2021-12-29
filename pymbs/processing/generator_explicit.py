@@ -5,7 +5,7 @@ from pymbs.common.functions import *
 
 from pymbs.common.simple import simple
 
-from pymbs.symbolics import Matrix, zeros, jacobian
+from pymbs.symbolics import Matrix, zeros, jacobian, VarKind
 
 
 class Generator_Explicit(Generator):
@@ -81,7 +81,7 @@ class Generator_Explicit(Generator):
                 parentCS = joint.coordSys
 
                 # Calculate Position and Angular Velocity
-                body.I_R = parentCS.I_R * joint.R;
+                body.I_R = parentCS.I_R * joint.R
 
                 body.I_r = parentCS.I_r + body.I_R*joint.Psi*joint.q
                 body.I_v = jacobian(body.I_r, self.q)*self.qd
@@ -96,7 +96,7 @@ class Generator_Explicit(Generator):
 
             # Update cg
             body.I_l = body.I_r + body.I_R*body.cg
-            body.I_ldot = jacobian(body.I_l, self.q)*self.qd;
+            body.I_ldot = jacobian(body.I_l, self.q)*self.qd
 
             # Update Child Coordinate Systems
             for childCS in body.children:

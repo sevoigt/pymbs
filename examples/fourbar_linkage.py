@@ -25,7 +25,7 @@ m4 = world.addParam('m4', 1)
 l4 = world.addParam('l4', 5)
 I4 = world.addParam('I4', m4/12*l4**2)
 
-# Create Bodies with Coordinate Systems
+# Create bodies with coordinate systems
 world.addFrame(name='CS_A')
 world.addFrame(name='CS_D', p=[l1, 0, 0])
 
@@ -44,7 +44,7 @@ bar4 = world.addBody(name='Bar4', mass=m4, cg=[l4/2, 0, 0],
 bar4.addFrame(name='CS_D')
 bar4.addFrame(name='CS_C', p=[l4, 0, 0])
 
-# Insert Joints
+# Insert joints
 jA = world.addJoint(world.CS_A, bar2.CS_A, 'Ry', pi/2)
 jB = world.addJoint(bar2.CS_B, bar3.CS_B, 'Ry')
 jD = world.addJoint(world.CS_D, bar4.CS_D, 'Ry')
