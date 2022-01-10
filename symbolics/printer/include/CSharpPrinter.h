@@ -31,10 +31,20 @@ namespace Symbolics
 		std::string print_Abs ( const Abs *s );
         std::string print_If( const If *e );
         //std::string print_Int( const Int *c );
+        
+        std::string print_Jacobian( const Jacobian *j );
         std::string print_Inverse ( const Inverse *c );
         std::string print_Sign( const Sign *s );
         std::string print_Solve( const Solve *s );
         std::string print_Transpose( const Transpose *s );  
+        
+        std::string print_Acos( const Acos *s );
+        std::string print_Asin( const Asin *s );
+        std::string print_Atan( const Atan *s );
+        std::string print_Atan2( const Atan2 *s );
+        std::string print_Cos( const Cos *c );
+        std::string print_Sin( const Sin *s );
+        std::string print_Tan( const Tan *s );
     };
 };
 

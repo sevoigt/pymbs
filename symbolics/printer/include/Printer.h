@@ -37,27 +37,27 @@ namespace Symbolics
         // Destruktor
         virtual ~Printer();
 
-        // Methode die alle Arten von Ausdrücken in Strings in der korrekten Syntax der Ausgabesprache verwandelt
+        // Methode die alle Arten von Ausdrï¿½cken in Strings in der korrekten Syntax der Ausgabesprache verwandelt
         std::string print( BasicPtr const& basic );
 
-        // Gibt den übergebenen String mit Kommentarzeichen oder einen leeren String zurück
-        // muss in abgeleiteten Klassen überschrieben werden
+        // Gibt den ï¿½bergebenen String mit Kommentarzeichen oder einen leeren String zurï¿½ck
+        // muss in abgeleiteten Klassen ï¿½berschrieben werden
         virtual std::string comment( std::string const& comment ) const = 0;
         
-        // Gibt den Kommentar (mit Kommentarzeichen) zum übergebenen Symbol Pointer oder einen leeren String zurück
-        // ist ein Wrapper für obige Methode, wegen "name hiding" muss sie einen anderen Namen haben.
+        // Gibt den Kommentar (mit Kommentarzeichen) zum ï¿½bergebenen Symbol Pointer oder einen leeren String zurï¿½ck
+        // ist ein Wrapper fï¿½r obige Methode, wegen "name hiding" muss sie einen anderen Namen haben.
         virtual std::string comment2( Graph::Graph& g, SymbolPtr const& s ) const;
 
-        // Gibt die Dimension des übergebenen Ausdrucks als String zurück. Wird beim deklarieren von Variablen gebraucht
-        // Gibt standardmäßig nur eine Fehlermeldung aus, muss somit für Sprachen in denen Variablen deklariert werden müssen überschrieben werden
+        // Gibt die Dimension des ï¿½bergebenen Ausdrucks als String zurï¿½ck. Wird beim deklarieren von Variablen gebraucht
+        // Gibt standardmï¿½ï¿½ig nur eine Fehlermeldung aus, muss somit fï¿½r Sprachen in denen Variablen deklariert werden mï¿½ssen ï¿½berschrieben werden
         virtual std::string dimension( BasicPtr const& basic );
 
-        // Abfragen und Zurücksetzen der Anzahl aufgetretener Fehlermeldungen
+        // Abfragen und Zurï¿½cksetzen der Anzahl aufgetretener Fehlermeldungen
         int getErrorcount( bool reset=false ); 
 
     protected:
 
-        // Essentielle Funktionen für die es keinen sinnvollen Standard gibt, 
+        // Essentielle Funktionen fï¿½r die es keinen sinnvollen Standard gibt, 
         // da sie in jeder Programmiersprache eine andere Syntax haben
         // Beispielimplementierungen sind auskommentiert in Printer.cpp
         virtual std::string print_Element( const Element *e ) = 0;
@@ -68,17 +68,17 @@ namespace Symbolics
         virtual std::string print_Bool( const Bool *b ) = 0;
 
 
-        // Funktionen die überschreiben werden können wenn sie von der jeweiligen Sprache unterstützt werden sollen.
-        // Standardmäßig geben diese Funktionen nur eine Fehlermeldung aus
+        // Funktionen die ï¿½berschreiben werden kï¿½nnen wenn sie von der jeweiligen Sprache unterstï¿½tzt werden sollen.
+        // Standardmï¿½ï¿½ig geben diese Funktionen nur eine Fehlermeldung aus
         virtual std::string print_If( const If *e );
         virtual std::string print_Inverse( const Inverse *c );
         virtual std::string print_Jacobian( const Jacobian *j );
-        virtual std::string print_Scalar( const Scalar *s ); //könnte evtl. auch nach unten, aber wo und wofür wird es überhaupt gebraucht?
+        virtual std::string print_Scalar( const Scalar *s ); //kï¿½nnte evtl. auch nach unten, aber wo und wofï¿½r wird es ï¿½berhaupt gebraucht?
         virtual std::string print_Solve( const Solve *s );
 
 
         // Funktionen die hier mit einem sinnvollen Standard implementiert sind, 
-        // der für viele Sprachen passen sollte:
+        // der fÃ¼r viele Sprachen passen sollte:
 
         //allgemeine Funktionen
         virtual std::string print_Abs( const Abs *s );
@@ -119,7 +119,7 @@ namespace Symbolics
 		// Vektoren werden bei unterschiedlichem rowSep und colSep wie folgt ausgegeben:
 		//     Spaltenvektor = <leftConstr> ... <rowSep> ... <rightConstr>
 		//     Zeilenvektor  = <leftConstr> ... <colSep> ... <rightConstr>
-		// Bei identischem rowSep und colSep werden Vektoren wie Matrizen ausgeben, außer es ist forceNoMatrixVectors gesetzt,
+		// Bei identischem rowSep und colSep werden Vektoren wie Matrizen ausgeben, auï¿½er es ist forceNoMatrixVectors gesetzt,
 		// womit allerdings die Information ob es sich um einen Zeilen oder Spaltenvektor handelt verloren geht.
         // 
         std::string print_Matrix( const Matrix *mat, 
@@ -129,10 +129,10 @@ namespace Symbolics
 								  std::string matrixLineBreak = "\n        ",
 								  bool forceNoMatrixVectors = false );
         
-        // Gibt Fehlermeldungen auf der Standardfehlerausgabe aus, Rückgabewert ist erweiterte errorMessage
+        // Gibt Fehlermeldungen auf der Standardfehlerausgabe aus, Rï¿½ckgabewert ist erweiterte errorMessage
         std::string error(std::string errorMessage);
 
-        int m_errorcount; // Zähler für Fehlermeldungen
+        int m_errorcount; // Zï¿½hler fï¿½r Fehlermeldungen
     };
 };
 

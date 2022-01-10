@@ -1,9 +1,5 @@
-
-
 #include "CSharpWriter.h"
 #include "CSharpPrinter.h"
-#include "PythonPrinter.h"
-#include "PythonWriter.h"
 #include "str.h"
 #include <iostream>
 #include <fstream>
@@ -99,7 +95,7 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 	f << "using MathNet.Numerics.LinearAlgebra" << std::endl;
 	f << std::endl;
 
-	f << "int "<< m_name <<"_der_state(double time, double y, double yd"; 
+	f << "def int "<< m_name <<"_der_state(double time, double[] y), out double[] yd"; 
 	for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
 	for (Graph::VariableVec::iterator it=controller.begin();it!=controller.end();++it)
@@ -107,7 +103,7 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 	f << ")" << std::endl;  //evtl noch die statesize mituebergeben, aber die kenn wir eigentlich auch
 	f << "{" << std::endl;
 
-	f << "/* declare state variables */" << std::endl;
+	f << "    /* declare state variables */" << std::endl;
 	for (size_t i=0; i < states.size(); ++i)
 	{
 		size_t n = states.at(i)->getShape().getNumEl();
@@ -121,31 +117,31 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 	}
 	f << std::endl; 
 
-	f << "/* Parameters */" << std::endl;
+	f << "    /* Parameters */" << std::endl;
 	for (Graph::VariableVec::iterator it=parameter.begin();it!=parameter.end();++it)
-		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "=" << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
-	f << "/* Constants */" << std::endl;
+	f << "    /* Constants */" << std::endl;
 	for (Graph::VariableVec::iterator it=constants.begin();it!=constants.end();++it)
-        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "=" << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
-	f << "/* User Expression variables */" << std::endl;
+	f << "    /* User Expression variables */" << std::endl;
 	for (Graph::VariableVec::iterator it=userexp.begin();it!=userexp.end();++it)
-		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "= " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
-	f << "/* ordinary variables */" << std::endl;
+	f << "    /* ordinary variables */" << std::endl;
     for (Graph::VariableVec::iterator it=variables.begin();it!=variables.end();++it)
-        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "= " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 	
-	f << "/* calculate state derivative */" << std::endl;
+	f << "    /* calculate state derivative */" << std::endl;
 	f << writeEquations(a->getEquations(PARAMETER | CONSTANT | INPUT )) << std::endl;
     f << std::endl;
 
-	f << "/* set return values */" << std::endl;
+	f << "    /* set return values */" << std::endl;
 	for (size_t i=0;i < states.size(); ++i)
 	{
 		size_t n = states.at(i)->getShape().getNumEl();
@@ -160,13 +156,7 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 	}
 	f << std::endl; 
 
-	////Jetzt wieder Datei schreiben, zunaechst noch zwei Zeilen an den Anfang setzen
-	//f << "    int tobefreedIndex = 0;" << std::endl;
-	//f << "    double *tobefreed[100];" << std::endl;
-
-	//f << ss.rdbuf();
-
-	f << "	return 0;" << std::endl;
+	f << "    return 0;" << std::endl;
 	f << "}" << std::endl;
 
 	f.close();
@@ -202,9 +192,8 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
 		return Util::getTime() - t1;
 	}
 
-	// StateVariables Vector sortieren:
+	// Sort variable vectors
 	std::sort(states.begin(),states.end(), sortVariableVec);
-	// Visual_sensors Vector sortieren: 
 	std::sort(sens_vis.begin(),sens_vis.end(), sortVariableVec);
 
 	std::ofstream f;
@@ -212,18 +201,31 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
     f.open(filename.c_str());
 
 	f << "/* " << getHeaderLine() << " */" << std::endl;
-	
-	f << "using System" << std::endl;
+		
+	f << "using System.Math" << std::endl;
 	f << "using MathNet.Numerics.LinearAlgebra" << std::endl;
 	f << std::endl;
 
-	f << "int "<< m_name <<"_visual(double y"; 
-	for (Graph::VariableVec::iterator it=sens_vis.begin();it!=sens_vis.end();++it)
-		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
-	f << ")" << std::endl;  //evtl noch die statesize mit�bergeben, aber die kenn wir eigentlich auch
+	f << "def int "<< m_name <<"_visual(Vector<double> y"; 
+	for (Graph::VariableVec::iterator it=sens_vis.begin(); it!=sens_vis.end(); ++it)
+		if (m_p->dimension(*it) == 1)
+		{ 
+			f << ", out Vector<double> " << m_p->print(*it);
+		}
+		else if (m_p->dimension(*it) == 2)
+		{
+			f << ", out Matrix<double> " << m_p->print(*it);
+		}
+		else
+		{
+			throw InternalError("Unsupported dimension of argument " + m_p->print(*it) + 
+								" in C# visual sensors function definition");
+		}
+
+	f << ")" << std::endl;
 	f << "{" << std::endl;
 
-	f << "/* declare state variables */" << std::endl;
+	f << "    /* declare state variables */" << std::endl;
 	for (size_t i=0; i < states.size(); ++i)
 	{
 		size_t n = states.at(i)->getShape().getNumEl();
@@ -234,27 +236,27 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
 	}
 	f << std::endl; 
 
-	f << "/* Parameters */" << std::endl;
+	f << "    /* Parameters */" << std::endl;
 	for (Graph::VariableVec::iterator it=parameter.begin();it!=parameter.end();++it)
-		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "=" << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
-	f << "/* Constants */" << std::endl;
+	f << "    /* Constants */" << std::endl;
 	for (Graph::VariableVec::iterator it=constants.begin();it!=constants.end();++it)
-        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "=" << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
-	f << "/* User Expression variables */" << std::endl;
+	f << "    /* User Expression variables */" << std::endl;
 	for (Graph::VariableVec::iterator it=userexp.begin();it!=userexp.end();++it)
-		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "= " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
-	f << "/* ordinary variables */" << std::endl;
+	f << "    /* ordinary variables */" << std::endl;
     for (Graph::VariableVec::iterator it=variables.begin();it!=variables.end();++it)
-        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "= " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
-	f << "/* calculate visual sensors */" << std::endl;
+	f << "    /* calculate visual sensors */" << std::endl;
 	f << writeEquations(a->getEquations(PARAMETER | CONSTANT | INPUT )) << std::endl;
     f << std::endl;
 
@@ -415,11 +417,13 @@ std::string CSharpWriter::writeEquations(std::vector<Graph::Assignment> const& e
 double CSharpWriter::generateAll(Graph::Graph& g, int &dim)
 /*****************************************************************************/
 {
+	// todo: do we need this at all??
+
 	//get timestamp and catch variables from graph
 	double t1 = Util::getTime();
 
 	std::ofstream f;
-    std::string filename= m_path + "/" + m_name + ".c"; 
+    std::string filename= m_path + "/" + m_name + ".cs"; 
     f.open(filename.c_str());
 
 	Symbolics::Graph::Category_Type cats = DER_STATE|SENSOR;
