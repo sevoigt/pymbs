@@ -31,6 +31,7 @@ Jens Frenkel, Sebastian Voigt
 #include "MatlabWriter.h"
 #include "FortranWriter.h"
 #include "CWriter.h"
+#include "CSharpWriter.h"
 #include "FMUWriter.h"
 #include "Writer.h"
 #include "CBasic.h"
@@ -572,6 +573,9 @@ static PyObject* CGraph_writeOutput(CGraphObject *self, PyObject *args, PyObject
 
 		if(!strcmp(typeString, "c"))
 			writer = new CWriter(keywords);
+
+		if(!strcmp(typeString, "cs"))
+			writer = new CSharpWriter(keywords);
 
 		if(!strcmp(typeString, "fmu"))
 			writer = new FMUWriter(keywords);

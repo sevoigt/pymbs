@@ -157,8 +157,8 @@ double FortranWriter::generateDerState(Graph::Graph& g)
 
 	f << "!Additional temporary variables (code export specific)" << std::endl;
 
-	// Das Folgende muss erstmal in einem Stringstream zwischengespeichert werden, da die temporären Variablen erst nach
-	// schreiben der Equations bekannt sind. Es ist in C++ nicht möglich nachträglich etwas in einen Stream einzufügen
+	// Das Folgende muss erstmal in einem Stringstream zwischengespeichert werden, da die temporï¿½ren Variablen erst nach
+	// schreiben der Equations bekannt sind. Es ist in C++ nicht mï¿½glich nachtrï¿½glich etwas in einen Stream einzufï¿½gen
 	std::stringstream fss;
 
 	fss << "!define states" << std::endl;
@@ -181,7 +181,7 @@ double FortranWriter::generateDerState(Graph::Graph& g)
 	fss << writeEquations(a->getEquations(PARAMETER | CONSTANT | INPUT ), additionalVarDefs) << std::endl;
     fss << std::endl;
 
-	// Jetzt sind die temporären Variablen bekannt
+	// Jetzt sind die temporï¿½ren Variablen bekannt
 	for (std::vector<std::string>::iterator it = additionalVarDefs.begin(); it != additionalVarDefs.end(); ++it)
 		f << "    " << *it << std::endl;
 	f << std::endl;
@@ -296,8 +296,8 @@ double FortranWriter::generateSensors(Graph::Graph& g)
 	
 	f << "!Additional temporary variables (code export specific)" << std::endl;
 
-	// Das Folgende muss erstmal in einem Stringstream zwischengespeichert werden, da die temporären Variablen erst nach
-	// schreiben der Equations bekannt sind. Es ist in C++ nicht möglich nachträglich etwas in einen Stream einzufügen
+	// Das Folgende muss erstmal in einem Stringstream zwischengespeichert werden, da die temporï¿½ren Variablen erst nach
+	// schreiben der Equations bekannt sind. Es ist in C++ nicht mï¿½glich nachtrï¿½glich etwas in einen Stream einzufï¿½gen
 	std::stringstream fss;
 
 	fss << "!define states" << std::endl; 
@@ -320,7 +320,7 @@ double FortranWriter::generateSensors(Graph::Graph& g)
 	fss << writeEquations(a->getEquations(PARAMETER | CONSTANT | INPUT ), additionalVarDefs) << std::endl;
     fss << std::endl;
 
-	// Jetzt sind die temporären Variablen bekannt
+	// Jetzt sind die temporï¿½ren Variablen bekannt
 	for (std::vector<std::string>::iterator it = additionalVarDefs.begin(); it != additionalVarDefs.end(); ++it)
 		f << "    " << *it << std::endl;
 	f << std::endl;
@@ -417,8 +417,8 @@ double FortranWriter::generateVisual(Graph::Graph& g)
 	
 	f << "!Additional temporary variables (code export specific)" << std::endl;
 
-	// Das Folgende muss erstmal in einem Stringstream zwischengespeichert werden, da die temporären Variablen erst nach
-	// schreiben der Equations bekannt sind. Es ist in C++ nicht möglich nachträglich etwas in einen Stream einzufügen
+	// Das Folgende muss erstmal in einem Stringstream zwischengespeichert werden, da die temporï¿½ren Variablen erst nach
+	// schreiben der Equations bekannt sind. Es ist in C++ nicht mï¿½glich nachtrï¿½glich etwas in einen Stream einzufï¿½gen
 	std::stringstream fss;
 
 	fss << "!define states" << std::endl;
@@ -441,7 +441,7 @@ double FortranWriter::generateVisual(Graph::Graph& g)
 	fss << writeEquations(a->getEquations(PARAMETER | CONSTANT | INPUT ), additionalVarDefs) << std::endl;
     fss << std::endl;
 
-	// Jetzt sind die temporären Variablen bekannt
+	// Jetzt sind die temporï¿½ren Variablen bekannt
 	for (std::vector<std::string>::iterator it = additionalVarDefs.begin(); it != additionalVarDefs.end(); ++it)
 		f << "    " << *it << std::endl;
 	f << std::endl;
@@ -480,11 +480,11 @@ std::string FortranWriter::writeEquations(std::vector<Graph::Assignment> const& 
 			{
 				const Matrix *mat = Util::getAsConstPtr<Matrix>(it->lhs[i]);
 				if (simple_exp->getType() == Type_Symbol)
-				{  // Wir können es ohne temporäre Variable auflösen
+				{  // Wir kï¿½nnen es ohne temporï¿½re Variable auflï¿½sen
 					for (size_t j=0; j < mat->getShape().getDimension(1); j++)
 						for (size_t k=0; k < mat->getShape().getDimension(2); k++)
 							s << "    " << m_p->print(mat->get(j,k)) << " = " << m_p->print(simple_exp) << "(" << j+1<< "," << k+1 << ")" << std::endl;
-				} else 	{  // Es muss eine temporäre Variable eingeführt werden
+				} else 	{  // Es muss eine temporï¿½re Variable eingefï¿½hrt werden
 					additionalVarDefs.push_back("double precision" + m_p->dimension(it->lhs[i]) + " :: temp_var_" + str(additionalVarDefs.size() + 1));
 					s << "    temp_var_" << additionalVarDefs.size() << " = " << m_p->print(simple_exp) << std::endl; 
 					for (size_t j=0; j < mat->getShape().getDimension(1); j++)
@@ -507,10 +507,12 @@ std::string FortranWriter::writeEquations(std::vector<Graph::Assignment> const& 
 double FortranWriter::generatePymbsWrapper(Graph::Graph& g)
 /*****************************************************************************/
 {
+	// This used to simulate the compiled model in the PyMbs gui
+
 	//get timestamp and catch variables from graph
 	double t1 = Util::getTime();
 
-	PythonPrinter p; //hier ist ein anderer Printer nötig
+	PythonPrinter p; //hier ist ein anderer Printer nÃ¶tig
 
 	//Wir brauchen einen lowercase Namen (f2py erzeugt das so)
 	std::string m_name_lower = m_name;

@@ -8,6 +8,7 @@ SET(Printer_headers	include/ModelicaPrinter.h
 					include/MatlabSymPrinter.h
 					include/FortranPrinter.h
 					include/CPrinter.h
+					include/CSharpPrinter.h
 					include/FMUPrinter.h
                     include/Printer.h)
 
@@ -17,6 +18,7 @@ SET(Printer_sources	ModelicaPrinter.cpp
 					MatlabSymPrinter.cpp
 					FortranPrinter.cpp
 					CPrinter.cpp
+					CSharpPrinter.cpp
 					FMUPrinter.cpp
                     Printer.cpp)
 

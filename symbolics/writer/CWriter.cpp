@@ -141,7 +141,7 @@ double CWriter::generateDerState(Graph::Graph& g, int &dim)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
 	for (Graph::VariableVec::iterator it=controller.begin();it!=controller.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
-	f << ")" << std::endl;  //evtl noch die statesize mitübergeben, aber die kenn wir eigentlich auch
+	f << ")" << std::endl;  //evtl noch die statesize mitï¿½bergeben, aber die kenn wir eigentlich auch
 	f << "{" << std::endl;
 
 	f << "/* declare state variables */" << std::endl;
@@ -197,7 +197,7 @@ double CWriter::generateDerState(Graph::Graph& g, int &dim)
 	}
 	f << std::endl; 
 
-	////Jetzt wieder Datei schreiben, zunächst noch zwei Zeilen an den Anfang setzen
+	////Jetzt wieder Datei schreiben, zunï¿½chst noch zwei Zeilen an den Anfang setzen
 	//f << "    int tobefreedIndex = 0;" << std::endl;
 	//f << "    double *tobefreed[100];" << std::endl;
 
@@ -256,7 +256,7 @@ double CWriter::generateVisual(Graph::Graph& g)
 	f << "int "<< m_name <<"_visual(double * y"; 
 	for (Graph::VariableVec::iterator it=sens_vis.begin();it!=sens_vis.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
-	f << ")" << std::endl;  //evtl noch die statesize mitübergeben, aber die kenn wir eigentlich auch
+	f << ")" << std::endl;  //evtl noch die statesize mitï¿½bergeben, aber die kenn wir eigentlich auch
 	f << "{" << std::endl;
 
 	f << "/* declare state variables */" << std::endl;
@@ -422,7 +422,7 @@ std::string CWriter::writeEquations(std::vector<Graph::Assignment> const& equati
             BasicPtr simple_exp = it->rhs[i]->simplify();
             if (simple_exp.get() == NULL) throw InternalError("CWriter: Value of Rhs is not Valid!");
 
-			//Workaround: Solve muss speziell behandelt werden TODO: Irgendwie ist das nicht schön und deckt bestimmt nicht alle Fälle ab
+			//Workaround: Solve muss speziell behandelt werden TODO: Irgendwie ist das nicht schï¿½n und deckt bestimmt nicht alle Fï¿½lle ab
 			if (it->rhs[i]->getType() == Type_Solve) 
 			{
 				const Solve *solve = Util::getAsConstPtr<Solve>(it->rhs[i]);
@@ -448,10 +448,12 @@ std::string CWriter::writeEquations(std::vector<Graph::Assignment> const& equati
 double CWriter::generatePymbsWrapper(Graph::Graph& g)
 /*****************************************************************************/
 {
+	// This used to simulate the compiled model in the PyMbs gui. 
+
 	//get timestamp and catch variables from graph
 	double t1 = Util::getTime();
 
-	PythonPrinter p; //zur Abkürzung
+	PythonPrinter p; //zur AbkÃ¼rzung
 
 	Graph::VariableVec state_inputs = g.getAssignments(DER_STATE)->getVariables(INPUT);
     Graph::VariableVec controller = g.getAssignments(DER_STATE)->getVariables(CONTROLLER);
@@ -506,7 +508,7 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
     f << "# inputs" << std::endl;
 	f << "_inputs = {" << std::endl;
 	for (Graph::VariableVec::iterator it=state_inputs.begin();it!=state_inputs.end();++it)
-    { // Da wir in C momentan mit echten Vektoren arbeiten müssen wir hier unser eigenes zero bauen... (eigentlich geht das nicht wegen initVal - TODO!)
+    { // Da wir in C momentan mit echten Vektoren arbeiten mï¿½ssen wir hier unser eigenes zero bauen... (eigentlich geht das nicht wegen initVal - TODO!)
 		//f << "           '" << p.print(*it) << "' : " << p.print(g.getinitVal(*it)) 
         //  << ",   " << p.comment2(g,*it) << std::endl;
         f << "           '" << p.print(*it) << "' : zeros(";
@@ -654,7 +656,7 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
     f << "# inputs" << std::endl;
 	f << "_inputs = {" << std::endl;
 	for (Graph::VariableVec::iterator it=sens_inputs.begin();it!=sens_inputs.end();++it)
-    { // Da wir in C momentan mit echten Vektoren arbeiten müssen wir hier unser eigenes zero bauen... (eigentlich geht das nicht wegen initVal - TODO!)
+    { // Da wir in C momentan mit echten Vektoren arbeiten mï¿½ssen wir hier unser eigenes zero bauen... (eigentlich geht das nicht wegen initVal - TODO!)
 		//f << "           '" << p.print(*it) << "' : " << p.print(g.getinitVal(*it)) 
         //  << ",   " << p.comment2(g,*it) << std::endl;
         f << "           '" << p.print(*it) << "' : zeros(";

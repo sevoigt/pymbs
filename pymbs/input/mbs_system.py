@@ -3176,6 +3176,20 @@ class GenCode(object):
         '''
         return trafo.genCode(self.world, "c", modelname, dirname, **kwargs)
 
+    def CSharp(self, modelname, dirname='.', **kwargs):
+        '''
+        After the equations of motion have been generated, the simulation code
+        for C# can be generated with this function.
+
+        :param modelname: Name of the model - will be used as a filename at least
+        :type modelname: String
+        :param dirname: Directory where the model shall be exported to
+        :type dirname: String.
+        :param include_visual: Generate code for visualisation
+        :type include_visual: Bool
+        '''
+        return trafo.genCode(self.world, "cs", modelname, dirname, **kwargs)
+
     def FMU(self, modelname, dirname='.', compile=True, **kwargs):
         '''
         .. deprecated:: 0.2.2

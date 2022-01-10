@@ -19,6 +19,7 @@ Contents:
    trouble/troubleshooting
    examples/index
    devnotes/index
+   developer/index
 
 Indices and tables
 ==================

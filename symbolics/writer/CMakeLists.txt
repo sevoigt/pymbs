@@ -7,6 +7,7 @@ SET(Writer_headers	include/ModelicaWriter.h
 					include/MatlabWriter.h
 					include/FortranWriter.h
 					include/CWriter.h
+					include/CSharpWriter.h
 					include/FMUWriter.h
 					lib/lib_xml_writer.h
                     include/Writer.h)
@@ -16,6 +17,7 @@ SET(Writer_sources	ModelicaWriter.cpp
 					MatlabWriter.cpp
 					FortranWriter.cpp
 					CWriter.cpp
+					CSharpWriter.cpp
 					FMUWriter.cpp
                     Writer.cpp)
 
