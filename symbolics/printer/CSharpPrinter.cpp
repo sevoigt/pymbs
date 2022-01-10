@@ -50,7 +50,7 @@ std::string CSharpPrinter::print_Abs( const Abs *s )
 /*****************************************************************************/
 {
 	if (s == NULL) throw InternalError("CSharpPrinter: Abs is NULL");
-	return "Abs(" + print(s->getArg()) + ")";
+	return "Math.Abs(" + print(s->getArg()) + ")";
 }
 /*****************************************************************************/
 
@@ -66,7 +66,7 @@ std::string CSharpPrinter::print_Element( const Element *e )
 		else
 			return print(e->getArg(0)) + "[" + str(e->getCol()) + "]";
 	}
-	return print(e->getArg(0)) + "[" + str(e->getRow()) + "][" + str(e->getCol()) + "]";
+	return print(e->getArg(0)) + "[" + str(e->getRow()) + "," + str(e->getCol()) + "]";
 }
 /*****************************************************************************/
 
@@ -95,7 +95,7 @@ std::string CSharpPrinter::print_Pow( const Pow *pow )
 /*****************************************************************************/
 {
 	if (pow == NULL) throw InternalError("CSharpPrinter: Pow is NULL");
-	return "Exp(" + print(pow->getBase()) + "," + print(pow->getExponent()) + ")";
+	return "Math.Exp(" + print(pow->getBase()) + "," + print(pow->getExponent()) + ")";
 }
 /*****************************************************************************/
 
@@ -137,10 +137,8 @@ std::string CSharpPrinter::print_Zero( const Zero *z )
     if (z->is_Scalar())
 		return "0";
     if (z->is_Vector())
-	    return "{0}"; 
+	    return "{0}";       // Todo: write constructors for zero vector and matrix 
     return "{{0}}";
-    // C# initialisiert nicht angegebene Werte immer mit 0, darum passt dies 
-    // für alle Vektoren und Matrizen
 }
 /*****************************************************************************/
 
@@ -161,7 +159,7 @@ std::string CSharpPrinter::print_Jacobian( const Jacobian *j )
     throw InternalError("CSharpPrinter: Jacobian not implemented");
 
     if (j == NULL) throw InternalError("CSharpPrinter: Jacobian is NULL");
-    return print(e->getArg(0)) + ".Jacobian(???)";
+    return print(j->getArg(0)) + ".Jacobian(???)";
 }
 
 
@@ -180,7 +178,7 @@ std::string CSharpPrinter::print_Sign( const Sign *s )
 /*****************************************************************************/
 { 
 	if (s==NULL) throw InternalError("CSharpPrinter: Sign is NULL");
-	return "Sign(" + print(s->getArg()) + ")";
+	return "Math.Sign(" + print(s->getArg()) + ")";
 }
 /*****************************************************************************/
 
@@ -201,47 +199,47 @@ std::string CSharpPrinter::print_Bool( const Bool *b )
 std::string CSharpPrinter::print_Acos( const Acos *s )
 {
     if (s == NULL) throw InternalError("CSharpPrinter: Acos is NUll");
-    return "Acos(" + print(s->getArg()) + ")";
+    return "Math.Acos(" + print(s->getArg()) + ")";
 }
 
 
 std::string CSharpPrinter::print_Asin( const Asin *s )
 {
     if (s == NULL) throw InternalError("CSharpPrinter: Asin is NUll");
-    return "Asin(" + print(s->getArg()) + ")";
+    return "Math.Asin(" + print(s->getArg()) + ")";
 }
 
 
 std::string CSharpPrinter::print_Atan( const Atan *s )
 {
     if (s == NULL) throw InternalError("CSharpPrinter: Atan is NUll");
-    return "Atan(" + print(s->getArg()) + ")";
+    return "Math.Atan(" + print(s->getArg()) + ")";
 }
 
 
 std::string CSharpPrinter::print_Atan2( const Atan2 *s )
 {
     if (s == NULL) throw InternalError("CSharpPrinter: Atan2 is NUll");
-    return "Atan2(" + print(s->getArg()) + ")";
+    return "Math.Atan2(" + print(s->getArg1()) + "," + print(s->getArg2()) + ")";
 }
 
 
 std::string CSharpPrinter::print_Cos( const Cos *c )
 {
-    if (s == NULL) throw InternalError("CSharpPrinter: Cos is NUll");
-    return "Cos(" + print(s->getArg()) + ")";
+    if (c == NULL) throw InternalError("CSharpPrinter: Cos is NUll");
+    return "Math.Cos(" + print(c->getArg()) + ")";
 }
 
 
 std::string CSharpPrinter::print_Sin( const Sin *s )
 {
     if (s == NULL) throw InternalError("CSharpPrinter: Sin is NUll");
-    return "Sin(" + print(s->getArg()) + ")";
+    return "Math.Sin(" + print(s->getArg()) + ")";
 }
 
 
 std::string CSharpPrinter::print_Tan( const Tan *s )
 {
     if (s == NULL) throw InternalError("CSharpPrinter: Tan is NUll");
-    return "Tan(" + print(s->getArg()) + ")";
+    return "Math.Tan(" + print(s->getArg()) + ")";
 }

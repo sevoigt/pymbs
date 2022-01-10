@@ -19,6 +19,6 @@ world.addJoint(world, pend.link, 'Ry')
 world.addVisualisation.Box(pend, length=0.1, width=0.1, height=1.0)
 
 world.genEquations.Recursive()
-world.show('SimplePendulum')
+#world.show('SimplePendulum')
 
 world.genCode.CSharp('pendulum', 'D:/Unity/PyMbsDemo/Assets/PyMbs')

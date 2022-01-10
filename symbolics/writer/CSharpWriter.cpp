@@ -95,7 +95,7 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 	f << "using MathNet.Numerics.LinearAlgebra" << std::endl;
 	f << std::endl;
 
-	f << "def int "<< m_name <<"_der_state(double time, double[] y), out double[] yd"; 
+	f << "int "<< m_name <<"_der_state(double time, double[] y), out double[] yd"; 
 	for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
 	for (Graph::VariableVec::iterator it=controller.begin();it!=controller.end();++it)
@@ -202,24 +202,24 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
 
 	f << "/* " << getHeaderLine() << " */" << std::endl;
 		
-	f << "using System.Math" << std::endl;
-	f << "using MathNet.Numerics.LinearAlgebra" << std::endl;
+	f << "using System;" << std::endl;
+	f << "using MathNet.Numerics.LinearAlgebra;" << std::endl;
 	f << std::endl;
 
-	f << "def int "<< m_name <<"_visual(Vector<double> y"; 
+	f << "int "<< m_name <<"_visual(Vector<double> y"; 
 	for (Graph::VariableVec::iterator it=sens_vis.begin(); it!=sens_vis.end(); ++it)
-		if (m_p->dimension(*it) == 1)
+		
+		if (((BasicPtr)*it)->is_Scalar())
+		{			
+			f << ", double " << m_p->print(*it);	// should not happen for visual sensor
+		}
+		else if (((BasicPtr)*it)->is_Vector()) 	//if (m_p->dimension(*it) == "[3]") -- will break when dimension() changes
 		{ 
 			f << ", out Vector<double> " << m_p->print(*it);
 		}
-		else if (m_p->dimension(*it) == 2)
-		{
-			f << ", out Matrix<double> " << m_p->print(*it);
-		}
 		else
 		{
-			throw InternalError("Unsupported dimension of argument " + m_p->print(*it) + 
-								" in C# visual sensors function definition");
+			f << ", out Matrix<double> " << m_p->print(*it);
 		}
 
 	f << ")" << std::endl;
