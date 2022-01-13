@@ -91,8 +91,8 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
     f.open(filename.c_str());
 
 	f << "/* " << getHeaderLine() << " */" << std::endl;
-	f << "using System" << std::endl;
-	f << "using MathNet.Numerics.LinearAlgebra" << std::endl;
+	f << "using System;" << std::endl;
+	f << "using MathNet.Numerics.LinearAlgebra;" << std::endl;
 	f << std::endl;
 
 	f << "int "<< m_name <<"_der_state(double time, double[] y), out double[] yd"; 
@@ -181,7 +181,6 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
 
 	Graph::VariableVec states = a->getVariables(STATE);
 	Graph::VariableVec variables = a->getVariables(VARIABLE|SENSOR);
-	//Graph::VariableVec inputs = a->getVariables(INPUT);
 	Graph::VariableVec parameter = a->getVariables(PARAMETER);
 	Graph::VariableVec constants = a->getVariables(CONSTANT);
 	Graph::VariableVec userexp = a->getVariables(USER_EXP);
@@ -408,107 +407,5 @@ std::string CSharpWriter::writeEquations(std::vector<Graph::Assignment> const& e
     }
 
 	return s.str();
-}
-/*****************************************************************************/
-
-
-
-/*****************************************************************************/
-double CSharpWriter::generateAll(Graph::Graph& g, int &dim)
-/*****************************************************************************/
-{
-	// todo: do we need this at all??
-
-	//get timestamp and catch variables from graph
-	double t1 = Util::getTime();
-
-	std::ofstream f;
-    std::string filename= m_path + "/" + m_name + ".cs"; 
-    f.open(filename.c_str());
-
-	Symbolics::Graph::Category_Type cats = DER_STATE|SENSOR;
-	if (m_include_visual)
-		cats |= SENSOR_VISUAL;
-	Graph::AssignmentsPtr a = g.getAssignments(cats);
-
-	Graph::VariableVec states = a->getVariables(STATE);
-	cats = VARIABLE;
-	if (!m_include_visual)
-		cats |= SENSOR_VISUAL;
-	Graph::VariableVec variables = a->getVariables(cats);
-	Graph::VariableVec inputs = a->getVariables(INPUT);
-	Graph::VariableVec parameters = a->getVariables(PARAMETER);
-	Graph::VariableVec constants = a->getVariables(CONSTANT);
-	Graph::VariableVec userexp = a->getVariables(USER_EXP);
-
-	// StateVariables Vector sortieren:
-	std::sort(states.begin(),states.end(), sortVariableVec);
-
-	f << "/* " << getHeaderLine() << " */" << std::endl;
-	f << "/*";
-	f << "#include <math.h>" << std::endl;
-	f << "#include \"functionmodule.c\"" << std::endl;
-	f << "*/";
-	f << std::endl;
-
-	f << "/* declare state variables */" << std::endl;
-	for (size_t i=0; i < states.size(); ++i)
-	{
-		size_t n = states.at(i)->getShape().getNumEl();
-		dim = n;
-		f << "    const double "  << m_p->print(states.at(i)) << m_p->dimension(states.at(i)) << " = " << ( n>1 ? "{" : "");
-		for (size_t j=0; j < n ; ++j)
-			f << "y[" << i*n+j << "]" << (j+1 < n ? ", " : "");
-		f << ( n>1 ? "}" : "") << ";" << m_p->comment2(g, states.at(i)) << std::endl;
-		f << "    double " << "der_" << m_p->print(states.at(i)) << m_p->dimension(states.at(i)) << " = " 
-          << m_p->print(Zero::getZero(states.at(i)->getShape())) << ";" << std::endl;	
-	}
-
-	f << "/* Parameters */" << std::endl;
-	for (Graph::VariableVec::iterator it=parameters.begin();it!=parameters.end();++it)
-		f << "    const double " << m_p->print(*it) << m_p->dimension(*it) << "=" << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
-	f << std::endl;
-
-	f << "/* Constants */" << std::endl;
-	for (Graph::VariableVec::iterator it=constants.begin();it!=constants.end();++it)
-        f << "    const double " << m_p->print(*it) << m_p->dimension(*it) << "=" << m_p->print(g.getEquation(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
-	f << std::endl;
-
-	f << "/* User Expression variables */" << std::endl;
-	for (Graph::VariableVec::iterator it=userexp.begin();it!=userexp.end();++it)
-		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "= " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
-	f << std::endl;
-
-	f << "/* ordinary variables */" << std::endl;
-    for (Graph::VariableVec::iterator it=variables.begin();it!=variables.end();++it)
-        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << "= " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
-	f << std::endl;
-
-	f << "/* calculate sensors and state derivative */" << std::endl;
-	f << writeEquations(a->getEquations(PARAMETER | CONSTANT | INPUT )) << std::endl;
-    f << std::endl;
-
-	f << "/* set return values */" << std::endl;
-	for (size_t i=0;i < states.size(); ++i)
-	{
-		size_t n = states.at(i)->getShape().getNumEl();
-		for (size_t j=0; j < n ; ++j) 
-		{
-			f << "    yd[" << i*n+j << "] = der_" << m_p->print(states.at(i));
-			if (n>1) // hm.. was ist schneller "n-1" oder "n>1"?
-				f << "[" << j << "];" << std::endl;
-			else 
-				f << ";" << std::endl; 
-		}
-	}
-	f << std::endl; 
-	
-	f.close();
-
-    if (m_p->getErrorcount())
-        std::cerr << "There have been " << m_p->getErrorcount(true) << " error(s) during generation of " 
-                  << m_name << ".c. Please have a look at that file to see where the error(s) occured." << std::endl;
-
-	return Util::getTime() - t1;
 }
 /*****************************************************************************/
