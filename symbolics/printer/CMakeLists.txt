@@ -31,4 +31,4 @@ ADD_LIBRARY( Printer STATIC ${Printer_sources} ${Printer_headers} )
 ADD_DEPENDENCIES( Printer Symbolics Graph )
 TARGET_LINK_LIBRARIES( Printer Symbolics Graph)
 
-ADD_SUBDIRECTORY( Test )
+ADD_SUBDIRECTORY( test )
