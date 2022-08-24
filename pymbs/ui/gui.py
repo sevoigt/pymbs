@@ -847,7 +847,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             slider.setOrientation(Qt.Horizontal)
             slider.setLimits(-500,500)
             slider.scale = 100.
-            init = float(str(self.graph.getinitVal(self.inputs[i])))
+            init = int(str(self.graph.getinitVal(self.inputs[i])))
             slider.setInitVal(init)
             slider.slider.setValue(init)
 

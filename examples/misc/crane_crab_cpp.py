@@ -28,31 +28,31 @@ Created on 05.07.2009
 '''
 
 # import PyMbs
-from PyMbs.Input import *
+from pymbs.input import *
 
 # set up inertial frame
 world=MbsSystem([0,0,-1])
 
 # add inputs and parameters
-F=world.addInput('DrivingForce', 'F')
-m1=world.addParam('mass 1', 'm1', 1)
-m2=world.addParam('mass 2', 'm2', 1)
-l2=world.addParam('lengthOfRod 2', 'l2', 1)
-I2=world.addParam('inertia 2', 'I2', m2*l2**2/12)
+F=world.addInput('DrivingForce')
+m1=world.addParam('m1', 1, name='mass 1')
+m2=world.addParam('m2', 1, name='mass 2')
+l2=world.addParam('l2', 1, name='lengthOfRod 2')
+I2=world.addParam('I2', m2*l2**2/12, name='inertia 2')
 
 # add bodies
-crab=world.addBody('Crab', mass=m1)
-pend=world.addBody('Pendulum', mass=m2, inertia=diag([0,I2,0]))
+crab=world.addBody(mass=m1, name='Crab')
+pend=world.addBody(mass=m2, inertia=diag([0,I2,0]), name='Pendulum')
 pend.addFrame('joint' , [0, 0, l2])
 pend.addFrame('middle', [0, 0, l2/2], rotMat(pi/2,'x'))
 
 # add joints
-world.addJoint('TransCrab', world, crab, 'Tx', 1)
-world.addJoint('RotPendulum', crab, pend.joint, 'Ry', -1)
+world.addJoint(world, crab, 'Tx', 1, name='TransCrab')
+world.addJoint(crab, pend.joint, 'Ry', -1, name='RotPendulum')
 
 # add load element and sensor
-world.addLoad.PtPForce(crab, world, F)
-world.addSensor.Distance(crab, world, 'd')
+world.addLoad.PtPForce(F, crab, world)
+world.addSensor.Distance('d', crab, world)
 
 # add visualisation
 world.addVisualisation.Box(crab, 1, 0.5, 0.1)
@@ -60,18 +60,14 @@ world.addVisualisation.Cylinder(pend.middle, 0.01, 1)
 world.addVisualisation.Sphere(pend, 0.1)
 
 
-
 # generate simulation code
-world.genEquations(explicit=True)
-world.genCode('mo', 'CraneCrab', '.\Output')
-world.genCode('m', 'CraneCrab', 'Output')
-world.genCode('py', 'CraneCrab', 'Output')
-world.genCode('cpp', 'CraneCrab', 'Output')
+world.genEquations.Explicit()
 
-# generate equations
-world.genEquations(explicit=False)
-world.genCode('cpp', 'CraneCrabRec', 'Output')
+world.genCode.Modelica('CraneCrab', '.\Output')
+world.genCode.Matlab('CraneCrab', 'Output')
+world.genCode.Python('CraneCrab', 'Output')
+world.genCode.C('CraneCrabRec', 'Output')
 
 # show system
-#world.genMatlabAnimation('CraneCrab')
-#world.show('CraneCrab')
+world.genMatlabAnimation('CraneCrab')
+world.show('CraneCrab')

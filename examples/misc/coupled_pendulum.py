@@ -29,7 +29,7 @@ model-description for a simple pendulum
 adapted from matlab-Example
 '''
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 world = MbsSystem([0, -1, 0])
 
@@ -58,4 +58,4 @@ world.addLoop.Transmission(j1, j2, 1, 'Fix')
 print("System has been assembled")
 
 world.genEquations.Explicit()
-world.genCode.Matlab('CoupledPendulum', './Output', debugMode=True)
+world.genCode.Matlab('CoupledPendulum', './Output')

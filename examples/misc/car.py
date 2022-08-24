@@ -28,7 +28,7 @@ Created on 28.07.2009
 model-description for a simple car with one chassi an 4 wheels
 '''
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 world = MbsSystem([0, 0, -1])
 

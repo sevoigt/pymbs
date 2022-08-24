@@ -30,8 +30,8 @@ Created on 23.06.2010
 model description of a vehicle with articulated steering
 '''
 
-from PyMbs.Input import *
-import PyMbs.Common.GraphReps as gr
+from pymbs.input import *
+import pymbs.common.graphreps as gr
 
 world=MbsSystem([0,0,-1])
 

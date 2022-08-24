@@ -28,7 +28,7 @@ Created on 31.07.2009
 Cardan Pendulum
 '''
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 world=MbsSystem([0,0,-1])
 
