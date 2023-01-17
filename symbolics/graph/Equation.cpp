@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include <map>
 #include "Equation.h"
 #include "str.h"
@@ -202,7 +181,7 @@ void Equation::solve(BasicPtr const& exp)
     if (exp->getType() == Type_Symbol)
     {
       const Symbol *sconst = Util::getAsConstPtr<Symbol>(exp);
-      /* TODO: Lösung für Solve(DER...) als Symbol mit nur einigen DER_STATES) */
+      /* TODO: Lï¿½sung fï¿½r Solve(DER...) als Symbol mit nur einigen DER_STATES) */
       if (sconst->stateKind() == ALL)
       {
         if (sconst->is_State(0,0) & DER_STATE)
@@ -382,7 +361,7 @@ bool Equation::DerivativeScanner::process_Arg(BasicPtr const &p, bool &stop)
   }
   /*
    DoTo: bei Element(MatrixSymbol*VectorSymbol) geht das hier schief
-   Eine Lösung wäre erst die Element exp zu elementarisieren (hoffnung auf Element(Matrix)) 
+   Eine Lï¿½sung wï¿½re erst die Element exp zu elementarisieren (hoffnung auf Element(Matrix)) 
   */
   else if (p->getType() == Type_Element)
   {

@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include "FortranPrinter.h"
 #include "str.h"
 
@@ -80,7 +59,7 @@ std::string FortranPrinter::print_Mul( const Mul *mul )
     }
     s += print(mul->getArg(n-1)) + t + ")";
 	if (includes_matmul && mul->is_Scalar()) //TODO: was ist mit (1,1) Matrizen? 
-		s = "scalar" + s; //keine Klammern nötig, diese sollten schon da sein
+		s = "scalar" + s; //keine Klammern nï¿½tig, diese sollten schon da sein
     return s;
 }
 /*****************************************************************************/
@@ -130,10 +109,10 @@ std::string FortranPrinter::print_Matrix( const Matrix *mat )
 		{
 			for (size_t n=0;n<rows;++n) {
 				s += print((*mat)(n,m));
-				if ((m+1)*(n+1) < rows*cols) //immer Komma außer am Ende
+				if ((m+1)*(n+1) < rows*cols) //immer Komma auï¿½er am Ende
 					s += ", "; 
 			}
-			if (cols > 1 && m < (rows-1)) //Matritzen mit Zeilenumbrüchen zur besseren Lesbarkeit
+			if (cols > 1 && m < (rows-1)) //Matritzen mit Zeilenumbrï¿½chen zur besseren Lesbarkeit
 				s += "&\n        ";
 		}
 	
@@ -175,7 +154,7 @@ std::string FortranPrinter::print_Pow( const Pow *pow )
 /*****************************************************************************/
 std::string FortranPrinter::print_Real( const Real *c )
 /*****************************************************************************/
-{ //TODO: eigentlich unschöne gehackte Lösung. Andere Ideen?
+{ //TODO: eigentlich unschï¿½ne gehackte Lï¿½sung. Andere Ideen?
     if (c == NULL) throw InternalError("FortranPrinter: Real is NULL");
 	std::string s = "";
 	size_t pos = 0;

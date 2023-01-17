@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include "EquationSystem.h"
 #include "str.h"
 #include <iostream>
@@ -636,7 +615,7 @@ EquationSystemPtr EquationSystem::makeScalar()
             if (rhs->getType() == Type_Solve)
             {
               const Solve* solve = Util::getAsConstPtr<Solve>(rhs);
-			  //geht IMHO so nicht, da die Matrix Multiplikation dann skalarisiert wird - ich weiß nicht wie ich daraus dann wieder matrizen basteln soll...
+			  //geht IMHO so nicht, da die Matrix Multiplikation dann skalarisiert wird - ich weiï¿½ nicht wie ich daraus dann wieder matrizen basteln soll...
               //eqsys->addEquation(lhs,Add::New(Mul::New(solve->getArg1(),lhs),Neg::New(solve->getArg2())),true);
 			  eqsys->addEquation(lhs,rhs,false);
             }
