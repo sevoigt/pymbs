@@ -879,9 +879,9 @@ class PublicMethods(object):
     @staticmethod
     def exportGraphReps(model, fileName):
 
-        #check whether _Graph was already created
+        #check whether _Graph was already created        
         try:
-            _Graph
+            _Graph = model.graph
         except NameError:
             raise PyMbsError('Cannot export graph reps. You have to call ' \
                              'the <genEquations()> method of your MbsSystem-'\

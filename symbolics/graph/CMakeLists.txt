@@ -27,4 +27,4 @@ ADD_LIBRARY( Graph STATIC ${Graph_headers} ${Graph_sources} )
 ADD_DEPENDENCIES( Graph Symbolics Functions )
 TARGET_LINK_LIBRARIES( Graph Symbolics Functions Printer)
 
-ADD_SUBDIRECTORY( Test )
+ADD_SUBDIRECTORY( test )

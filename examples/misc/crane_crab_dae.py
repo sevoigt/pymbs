@@ -28,7 +28,7 @@ Created on 06.02.2010
 '''
 
 # import PyMbs
-from PyMbs.Input import *
+from pymbs.input import *
 
 # set up inertial frame
 world=MbsSystem([0,0,-1])

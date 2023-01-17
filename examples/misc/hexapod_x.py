@@ -27,7 +27,7 @@ Created on 27.03.2012
 
 
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 
 from math import pi, sin, cos

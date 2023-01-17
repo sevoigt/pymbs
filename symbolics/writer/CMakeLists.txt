@@ -31,4 +31,4 @@ ADD_DEPENDENCIES( Writer Symbolics Printer Functions )
 TARGET_LINK_LIBRARIES( Writer Symbolics Functions Printer ${Boost_FILESYSTEM_LIBRARY} )
 
 
-ADD_SUBDIRECTORY( Test )
+ADD_SUBDIRECTORY( test )

@@ -26,7 +26,7 @@ Created on 26.08.2009
 @author: Christian
 '''
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 world = MbsSystem([0, -1, 0])
 

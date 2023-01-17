@@ -33,9 +33,9 @@ Pfade für Visualisierung anpassen !!!
 # import PyMbs & Lib.           #
 #################################
 
-from PyMbs.Input import *
+from pymbs.input import *
 
-from PyMbs.Symbolics import Matrix,cos,sin
+from pymbs.symbolics import Matrix,cos,sin
 pi = 3.1415926535897932384626433832795
 
 #################################
