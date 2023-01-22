@@ -272,7 +272,7 @@ class Generator(MbsElement):
         # are there any force elements
         if hasattr(body, 'loads'):
             for lel in body.loads:
-                if (lel not in lels): lels.append(lel);
+                if (lel not in lels): lels.append(lel)
 
         i = 0
         # Try every child
@@ -489,8 +489,8 @@ class Generator(MbsElement):
 
         # remove v from the state ( Vector of All Generalised Positions (q) and Velocities (qd) )
         for loop in Lsorted:
-            wd += loop.vd;
-            wdd += loop.vdd;
+            wd += loop.vd
+            wdd += loop.vdd
         for item in self.w: self.state.q.remove(item)
         for item in wd: self.state.qd.remove(item)
         oldq = self.q

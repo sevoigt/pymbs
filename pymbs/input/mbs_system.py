@@ -2345,7 +2345,7 @@ class AddLoad(object):
         # call world function
         return self.world._addLoad('PtPForce', symbol, CS1, CS2, name=name)
 
-    def CmpForce(self, symbol, CS1, CS2, name=None, CSref=None):
+    def CmpForce(self, symbol, CS1, CS2, CSref=None, name=None):
         '''
         Use *addLoad.CmpForce* to add a vectorial force, acting between two
         coordinate systems. The force, specified with respect to the parent or
