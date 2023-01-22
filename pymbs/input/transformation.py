@@ -756,7 +756,7 @@ class PublicMethods(object):
     """
     Collects all functions that are ought to be used by other modules
 
-    These functions are declared as static methods hence this class in not
+    These functions are declared as static methods hence this class is not
     intented to be instantiated.
     """
 
