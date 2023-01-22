@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include <iostream>
 #include <cstdlib>
 #include "Symbolics.h"
@@ -42,8 +21,8 @@ int pendulum()
 
     writer.generateTarget("Pendulum","./.",g,true);
 
-    return 0; //Überprüft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
-              //Keine Aussage darüber ob sich der Code mit einem Modelica Compiler übersetzen lässt.
+    return 0; //ï¿½berprï¿½ft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
+              //Keine Aussage darï¿½ber ob sich der Code mit einem Modelica Compiler ï¿½bersetzen lï¿½sst.
 }
 
 int pendulumDAE( )
@@ -57,8 +36,8 @@ int pendulumDAE( )
 
     writer.generateTarget("PendulumDAE","./.",g,true);
 
-    return 0; //Überprüft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
-              //Keine Aussage darüber ob sich der Code mit einem Modelica Compiler übersetzen lässt.
+    return 0; //ï¿½berprï¿½ft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
+              //Keine Aussage darï¿½ber ob sich der Code mit einem Modelica Compiler ï¿½bersetzen lï¿½sst.
 }
 
 int pend_expl_mod( )
@@ -68,8 +47,8 @@ int pend_expl_mod( )
     g.buildGraph(true);
     ModelicaWriter writer;
     writer.generateTarget("Pendulum_expl","./.",g,true);
-    return 0; //Überprüft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
-              //Keine Aussage darüber ob sich der Code mit einem Modelica Compiler übersetzen lässt.
+    return 0; //ï¿½berprï¿½ft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
+              //Keine Aussage darï¿½ber ob sich der Code mit einem Modelica Compiler ï¿½bersetzen lï¿½sst.
 }
 
 int pend_expl_mat( )
@@ -79,8 +58,8 @@ int pend_expl_mat( )
     g.buildGraph(true);
     MatlabWriter writer;
     writer.generateTarget("Pendulum_expl","./.",g,true);
-    return 0; //Überprüft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
-              //Keine Aussage darüber ob sich der Code mit MATLAB ausführen lässt.
+    return 0; //ï¿½berprï¿½ft somit nur, ob der Code generell ohne abgefangene Fehler erstellt werden kann.
+              //Keine Aussage darï¿½ber ob sich der Code mit MATLAB ausfï¿½hren lï¿½sst.
 }
 
 int pend_expl_c()
@@ -128,7 +107,7 @@ int pend_expl_python()
     PythonWriter writer;
     writer.generateTarget("Pendulum_expl","./.",g,true);
 
-    //Modell überprüfen 
+    //Modell ï¿½berprï¿½fen 
     int res = 0;
 	std::string cmd = "python \"Pendulum_expl_der_state.py\"";
     res += system(cmd.c_str()); 

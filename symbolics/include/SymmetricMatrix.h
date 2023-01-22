@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #ifndef __SymmetricMatrix_H_
 #define __SymmetricMatrix_H_
 
@@ -31,7 +10,7 @@ namespace Symbolics
     class SymmetricMatrix: public Matrix
     {
     public:
-        // Konstruktor (mit Nullen füllen)
+        // Konstruktor (mit Nullen fï¿½llen)
         SymmetricMatrix( Shape const& shape );
         // Konstruktor (mit Array)
         SymmetricMatrix( BasicPtrVec const& values,  Shape const& shape );
@@ -66,8 +45,8 @@ namespace Symbolics
         // Transponieren
         Matrix transpose() const { return *this; };
 
-        // Inserter, so dass mit SymmetricMatrix = 1,2,3 eingefügt werden kann
-        // SymmetricMatrix = 1 gibt einen Inserter zurück, dessen , Operator überladen ist ...
+        // Inserter, so dass mit SymmetricMatrix = 1,2,3 eingefï¿½gt werden kann
+        // SymmetricMatrix = 1 gibt einen Inserter zurï¿½ck, dessen , Operator ï¿½berladen ist ...
         struct Inserter
         {
         public:
@@ -75,7 +54,7 @@ namespace Symbolics
             Inserter( SymmetricMatrix &constant,  BasicPtr &a );
             // Destruktor
             ~Inserter();
-            // , Operator überladen
+            // , Operator ï¿½berladen
             Inserter& operator,( BasicPtr &a);
             Inserter& operator,( int a);
             Inserter& operator,( double a);

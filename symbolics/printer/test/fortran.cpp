@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include <iostream>
 #include "Symbolics.h"
 #include "FortranPrinter.h"
@@ -130,7 +109,7 @@ int fortranTestPow()
     if ( fp.print(pow3).compare("matpow(testMatrix,3)") )
         out += "TEST_ERROR: Pow test 3: "+ fp.print(pow3) + "\n";
 
-    //Folgendes schlägt fehl, und muss noch gefixt werden (kein Printer Problem!)
+    //Folgendes schlï¿½gt fehl, und muss noch gefixt werden (kein Printer Problem!)
     BasicPtr pow4(new Pow(new Symbol("testMatrix",s),3.0));
     if ( fp.print(pow4->simplify()).compare("matpow(testMatrix,3)") )
         out += "TEST_ERROR: Pow test 4: "+ fp.print(pow4) + "\n";
@@ -293,7 +272,7 @@ int fortranTestMul()
     if ( fp.print(b2).compare("(testSymbol*testSymbol2*(-testSymbol3)*testSymbol4)") )
         out += "TEST_ERROR: Mul test 2: "+ fp.print(b2) + "\n";
 
-    Shape s1 = Shape(1,1,4); //Spaltenvektoren müssen so erstellt werden, Shape(1,4) erzeugt eine Matrix (ndim=2)
+    Shape s1 = Shape(1,1,4); //Spaltenvektoren mï¿½ssen so erstellt werden, Shape(1,4) erzeugt eine Matrix (ndim=2)
     Shape s2 = Shape(4);
     Shape s3 = Shape(3,3);
     bv.clear();

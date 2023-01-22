@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include "FMUWriter.h"
 #include "lib/lib_xml_writer.h"
 #include "FMUPrinter.h"
@@ -211,7 +190,7 @@ double FMUWriter::generateTarget_Impl(Graph::Graph &g)
 	    #endif
 	    system(cmd.c_str());
     } 
-    //TODO: kompiliervorgang überprüfen, evtl. existenz vom gcc prüfen, und evtl. auch alternativ den VS Compiler nutzen
+    //TODO: kompiliervorgang ï¿½berprï¿½fen, evtl. existenz vom gcc prï¿½fen, und evtl. auch alternativ den VS Compiler nutzen
 
 	// ZIP Datei erstellen
 	std::string fmu_file = m_base_path + "/" + m_name + ".fmu";
@@ -224,10 +203,10 @@ double FMUWriter::generateTarget_Impl(Graph::Graph &g)
 	system(cmd.c_str());
 
 
-	// TODO: Ordner wieder löschen - oder auch nicht... oder konfigurierbar?
+	// TODO: Ordner wieder lï¿½schen - oder auch nicht... oder konfigurierbar?
 
-	//Wahrscheinlich sollten alle Dateien/Verzeichnisse einzeln mit remove gelöscht werden. remove_all ist schon relativ böse...
-	//Alternativ das Verzeichnis im Temp ordner anlegen und wieder löschen.
+	//Wahrscheinlich sollten alle Dateien/Verzeichnisse einzeln mit remove gelï¿½scht werden. remove_all ist schon relativ bï¿½se...
+	//Alternativ das Verzeichnis im Temp ordner anlegen und wieder lï¿½schen.
     // Nutzung des Temp Ordners konfigurierbar?
 	return t1 + t2 + t3;
 }
@@ -304,7 +283,7 @@ double FMUWriter::generateXML(Graph::Graph& g)
 						record.attr("fixed", "true"); // TODO: evtl false? true ist default.
 					} {
 						xml::element sv("ScalarVariable", xw);
-						sv.attr("name", "der_" + name); // TODO: evtl könnte man hier auch die Klammervariante wie beim comment nehmen
+						sv.attr("name", "der_" + name); // TODO: evtl kï¿½nnte man hier auch die Klammervariante wie beim comment nehmen
 						sv.attr("valueReference", m_valueReferences.size());
 						m_valueReferences["der_" + name] = m_valueReferences.size();
 						sv.attr("description", "der(" + g.getComment(*it) + (m>1 ? "[" + str(i) + "]" : "") + (n>1 ? "[" + str(j) + "]" : "") + ")");
@@ -339,7 +318,7 @@ double FMUWriter::generateXML(Graph::Graph& g)
 		{
 			size_t m = (*it)->getShape().getDimension(1);
 			size_t n = (*it)->getShape().getDimension(2);
-			for (size_t i = 0; i < m; ++i) // Parameter sind wohl immer Skalar, da eine Skalarisierung schon im Python Teil durchgeführt wird??
+			for (size_t i = 0; i < m; ++i) // Parameter sind wohl immer Skalar, da eine Skalarisierung schon im Python Teil durchgefï¿½hrt wird??
 				for (size_t j = 0; j < n; ++j)
 				{
 					std::string name = (*it)->getName() + (m>1 ? "_" + str(i) : "") + (n>1 ? "_" + str(j) : "");

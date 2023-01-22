@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include "CPrinter.h"
 #include "str.h"
 
@@ -156,7 +135,7 @@ std::string CPrinter::print_Zero( const Zero *z )
     if (z->is_Vector())
 	    return "{0}"; 
     return "{{0}}";
-    // C initialisiert nicht angegebene Werte immer mit 0, darum passt dies für alle Vektoren und Matrizen
+    // C initialisiert nicht angegebene Werte immer mit 0, darum passt dies fï¿½r alle Vektoren und Matrizen
 }
 /*****************************************************************************/
 

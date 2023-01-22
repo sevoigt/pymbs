@@ -1,24 +1,3 @@
-/*
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-*/
-
 #include "MatlabWriter.h"
 #include "MatlabSymPrinter.h"
 #include "str.h"
@@ -101,7 +80,7 @@ double MatlabWriter::generateBasicSim(Graph::Graph& g)
 	// StateVariables Vector sortieren:
 	std::sort(states.begin(),states.end(), sortVariableVec);
 
-	//weil es häufiger verwendet wird:
+	//weil es hï¿½ufiger verwendet wird:
 	size_t state0_dim1 = states.at(0)->getShape().getDimension(1);
     
 	f << "% " << getHeaderLine() << std::endl;
@@ -117,7 +96,7 @@ double MatlabWriter::generateBasicSim(Graph::Graph& g)
 	f << std::endl;
 	f << "y0 = [";
 	for (Graph::VariableVec::iterator it=states.begin();it!=states.end();++it)
-		f << m_p->print(*it) << "0" << (it+1 != states.end() ? "; " : "" ); //Matlab käme zwar auch mit dem zusätzlichen Komma am Ende klar, aber wir wollen ja schönen Code...
+		f << m_p->print(*it) << "0" << (it+1 != states.end() ? "; " : "" ); //Matlab kï¿½me zwar auch mit dem zusï¿½tzlichen Komma am Ende klar, aber wir wollen ja schï¿½nen Code...
 	f << "];" << std::endl; 
 	f << std::endl;
 	f << "% Configure simulation" << std::endl;
@@ -331,7 +310,7 @@ double MatlabWriter::generateInputs(Graph::Graph& g)
 	f << std::endl;
 	if (inputs.begin()==inputs.end())
 		f << "	I = [];" << std::endl; 
-	 // folgende zwei Schleifen werden ja nicht ausgeführt wenn obiges zutrifft
+	 // folgende zwei Schleifen werden ja nicht ausgefï¿½hrt wenn obiges zutrifft
 	for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		f << "	" << m_p->print(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) << std::endl;
 	f << std::endl;
@@ -535,12 +514,12 @@ std::string MatlabWriter::writeEquations(std::vector<Graph::Assignment> const& e
 			{
 				const Matrix *mat = Util::getAsConstPtr<Matrix>(it->lhs[i]);
 				if (simple_exp->getType() == Type_Symbol)
-				{  // Wir können es ohne temporäre Variable auflösen
+				{  // Wir kï¿½nnen es ohne temporï¿½re Variable auflï¿½sen
 					for (size_t j=0; j < mat->getShape().getDimension(1); j++)
 						for (size_t k=0; k < mat->getShape().getDimension(2); k++)
 							s << "    " << m_p->print(mat->get(j,k)) << " = " << m_p->print(simple_exp) << "(" << j+1<< "," << k+1 << ")" << (m_symbolicmode ? "" : ";") << std::endl;
-				} else 	{  // Es muss eine temporäre Variable eingeführt werden
-					s << "    temp_var_1 = " << m_p->print(simple_exp) << (m_symbolicmode ? "" : ";") << std::endl; // TODO: So ein fester Name ist nicht schön, wie lassen sich Kollisionen vermeiden?
+				} else 	{  // Es muss eine temporï¿½re Variable eingefï¿½hrt werden
+					s << "    temp_var_1 = " << m_p->print(simple_exp) << (m_symbolicmode ? "" : ";") << std::endl; // TODO: So ein fester Name ist nicht schï¿½n, wie lassen sich Kollisionen vermeiden?
 					for (size_t j=0; j < mat->getShape().getDimension(1); j++)
 						for (size_t k=0; k < mat->getShape().getDimension(2); k++)
 							s << "    " << m_p->print(mat->get(j,k)) << " = temp_var_1(" << j+1<< "," << k+1 << ")" << (m_symbolicmode ? "" : ";") << std::endl;
