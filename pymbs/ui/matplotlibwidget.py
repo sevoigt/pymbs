@@ -75,8 +75,7 @@ class MatplotlibWidget(Canvas):
         if xlim is not None:
             self.axes.set_xlim(*xlim)
         if ylim is not None:
-            self.axes.set_ylim(*ylim)
-        self.axes.hold(hold)
+            self.axes.set_ylim(*ylim)        
 
         Canvas.__init__(self, self.figure)
         self.setParent(parent)
