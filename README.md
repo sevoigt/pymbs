@@ -2,8 +2,6 @@
 
 ## About
 
-[![Build Status](https://drone.io/bitbucket.org/pymbs/pymbs/status.png)](https://drone.io/bitbucket.org/pymbs/pymbs/latest)
-
 PyMbs is a tool to generate the equations of motion of holonomic multibody
 systems. The equations can be exported to several target languages like Matlab,
 Modelica, Python or C/C++. Thus the output of PyMbs is a mathematical model of
@@ -34,9 +32,9 @@ PyMbs is developed using Python 3.11. It will most likely work on older 3.x vers
 
 ### Installation on Windows
 
-Simply execute the installer
+Simply execute the installer (outdated)
 
-Todo: installer is only available via Bitbucket, see legacy repo below.
+Note: installer is only available via Bitbucket, see legacy repo below.
 
 ### Installation on Linux
 
@@ -67,6 +65,6 @@ To check your installation and see an example of PyMbs in action, try:
 
 ## Legacy Repo
 
-PyMbs used to reside on bitbucket:
+PyMbs used to reside on Bitbucket:
 
 <https://bitbucket.org/pymbs/pymbs/src/master/?at=default>
