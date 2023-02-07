@@ -23,9 +23,10 @@ def compileF90(modulename, path, compiler=None):
         opsys = platform.system()
 
         if opsys == 'Windows':
-            binpath = sys.prefix+"/python.exe " +  sys.prefix+"/Scripts/"
-            f2py = binpath + 'f2py.py'
+            binpath = os.path.join(sys.prefix, 'Scripts/')
+            f2py = binpath + 'f2py.exe'
             comp = '--compiler=mingw32'
+            #comp = '--compiler=gcc'
 
         elif opsys == 'Linux':
             binpath = sys.prefix+"/bin/"
