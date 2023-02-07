@@ -23,10 +23,9 @@ def compileF90(modulename, path, compiler=None):
         opsys = platform.system()
 
         if opsys == 'Windows':
-            binpath = os.path.join(sys.prefix, 'Scripts/')
-            f2py = binpath + 'f2py.exe'
-            comp = '--compiler=mingw32'
-            #comp = '--compiler=gcc'
+            binpath = os.path.join(sys.prefix, 'python.exe')
+            f2py = binpath + ' -m numpy.f2py'
+            comp = '--compiler=mingw32'            
 
         elif opsys == 'Linux':
             binpath = sys.prefix+"/bin/"
@@ -43,7 +42,7 @@ def compileF90(modulename, path, compiler=None):
         compiler += " --f90flags=-ffree-line-length-none"
 
         # compile
-        compileProcess = Popen(f2py+' -c -m %s functionmodule.f90 %s.f90 %s' % \
+        compileProcess = Popen(f2py + ' -c -m %s functionmodule.f90 %s.f90 %s' % \
                                (modulename_py, modulename, compiler), stdout=PIPE,
                                 stderr=STDOUT, shell=True, cwd=path)
 
