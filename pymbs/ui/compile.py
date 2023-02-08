@@ -39,7 +39,11 @@ def compileF90(modulename, path, compiler=None):
         # use default compiler
         if compiler is None:
             compiler = comp
-        compiler += " --f90flags='-ffree-line-length-none'"
+        #compiler += " --f90flags=-ffree-line-length-none"
+        
+        # Todo: try compiler flags to handle segfault error in functionmodule.f90
+        # source: https://stackoverflow.com/questions/44633519/fortran-strange-segmentation-fault
+        compiler += " --f90flags='-ffree-line-length-none -fno-stack-arrays"
 
         # compile
         f2py_call = str.format('{0} -c functionmodule.f90 {1}.f90 -m {2} {3}', 
