@@ -25,7 +25,7 @@ def compileF90(modulename, path, compiler=None):
         if opsys == 'Windows':
             binpath = os.path.join(sys.prefix, 'python.exe')
             f2py = binpath + ' -m numpy.f2py'
-            comp = '--compiler=mingw32'            
+            comp = '--compiler=mingw32 --skip-empty-wrappers --noopt'            
 
         elif opsys == 'Linux':
             binpath = sys.prefix+"/bin/"
@@ -39,19 +39,34 @@ def compileF90(modulename, path, compiler=None):
         # use default compiler
         if compiler is None:
             compiler = comp
-        compiler += " --f90flags=-ffree-line-length-none"
+        compiler += " --f90flags='-ffree-line-length-none'"
 
         # compile
-        compileProcess = Popen(f2py + ' -c -m %s functionmodule.f90 %s.f90 %s' % \
-                               (modulename_py, modulename, compiler), stdout=PIPE,
-                                stderr=STDOUT, shell=True, cwd=path)
+        f2py_call = str.format('{0} -c functionmodule.f90 {1}.f90 -m {2} {3}', 
+                                f2py, modulename, modulename_py, compiler)
+        print(path)
+        print(f2py_call)
 
+        compileProcess = Popen(f2py_call,
+                               stdout=PIPE,
+                               stderr=STDOUT, 
+                               shell=True, 
+                               cwd=path)
+
+        while True:
+            output = compileProcess.stdout.readline()[:-1]
+            if output:
+                print(output.decode('UTF-8'))
+            if compileProcess.poll() is not None:
+                break
+        """
         output = compileProcess.communicate()
 
         if compileProcess.returncode != 0:
             print(output[0])
         else:
             print('Compilation of "%s.f90" successful' % modulename)
+        """
 
     except OSError as e:
         print("Execution failed:", e, file=sys.stderr)
