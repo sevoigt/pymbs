@@ -92,6 +92,7 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl << std::endl;
 
+	//f << "from numba import njit" << std::endl;
 	f << "from numpy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
 	f << "from numpy import arctan2 as atan2" << std::endl;
 	f << "from numpy import arctan as atan" << std::endl;
@@ -131,6 +132,7 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 	}
 
 	// write state derivative function
+	//f << "@njit" << std::endl;
 	f << "def " << m_name << "_der_state(time, y):" << std::endl;
 	f << std::endl;
 	// f << "    print \"y:=%s\"%y"; //for debug
