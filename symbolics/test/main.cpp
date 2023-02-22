@@ -1,3 +1,4 @@
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 #include <iostream>
 #include "Symbolics.h"
 #include <map>
@@ -17,6 +18,7 @@ using namespace Symbolics;
 #ifndef __GNUC__
 class ConstBasichasher : public stdext::hash_compare <BasicPtr>
 {
+
 public:
   /**
    * Required by 
@@ -29,6 +31,7 @@ public:
   {
       return s->getHash();
   }
+
 
   /**
    * 
