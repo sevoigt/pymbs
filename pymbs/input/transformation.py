@@ -836,12 +836,8 @@ class PublicMethods(object):
 
         # Write Python Code
         print("Writing model code for GUI to temporary directory: '%s'"%tempfile.gettempdir())
-        #graphics = CodeGenerator('py', modelname, _Graph, tempfile.gettempdir())
-        #graphics.genVisualisationSensors()
-        #graphics.genStateDerivative()
 
         _Graph.writeCode('py', modelname, tempfile.gettempdir())
-
 
         # this is the list of graphRep objects:
         grList = list(model.graphRepDict.values())
@@ -851,30 +847,19 @@ class PublicMethods(object):
 
 
     @staticmethod
-    def genSarturisXml(model, modelname, dirname = '.'):
-
-        grList = list(model.graphRepDict.values())
-
-        save = CodeGenerator('xml', modelname, _Graph, dirname)
-        save.genSarturisScenegraph(grList)
-
-    @staticmethod
     def genMatlabAnimation(model, modelname, dirname = '.', **kwargs):
-
-        # this is the list of graphRep objects:
-        grList = list(model.graphRepDict.values())
-
-        graphics = CodeGenerator('m', modelname, _Graph, dirname)
-        graphics.genVisualisationSensors()
-        graphics.genAnimation(grList, _gravity, **kwargs)
+        from pymbs.input import MbsSystem
+        assert isinstance(model, MbsSystem)
+        
+        _Graph = model.graph
+        _Graph.writeCode('m', modelname, dirname, **kwargs)
 
         # try to delete 'stl.mat', otherwise graphics never get updated
         try:
             os.remove(os.path.join(dirname, 'stl.mat'))
-        #TODO: which exception??
-        except:
-            # Ignore file not found
+        except FileNotFoundError:
             pass
+
 
     @staticmethod
     def exportGraphReps(model, fileName):
@@ -896,5 +881,7 @@ class PublicMethods(object):
                              'instance to add 3d objects representing the '\
                              'bodies of your mbs.')
 
-        exporter = GraphRepWriter(grList, _Graph, fileName)
-        exporter.save()
+        raise NotImplementedError('Exporting the graphics objects is '\
+                                  'not implemented.')
+        #exporter = GraphRepWriter(grList, _Graph, fileName)
+        #exporter.save()
