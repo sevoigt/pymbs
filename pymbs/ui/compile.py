@@ -25,7 +25,7 @@ def compileF90(modulename, path, compiler=None):
         if opsys == 'Windows':
             binpath = os.path.join(sys.prefix, 'python.exe')
             f2py = binpath + ' -m numpy.f2py'
-            comp = '--compiler=mingw32 --skip-empty-wrappers --noopt'            
+            comp = '--compiler=mingw32 --skip-empty-wrappers' #--noopt'            
 
         elif opsys == 'Linux':
             binpath = sys.prefix+"/bin/"
@@ -43,7 +43,7 @@ def compileF90(modulename, path, compiler=None):
         
         # Todo: try compiler flags to handle segfault error in functionmodule.f90
         # source: https://stackoverflow.com/questions/44633519/fortran-strange-segmentation-fault
-        compiler += " --f90flags='-ffree-line-length-none -fno-stack-arrays"
+        compiler += " --f90flags=\"-ffree-line-length-none -fno-stack-arrays -fno-realloc-lhs\""
 
         # compile
         f2py_call = str.format('{0} -c functionmodule.f90 {1}.f90 -m {2} {3}', 
