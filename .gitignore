@@ -6,3 +6,13 @@ build/*
 *.pyo
 
 Thumbs.db
+
+**/output
+
+__pycache__
+
+# C# test project
+*.csproj
+**/project/bin
+**/project/obj
+
