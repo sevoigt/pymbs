@@ -5,7 +5,7 @@ from pymbs.common.functions import skew, transpose, solve, der, scalar, scalar_i
                                     blockMatrix, blockVector, outer, vector_if_possible
 from pymbs.common.state import State
 
-from pymbs.symbolics import zeros, Matrix, jacobian, eye, Graph
+from pymbs.symbolics import zeros, Matrix, jacobian, eye, Graph, VarKind
 
 import pymbs.processing.sensors
 

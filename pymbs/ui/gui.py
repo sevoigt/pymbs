@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabe
         QApplication, QLineEdit
 
 
-from PyQt5.QtGui import QDoubleValidator, QIcon, QPixmap
+from PyQt5.QtGui import QDoubleValidator, QIcon, QPixmap, QCloseEvent
 
 from PyQt5.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
                         QApplication, QTabWidget, QVBoxLayout,\
@@ -967,6 +967,11 @@ class Gui(QMainWindow, pymbsMainWindow):
         self.recorder = PIRecorder(self.getSensorData)
         self.recordButton.clicked.connect(self.recorder.toggle)
 
+
+    def closeEvent(self, a0: QCloseEvent) -> None:
+        self.SimThread.stop()
+        self.ResultThread.stop()
+        return super().closeEvent(a0)
 
 
     def getSensorData(self):
