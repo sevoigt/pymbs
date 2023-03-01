@@ -11,8 +11,9 @@ Thumbs.db
 
 __pycache__
 
-# C# test project
+# C# test project and pymbs output for testing
 *.csproj
 **/project/bin
 **/project/obj
-
+test/csharp/project/*_der_state.cs
+test/csharp/project/*_visual.cs
