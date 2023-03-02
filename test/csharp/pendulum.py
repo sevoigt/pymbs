@@ -1,5 +1,5 @@
 ﻿"""
-Test model for C#-export (and Unity)
+Test model for C#-export
 """
 
 from pymbs.input import *
@@ -14,7 +14,7 @@ I = world.addParam('Inertia', (m*l**2)/12)
 pend = world.addBody(mass=m, inertia=diag([0, I, 0]))
 pend.addFrame('link', [0,0,0.5*l])
 
-world.addJoint(world, pend.link, 'Ry')
+world.addJoint(world, pend.link, 'Ry', startVals=[0.2])
 
 world.addVisualisation.Box(pend, length=0.1, width=0.1, height=1.0)
 

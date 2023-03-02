@@ -253,13 +253,12 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
 		}
 		else if (((BasicPtr)*it)->is_Vector()) 	//if (m_p->dimension(*it) == "[3]") -- will break when dimension() changes
 		{ 
-			f << "    Vector<double> " << m_p->print(*it);
+			f << "    " << m_p->print(*it) << " = CreateVector.Dense<double>(" << m_p->dimension(*it) << ", 0);" <<  std::endl;;
 		}
 		else
 		{
-			f << "    Matrix<double> " << m_p->print(*it);
+			f << "    " << m_p->print(*it) << " = CreateMatrix.Dense<double>(" << m_p->dimension(*it) << ", 0);" <<  std::endl;
 		}
-		f << ";" << std::endl;
 	}
 	f << std::endl;
 
