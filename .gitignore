@@ -11,6 +11,9 @@ Thumbs.db
 
 __pycache__
 
+# precompiled symbolics module on linux
+symbolics.so
+
 # C# test project and pymbs output for testing
 *.csproj
 **/project/bin
