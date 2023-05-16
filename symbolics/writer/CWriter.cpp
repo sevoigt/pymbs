@@ -508,14 +508,6 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
 	f << "def ode_int(t, y):" << std::endl;
 	f << "    global _inputs" << std::endl;
 	f << std::endl;
-    if (!sensors.empty())
-    {
-        f << "    sensors = graphSensors(t, y)" << std::endl;
-    }
-    else
-    {
-        f << "    sensors = dict()" << std::endl;
-    }
     for (Graph::VariableVec::iterator it=controller.begin();it!=controller.end();++it)
 	{
         std::string comment_tmp = m_p->comment2(g,*it);
