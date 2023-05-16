@@ -17,13 +17,13 @@ world = MbsSystem([0, 0, -1])
 pitch = 0.13 # pitch (length of a segment)
 nseg = 16   # number of segments
 
-c =  75000   # [N/m] translational stiffness
-d =   7500   # [Ns/m] translational damping
+c = 120000   # [N/m] translational stiffness
+d =  10000   # [Ns/m] translational damping
 
-c_r =  100  # [Nm/rad] rotational stiffness
-d_r =   10  # [Nms/rad] rotational damping
+c_r =  200  # [Nm/rad] rotational stiffness
+d_r =  150  # [Nms/rad] rotational damping
 
-ml = 10     # [kg/m] mass per length
+ml = 15     # [kg/m] mass per length
 
 
 # Initialize lists
