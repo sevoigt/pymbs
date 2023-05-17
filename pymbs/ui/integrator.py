@@ -3,7 +3,7 @@ from scipy import integrate
 
 class Integrator(integrate.ode):
 
-    def __init__(self, handle, y0, yd0, dt=0.01, rtol=1e-6, atol=1e-6):
+    def __init__(self, handle, y0, yd0, dt=0.01, rtol=1e-3, atol=1e-6):
 
         integrate.ode.__init__(self, handle)
         self.y0 = list(y0)
