@@ -20,7 +20,7 @@ world = MbsSystem([0, 0, -1])
 pitch = 0.131     # [m] pitch (length of a segment)
 link_width = 0.05 # [m] width of the stiff part of a segment
 mass = 15.943     # [kg] mass per length
-nseg = 16      # number of segments
+nseg = 16         # number of segments
 
 c = 120e6   # [N/m] translational stiffness
 d =   1e6   # [Ns/m] translational damping
