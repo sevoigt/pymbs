@@ -5,6 +5,9 @@ a 1D translational joint.
 
 This could also serve as chain or rope model if the stiffnesses are adjusted
 accordingly.
+
+This model is also used as benchmark. The original model with 16 segments
+was created in SimulationX 4.0 and all parameters have been taken from there. 
 """
 
 import time
@@ -14,16 +17,16 @@ from pymbs.input import *
 world = MbsSystem([0, 0, -1])
 
 
-pitch = 0.13 # pitch (length of a segment)
-nseg = 16   # number of segments
+pitch = 0.131  # [m] pitch (length of a segment)
+mass = 15.943      # [kg] mass per length
+nseg = 16      # number of segments
 
-c = 120000   # [N/m] translational stiffness
-d =  10000   # [Ns/m] translational damping
+c = 120e6   # [N/m] translational stiffness
+d =   1e6   # [Ns/m] translational damping
 
-c_r =  200  # [Nm/rad] rotational stiffness
-d_r =  150  # [Nms/rad] rotational damping
+c_r = 1000  # [Nm/rad] rotational stiffness
+d_r = 1500  # [Nms/rad] rotational damping
 
-ml = 15     # [kg/m] mass per length
 
 
 # Initialize lists
@@ -32,29 +35,29 @@ joints_Tx = [None]*nseg
 joints_Ry = [None]*nseg
 
 # Parameters
-m = ml * pitch
-I = 1/12*m*pitch**2*diag([1, 1, 1])
+I = diag([2.2896, 0.0194 + mass*pitch**2, 2.2896])
 
 # Create bodies and connect them
 for i in range(0, nseg):
     # Create Body and Frame
-    bodies[i] = world.addBody(m, cg=[pitch/2, 0, 0], inertia=I)
+    bodies[i] = world.addBody(mass, cg=[pitch, 0, -0.037], inertia=I)
     bodies[i].addFrame(name='end', p=[pitch, 0, 0])
 
     # Create joints
     if (i==0):
-        joints_Ry[i] = world.addJoint(world, bodies[i], ['Ry'])        
+        joints_Ry[i], joints_Tx[i] = world.addJoint(world, bodies[i], ['Ry', 'Tx'])        
     else:
         joints_Ry[i], joints_Tx[i] = world.addJoint(bodies[i-1].end, bodies[i], ['Ry', 'Tx'])
         #joints_Ry[i] = world.addJoint(bodies[i-1].end, bodies[i], 'Ry')
 
     world.addVisualisation.Line(bodies[i], pitch)
+    world.addVisualisation.Sphere(bodies[i].end, 0.01, color=[0.8, 0.5, 0.5])
 
     # Add force    
-    if i>0:
-        dx = world.addSensor.Joint(symbol=f'tx_{i}', joint=joints_Tx[i])
-        f = world.addExpression(symbol_str=f'force_{i}', exp= -c*dx[0] - d*dx[1])
-        world.addLoad.Joint(joint=joints_Tx[i], symbol=f)
+    #if i>0:
+    dx = world.addSensor.Joint(symbol=f'tx_{i}', joint=joints_Tx[i])
+    f = world.addExpression(symbol_str=f'force_{i}', exp= -c*dx[0] - d*dx[1])
+    world.addLoad.Joint(joint=joints_Tx[i], symbol=f)
     
     # Add torque
     dphi = world.addSensor.Joint(symbol = f'ry_{i}', joint=joints_Ry[i])
@@ -62,14 +65,9 @@ for i in range(0, nseg):
     world.addLoad.Joint(joint=joints_Ry[i], symbol=t)
 
 
-# Pin other end to world with loose spring
-world.addFrame('pin', p=[nseg*pitch, 0, 0])
-dist = world.addSensor.Distance(symbol='dist', CS1=world.pin, CS2=bodies[-1].end)
-fd = world.addExpression(symbol_str='f_dist', exp= -100*dist[0] - 10*dist[1])
-world.addLoad.PtPForce(symbol=fd, CS1=world.pin, CS2=bodies[-1].end)
-
 t = time.time()
 
+world.addVisualisation.Frame(world, 0.5)
 world.genEquations.Recursive()
 print('Time needed for generating equations: %5.2f s' % (time.time() - t))
 
