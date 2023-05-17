@@ -17,8 +17,9 @@ from pymbs.input import *
 world = MbsSystem([0, 0, -1])
 
 
-pitch = 0.131  # [m] pitch (length of a segment)
-mass = 15.943      # [kg] mass per length
+pitch = 0.131     # [m] pitch (length of a segment)
+link_width = 0.05 # [m] width of the stiff part of a segment
+mass = 15.943     # [kg] mass per length
 nseg = 16      # number of segments
 
 c = 120e6   # [N/m] translational stiffness
@@ -28,6 +29,8 @@ c_r = 1000  # [Nm/rad] rotational stiffness
 d_r = 1500  # [Nms/rad] rotational damping
 
 
+world.addFrame(name='start', p=[link_width/2, 0, 0])  
+world.addVisualisation.Frame(world, 0.05)
 
 # Initialize lists
 bodies = [None]*nseg
@@ -40,24 +43,33 @@ I = diag([2.2896, 0.0194 + mass*pitch**2, 2.2896])
 # Create bodies and connect them
 for i in range(0, nseg):
     # Create Body and Frame
-    bodies[i] = world.addBody(mass, cg=[pitch, 0, -0.037], inertia=I)
-    bodies[i].addFrame(name='end', p=[pitch, 0, 0])
+    bodies[i] = world.addBody(mass, cg=[0, 0, -0.037], inertia=I)
+    bodies[i].addFrame(name='start', p=[-link_width/2, 0,0])
+    bodies[i].addFrame(name='end', p=[link_width/2, 0, 0])  
 
     # Create joints
     if (i==0):
-        joints_Ry[i], joints_Tx[i] = world.addJoint(world, bodies[i], ['Ry', 'Tx'])        
+        joints_Ry[i], joints_Tx[i] = world.addJoint(world, bodies[i], ['Ry', 'Tx'], [0, pitch])        
     else:
-        joints_Ry[i], joints_Tx[i] = world.addJoint(bodies[i-1].end, bodies[i], ['Ry', 'Tx'])
+        joints_Ry[i], joints_Tx[i] = world.addJoint(bodies[i-1], bodies[i], ['Ry', 'Tx'], [0, pitch])
         #joints_Ry[i] = world.addJoint(bodies[i-1].end, bodies[i], 'Ry')
 
-    world.addVisualisation.Line(bodies[i], pitch)
-    world.addVisualisation.Sphere(bodies[i].end, 0.01, color=[0.8, 0.5, 0.5])
+    world.addVisualisation.Line(bodies[i].start, -(pitch-link_width))
+    world.addVisualisation.Sphere(bodies[i], link_width/2, res=10, color=[0.8, 0.5, 0.5])
 
-    # Add force    
-    #if i>0:
-    dx = world.addSensor.Joint(symbol=f'tx_{i}', joint=joints_Tx[i])
-    f = world.addExpression(symbol_str=f'force_{i}', exp= -c*dx[0] - d*dx[1])
-    world.addLoad.Joint(joint=joints_Tx[i], symbol=f)
+    # Add force        
+    if i==0:
+        dx = world.addSensor.Distance(f'tx_{i}', world.start, bodies[i].start)
+    else:
+        dx = world.addSensor.Distance(f'tx_{i}', bodies[i-1].end, bodies[i].start)
+
+    f = world.addExpression(symbol_str=f'force_{i}', 
+                            exp= -c*(dx[0]-(pitch-link_width)) - d*dx[1])
+    
+    if i==0:
+        world.addLoad.PtPForce(f, world.start, bodies[i].start)
+    else:
+        world.addLoad.PtPForce(f, bodies[i-1].end, bodies[i].start)
     
     # Add torque
     dphi = world.addSensor.Joint(symbol = f'ry_{i}', joint=joints_Ry[i])
@@ -67,7 +79,6 @@ for i in range(0, nseg):
 
 t = time.time()
 
-world.addVisualisation.Frame(world, 0.5)
 world.genEquations.Recursive()
 print('Time needed for generating equations: %5.2f s' % (time.time() - t))
 
