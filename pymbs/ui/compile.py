@@ -87,7 +87,7 @@ def compileC(modulename, path):
         if os.path.isfile(path + '/%s.so'%modulename):
             os.remove(path + '/%s.so'%modulename)
     
-        compileProcess = Popen('gcc -shared %s.c -fPIC -o %s.so' % \
+        compileProcess = Popen('gcc -Ofast -shared %s.c -fPIC -o %s.so' % \
                                (modulename, modulename), stdout=PIPE,
                                 stderr=STDOUT, shell=True, cwd=path)
 
