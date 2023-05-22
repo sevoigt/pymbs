@@ -450,7 +450,7 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl;
 	f << "from ctypes import c_double" << std::endl;
-	f << "from numpy import matrix, zeros_like, zeros, ctypeslib" << std::endl;
+	f << "from numpy import matrix, empty, zeros, ctypeslib" << std::endl;
     if (!sensors.empty())
 	{
         f << "from " << m_name << "_sensors_CWrapper import graphSensors" << std::endl;
@@ -516,7 +516,7 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
         std::vector<std::string> comment_vector = split(comment, ':');
         f << "    " << m_p->print(*it) << " = " << comment_vector.back() << "(t, y, sensors)" << std::endl;
 	}
-	f << "    yd = zeros_like(y)" << std::endl;
+	f << "    yd = empty(y.shape)" << std::endl;
 	f << "    cm." << m_name << "_der_state(t, y, yd";
     for (Graph::VariableVec::iterator it=state_inputs.begin();it!=state_inputs.end();++it)
         f << ", _inputs['" << p.print(*it) << "']";
