@@ -51,26 +51,21 @@ for i in range(0, nseg):
     if (i==0):
         joints_Ry[i], joints_Tx[i] = world.addJoint(world, bodies[i], ['Ry', 'Tx'], [0, pitch])        
     else:
-        joints_Ry[i], joints_Tx[i] = world.addJoint(bodies[i-1], bodies[i], ['Ry', 'Tx'], [0, pitch])
-        #joints_Ry[i] = world.addJoint(bodies[i-1].end, bodies[i], 'Ry')
+        joints_Ry[i], joints_Tx[i] = world.addJoint(bodies[i-1], bodies[i], ['Ry', 'Tx'], [0, pitch])        
 
     world.addVisualisation.Line(bodies[i].start, -(pitch-link_width))
     world.addVisualisation.Sphere(bodies[i], link_width/2, res=10, color=[0.8, 0.5, 0.5])
 
     # Add force        
     if i==0:
-        dx = world.addSensor.Distance(f'tx_{i}', world.start, bodies[i].start)
+        cs1 = world.start
+        cs2 = bodies[i].start
     else:
-        dx = world.addSensor.Distance(f'tx_{i}', bodies[i-1].end, bodies[i].start)
+        cs1 = bodies[i-1].end
+        cs2 = bodies[i].start
 
-    f = world.addExpression(symbol_str=f'force_{i}', 
-                            exp= -c*(dx[0]-(pitch-link_width)) - d*dx[1])
-    
-    if i==0:
-        world.addLoad.PtPForce(f, world.start, bodies[i].start)
-    else:
-        world.addLoad.PtPForce(f, bodies[i-1].end, bodies[i].start)
-    
+    world.addSpringDamper(cs1, cs2, c, d, pitch-link_width, f'sd_{i}')
+
     # Add torque
     dphi = world.addSensor.Joint(symbol = f'ry_{i}', joint=joints_Ry[i])
     t = world.addExpression(symbol_str=f'tau_{i}', exp= -c_r*dphi[0] - d_r*dphi[1])
