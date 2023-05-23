@@ -3,13 +3,13 @@ from scipy import integrate
 
 class Integrator(integrate.ode):
 
-    def __init__(self, handle, y0, yd0, dt=0.01, rtol=1e-6, atol=1e-6):
+    def __init__(self, handle, y0, yd0, dt=0.01, rtol=1e-3, atol=1e-6):
 
         integrate.ode.__init__(self, handle)
         self.y0 = list(y0)
         self.yd0 = list(yd0)
         self.initVals = self.y0 + self.yd0
-        self.set_integrator('vode', method='adams', rtol=rtol, atol=atol)
+        self.set_integrator('lsoda', rtol=rtol, atol=atol)
         self.set_initial_value(self.initVals)
         self.dt = dt
         self.handle = handle

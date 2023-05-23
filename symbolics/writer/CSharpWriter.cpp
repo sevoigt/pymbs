@@ -95,7 +95,9 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 	f << "using MathNet.Numerics.LinearAlgebra;" << std::endl;
 	f << std::endl;
 
-	f << "int "<< m_name <<"_der_state(double time, double[] y), out double[] yd"; 
+	f << "class " << m_name << " : Object" << std::endl;
+	f << "{" << std::endl;
+	f << "public int "<< m_name <<"_der_state(double time, double[] y, out double[] yd"; 
 	for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
 	for (Graph::VariableVec::iterator it=controller.begin();it!=controller.end();++it)
@@ -132,17 +134,33 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 		f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
 	f << std::endl;
 
+
 	f << "    /* ordinary variables */" << std::endl;
     for (Graph::VariableVec::iterator it=variables.begin();it!=variables.end();++it)
-        f << "    double " << m_p->print(*it) << m_p->dimension(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+    {
+		if (((BasicPtr)*it)->is_Scalar())
+		{
+			f << "    double " << m_p->print(*it) << " = " << m_p->print(g.getinitVal(*it)) << "; " << m_p->comment2(g,*it) <<  std::endl;
+		}
+		else if (((BasicPtr)*it)->is_Vector())
+		{
+			f << "    Vector<double> " << m_p->print(*it) << " = CreateVector.Dense<double>(" << m_p->dimension(*it) << ", " << m_p->print(g.getinitVal(*it)) << "); " << m_p->comment2(g,*it) <<  std::endl;
+		}
+		else
+		{
+			f << "    Matrix<double> " << m_p->print(*it) << " = CreateMatrix.Dense<double>(" << m_p->dimension(*it) << ", " << m_p->print(g.getinitVal(*it)) << "); " << m_p->comment2(g,*it) <<  std::endl;
+		}		
+	}
 	f << std::endl;
-	
+
+
 	f << "    /* calculate state derivative */" << std::endl;
 	f << writeEquations(a->getEquations(PARAMETER | CONSTANT | INPUT )) << std::endl;
     f << std::endl;
 
 	f << "    /* set return values */" << std::endl;
-	for (size_t i=0;i < states.size(); ++i)
+	f << "    yd = new double[" << states.size() << "];" << std::endl;
+ 	for (size_t i=0;i < states.size(); ++i)
 	{
 		size_t n = states.at(i)->getShape().getNumEl();
 		for (size_t j=0; j < n ; ++j) 
@@ -158,7 +176,7 @@ double CSharpWriter::generateDerState(Graph::Graph& g, int &dim)
 
 	f << "    return 0;" << std::endl;
 	f << "}" << std::endl;
-
+	f << "}" << std::endl;
 	f.close();
 
     if (m_p->getErrorcount())
@@ -205,7 +223,9 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
 	f << "using MathNet.Numerics.LinearAlgebra;" << std::endl;
 	f << std::endl;
 
-	f << "int "<< m_name <<"_visual(Vector<double> y"; 
+	f << "class " << m_name << "Visual : Object" << std::endl;
+	f << "{" << std::endl;
+	f << "public int "<< m_name <<"_visual(Vector<double> y"; 
 	for (Graph::VariableVec::iterator it=sens_vis.begin(); it!=sens_vis.end(); ++it)
 		
 		if (((BasicPtr)*it)->is_Scalar())
@@ -223,6 +243,24 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
 
 	f << ")" << std::endl;
 	f << "{" << std::endl;
+
+	f << "// out variables" << std::endl;
+	for (Graph::VariableVec::iterator it=sens_vis.begin(); it!=sens_vis.end(); ++it)
+	{	
+		if (((BasicPtr)*it)->is_Scalar())
+		{			
+			//f << "    m_p->print(*it) = 0;	// should not happen for visual sensor
+		}
+		else if (((BasicPtr)*it)->is_Vector()) 	//if (m_p->dimension(*it) == "[3]") -- will break when dimension() changes
+		{ 
+			f << "    " << m_p->print(*it) << " = CreateVector.Dense<double>(" << m_p->dimension(*it) << ", 0);" <<  std::endl;;
+		}
+		else
+		{
+			f << "    " << m_p->print(*it) << " = CreateMatrix.Dense<double>(" << m_p->dimension(*it) << ", 0);" <<  std::endl;
+		}
+	}
+	f << std::endl;
 
 	f << "    /* declare state variables */" << std::endl;
 	for (size_t i=0; i < states.size(); ++i)
@@ -260,6 +298,7 @@ double CSharpWriter::generateVisual(Graph::Graph& g)
     f << std::endl;
 
 	f << "	return 0;" << std::endl;
+	f << "}" << std::endl;
 	f << "}" << std::endl;
 	
 	f.close();

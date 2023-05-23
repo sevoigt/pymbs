@@ -1,5 +1,5 @@
 /*
-Prints expressions in C# using the Math.NET library for linear algebra
+Prints expressions in C# using the MathNet.Numerics library for linear algebra
 */
 
 #include "CSharpPrinter.h"
@@ -7,56 +7,49 @@ Prints expressions in C# using the Math.NET library for linear algebra
 
 using namespace Symbolics;
 
-/*****************************************************************************/
+
+
 CSharpPrinter::CSharpPrinter()
-/*****************************************************************************/
 {
 }
-/*****************************************************************************/
 
 
-/*****************************************************************************/
+
 CSharpPrinter::~CSharpPrinter()
-/*****************************************************************************/
 {
 }
-/*****************************************************************************/
 
 
-/*****************************************************************************/
+
 std::string CSharpPrinter::comment( const std::string &c ) const
-/*****************************************************************************/
 {
     if (c.empty())
         return "";
     return " /*" + c + "*/";
 }
-/*****************************************************************************/
 
-/*****************************************************************************/
+
+
 std::string CSharpPrinter::dimension( const BasicPtr &b )
-/*****************************************************************************/
 {
     if (b->is_Scalar())
         return "";
 	if (b->is_Vector())
-        return "[" + str(b->getShape().getNumEl()) + "]";
-    return "[" + str(b->getShape().getDimension(1)) + "][" + str(b->getShape().getDimension(2)) + "]";
+        return str(b->getShape().getNumEl());
+    return str(b->getShape().getDimension(1)) + ", " + str(b->getShape().getDimension(2));
 }
-/*****************************************************************************/
 
-/*****************************************************************************/
+
+
 std::string CSharpPrinter::print_Abs( const Abs *s )
-/*****************************************************************************/
 {
 	if (s == NULL) throw InternalError("CSharpPrinter: Abs is NULL");
 	return "Math.Abs(" + print(s->getArg()) + ")";
 }
-/*****************************************************************************/
 
-/*****************************************************************************/
+
+
 std::string CSharpPrinter::print_Element( const Element *e )
-/*****************************************************************************/
 { 
 	if (e == NULL) throw InternalError("CSharpPrinter: Element is NULL");
 	if (e->getArg(0)->is_Vector())
@@ -68,9 +61,9 @@ std::string CSharpPrinter::print_Element( const Element *e )
 	}
 	return print(e->getArg(0)) + "[" + str(e->getRow()) + "," + str(e->getCol()) + "]";
 }
-/*****************************************************************************/
 
-/*****************************************************************************/
+
+
 //std::string CSharpPrinter::print_Int( const Int *c )
 /*****************************************************************************/
 //{ // Als double ausgeben damit es keine Probleme bei z.B. Divisionen gibt?
@@ -95,7 +88,7 @@ std::string CSharpPrinter::print_Pow( const Pow *pow )
 /*****************************************************************************/
 {
 	if (pow == NULL) throw InternalError("CSharpPrinter: Pow is NULL");
-	return "Math.Exp(" + print(pow->getBase()) + "," + print(pow->getExponent()) + ")";
+	return "Math.Pow(" + print(pow->getBase()) + "," + print(pow->getExponent()) + ")";
 }
 /*****************************************************************************/
 
@@ -137,8 +130,8 @@ std::string CSharpPrinter::print_Zero( const Zero *z )
     if (z->is_Scalar())
 		return "0";
     if (z->is_Vector())
-	    return "{0}";       // Todo: write constructors for zero vector and matrix 
-    return "{{0}}";
+	    return "0";       // Todo: write constructors for zero vector and matrix 
+    return "0";
 }
 /*****************************************************************************/
 

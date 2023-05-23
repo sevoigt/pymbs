@@ -6,3 +6,17 @@ build/*
 *.pyo
 
 Thumbs.db
+
+**/output
+
+__pycache__
+
+# precompiled symbolics module on linux
+symbolics.so
+
+# C# test project and pymbs output for testing
+*.csproj
+**/project/bin
+**/project/obj
+test/csharp/project/*_der_state.cs
+test/csharp/project/*_visual.cs
