@@ -44,7 +44,7 @@ I = diag([2.2896, 0.0194 + mass*pitch**2, 2.2896])
 for i in range(0, nseg):
     # Create Body and Frame
     bodies[i] = world.addBody(mass, cg=[0, 0, -0.037], inertia=I)
-    bodies[i].addFrame(name='start', p=[-link_width/2, 0,0])
+    bodies[i].addFrame(name='start', p=[-link_width/2, 0, 0])
     bodies[i].addFrame(name='end', p=[link_width/2, 0, 0])  
 
     # Create joints
@@ -57,13 +57,8 @@ for i in range(0, nseg):
     world.addVisualisation.Sphere(bodies[i], link_width/2, res=10, color=[0.8, 0.5, 0.5])
 
     # Add force        
-    if i==0:
-        cs1 = world.start
-        cs2 = bodies[i].start
-    else:
-        cs1 = bodies[i-1].end
-        cs2 = bodies[i].start
-
+    cs1 = world.start if i == 0 else bodies[i-1]
+    cs2 = bodies[i].start
     world.addSpringDamper(cs1, cs2, c, d, pitch-link_width, f'sd_{i}')
 
     # Add torque
