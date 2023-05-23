@@ -1564,7 +1564,7 @@ class MbsSystem(Body):
 
     def addHydCylSensorsLoads(self, name, CS1, CS2):
         """
-        Add all Sensors and Load Elements needed for a hydraulic cylinder:
+        Add all Sensors and load elements needed for a hydraulic cylinder:
         * DistanceSensor (distance and velocity at which the distance changes)
         * PtP-Force with scalar input
 
@@ -1581,6 +1581,33 @@ class MbsSystem(Body):
         self.addSensor.Distance("d_%s"%name, CS1, CS2, name="d_%s"%name)
         F = self.addInput("F_%s"%name, shape=None)
         self.addLoad.PtPForce(F, CS1, CS2, name="PtPForce_%s"%name)
+
+    def addSpringDamper(self, CS1, CS2, c, d, l0, name):
+        """
+        Add parameters, sensor and force element for a linear springdamper.
+        This a parallel combination of a spring and a velocity-proportional
+        damper that exerts a force between its two connection points.
+        * Parameter for stiffness
+        * Parameter for damping
+        * DistanceSensor (distance and velocity at which the distance changes)
+        * PtP-Force
+
+        :param CS1: Coordinate System 1
+        :type CS1: Body or Coordinate System
+        :param CS2: Coordinate System 2
+        :type CS2: Body or Coordinate System
+        :param c: Linear spring stiffness in [N/m]
+        :type c: Number or Parameter
+        :param d: Linear damping in [Ns/m]
+        :type d: Number or Parameter
+        :param l0: Unstretched length of the spring in [m]
+        :type l0: Number or Parameter
+        """
+        
+        dx = self.addSensor.Distance(f'dx_{name}', CS1, CS2, name=f'dx_{name}')
+        F = self.addExpression(symbol_str=f'force_{name}', 
+                               exp= -c*(dx[0]-l0) - d*dx[1])
+        self.addLoad.PtPForce(F, CS1, CS2, name=f'PtPForce_{name}')
 
     def addContactSensorsLoads(self, name, CS_C):
         """
