@@ -87,7 +87,7 @@ def compileC(modulename, path):
     Both files reside somewhere in the Visual Studio installation folder.
     '''
 
-    # generate platform specific shared library extension
+    # generate platform specific shared library extension and compile cl
     opsys = platform.system()
     ext = 'dll' if opsys == 'Windows' else 'so'
 
@@ -98,14 +98,17 @@ def compileC(modulename, path):
             os.remove(module_file)
 
         if opsys == 'Windows':
-            compileProcess = Popen('vcvars64.bat && cl /LD %s.c' % modulename,
-                                   stdout=PIPE, stderr=STDOUT, 
-                                   shell=True, cwd=path)                    
+            
+            # Try gcc first on Windows, just less hassle
+            compileProcess = compile_gcc(path, modulename)
+
+            # Fall back to Visual Studio if gcc was not found
+            if compileProcess.returncode != 0:
+                compileProcess = compile_vs(path, modulename)
+        
         else:
-            # Assume everything else might have gcc available
-            compileProcess = Popen('gcc -Ofast -shared %s.c -fPIC -o %s.so' % \
-                                   (modulename, modulename), stdout=PIPE,
-                                    stderr=STDOUT, shell=True, cwd=path)
+            # Use gcc on all other platforms    
+            compileProcess = compile_gcc(path, modulename)
 
         output = compileProcess.communicate()
 
@@ -117,4 +120,20 @@ def compileC(modulename, path):
     except OSError as e:
         print("Execution failed:", e, file=sys.stderr)
 
-    return path + '/%s.so' % modulename
+    return os.path.join(path, f'{modulename}.{ext}')
+
+
+def compile_gcc(path, modulename):
+    """
+    Use gcc to compile c-module to shared lib
+    """    
+    return Popen(f'gcc -Ofast -shared {modulename}s.c -fPIC -o {modulename}.so',
+                    stdout=PIPE, stderr=STDOUT, shell=True, cwd=path)
+
+
+def compile_vs(path, modulename):
+    """
+    Use Visual Studio to compile c-module to shared lib
+    """
+    return Popen(f'vcvars64.bat && cl /LD {modulename}.c',
+                    stdout=PIPE, stderr=STDOUT, shell=True, cwd=path)                    
