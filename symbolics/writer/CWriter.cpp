@@ -115,7 +115,7 @@ double CWriter::generateDerState(Graph::Graph& g, int &dim)
 	f << "#include \"functionmodule.c\"" << std::endl;
 	f << std::endl;
 
-	f << "int "<< m_name <<"_der_state(double time, double * y, double * yd"; 
+	f << "__declspec(dllexport) int "<< m_name <<"_der_state(double time, double * y, double * yd"; 
 	for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
 	for (Graph::VariableVec::iterator it=controller.begin();it!=controller.end();++it)
@@ -232,7 +232,7 @@ double CWriter::generateVisual(Graph::Graph& g)
 	f << "#include \"functionmodule.c\"" << std::endl;
 	f << std::endl;
 
-	f << "int "<< m_name <<"_visual(double * y"; 
+	f << "__declspec(dllexport) int "<< m_name <<"_visual(double * y"; 
 	for (Graph::VariableVec::iterator it=sens_vis.begin();it!=sens_vis.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
 	f << ")" << std::endl;  //evtl noch die statesize mit�bergeben, aber die kenn wir eigentlich auch
@@ -326,7 +326,7 @@ double CWriter::generateSensors(Graph::Graph& g)
 	f << "#include \"functionmodule.c\"" << std::endl;
 	f << std::endl;
 
-	f << "int "<< m_name <<"_sensors(double time, double * y"; 
+	f << "__declspec(dllexport) int "<< m_name <<"_sensors(double time, double * y"; 
 	for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		f << ", double " << m_p->print(*it) << m_p->dimension(*it); 
 	for (Graph::VariableVec::iterator it=sensors.begin();it!=sensors.end();++it)
@@ -449,8 +449,10 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
 
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl;
+	f << "import platform" << std::endl;
 	f << "from ctypes import c_double" << std::endl;
 	f << "from numpy import matrix, empty, zeros, ctypeslib" << std::endl;
+	f << std::endl;
     if (!sensors.empty())
 	{
         f << "from " << m_name << "_sensors_CWrapper import graphSensors" << std::endl;
@@ -464,7 +466,8 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
         f << "from " << comment_vector.front() << " import " << comment_vector.back() << std::endl;
 	}
 	f << std::endl;
-	f << "cm = ctypeslib.load_library(\"" << m_name << "_der_state.so\", \"" << m_path << "\")" << std::endl;
+	f << "ext = 'dll' if platform.system() == 'Windows' else 'so'" << std::endl;
+	f << "cm = ctypeslib.load_library(f\"" << m_name << "_der_state.{ext}\", \"" << m_path << "\")" << std::endl;
 	f << "cm." << m_name << "_der_state.argtypes = [c_double," << std::endl;
     f << "                    ctypeslib.ndpointer()," << std::endl;
 	f << "                    ctypeslib.ndpointer()";
@@ -542,9 +545,11 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl;
 //	f << "from ctypes import c_double" << std::endl;
+	f << "import platform" << std::endl;
 	f << "from numpy import matrix, array, zeros, ctypeslib" << std::endl;
 	f << std::endl;
-	f << "cm = ctypeslib.load_library(\"" << m_name << "_visual.so\", \"" << m_path << "\")" << std::endl;
+	f << "ext = 'dll' if platform.system() == 'Windows' else 'so'" << std::endl;
+	f << "cm = ctypeslib.load_library(f\"" << m_name << "_visual.{ext}\", \"" << m_path << "\")" << std::endl;
 	f << "cm." << m_name << "_visual.argtypes = [ctypeslib.ndpointer()";
 	for (Graph::VariableVec::iterator it=sens_vis.begin(); it!=sens_vis.end(); ++it)
 	{
@@ -601,10 +606,12 @@ double CWriter::generatePymbsWrapper(Graph::Graph& g)
 
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl;
+	f << "import platform" << std::endl;
     f << "from ctypes import c_double" << std::endl;
 	f << "from numpy import matrix, array, zeros, ctypeslib" << std::endl;
 	f << std::endl;
-	f << "cm = ctypeslib.load_library(\"" << m_name << "_sensors.so\", \"" << m_path << "\")" << std::endl;
+	f << "ext = 'dll' if platform.system() == 'Windows' else 'so'" << std::endl;
+	f << "cm = ctypeslib.load_library(f\"" << m_name << "_sensors.{ext}\", \"" << m_path << "\")" << std::endl;
 	f << "cm." << m_name << "_sensors.argtypes = [c_double, ctypeslib.ndpointer()";
     for (Graph::VariableVec::iterator it=sens_inputs.begin();it!=sens_inputs.end();++it)
 	{
