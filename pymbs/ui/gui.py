@@ -1405,21 +1405,20 @@ class Gui(QMainWindow, pymbsMainWindow):
         f.close()
 
 
-
     def showSensors(self):
 
         if (self.sensorsWindow is None):
             self.sensorsWindow = Sensors(self)
             self.sensorsWindow.show()
 
+
     def closeEvent(self, event):
-        """ Overload closeEvent to stop simulation, in case it was running
-        when the window was closed """
+        """
+        Overload closeEvent to stop simulation, in case it was running
+        when the window was closed
+        """
         self.SimThread.stop()
-        # if compileModelC was called, this contains the filenames of the *.so files
-        if self.dynamicLibraries:
-            for lib in self.dynamicLibraries:
-                os.remove(lib)
+        self.SimThread.join()
         event.accept()
 
 
