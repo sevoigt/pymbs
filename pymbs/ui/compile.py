@@ -87,7 +87,7 @@ def compileC(modulename, path):
     Both files reside somewhere in the Visual Studio installation folder.
     '''
 
-    # generate platform specific path to f2py and compiler defaults
+    # generate platform specific shared library extension
     opsys = platform.system()
     ext = 'dll' if opsys == 'Windows' else 'so'
 
@@ -107,9 +107,7 @@ def compileC(modulename, path):
                                    (modulename, modulename), stdout=PIPE,
                                     stderr=STDOUT, shell=True, cwd=path)
 
-
         output = compileProcess.communicate()
-        print(output)
 
         if compileProcess.returncode != 0:
             print(output[0])
