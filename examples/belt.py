@@ -57,7 +57,7 @@ for i in range(0, nseg):
     world.addVisualisation.Sphere(bodies[i], link_width/2, res=10, color=[0.8, 0.5, 0.5])
 
     # Add force        
-    cs1 = world.start if i == 0 else bodies[i-1]
+    cs1 = world.start if i == 0 else bodies[i-1].end
     cs2 = bodies[i].start
     world.addSpringDamper(cs1, cs2, c, d, pitch-link_width, f'sd_{i}')
 
