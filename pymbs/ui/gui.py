@@ -1417,8 +1417,9 @@ class Gui(QMainWindow, pymbsMainWindow):
         Overload closeEvent to stop simulation, in case it was running
         when the window was closed
         """
-        self.SimThread.stop()
-        self.SimThread.join()
+        if self.SimThread.is_alive():
+            self.SimThread.stop()
+            self.SimThread.join()
         event.accept()
 
 
