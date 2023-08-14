@@ -80,7 +80,7 @@ class MatplotlibWidget(Canvas):
         Canvas.__init__(self, self.figure)
         self.setParent(parent)
 
-        Canvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
+        Canvas.setSizePolicy(self, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         Canvas.updateGeometry(self)
 
     def sizeHint(self):
