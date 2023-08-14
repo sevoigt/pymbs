@@ -66,8 +66,10 @@ SET(Functions_sources   Abs.cpp
 
 # Plattform-Libs
 IF(WIN32)
-  SET(platform_libs )
-ELSE(WIN32)
+  SET(platform_libs)
+ELSEIF(APPLE)
+  SET(platform_libs)
+ELSE()
   SET(platform_libs rt)
 ENDIF(WIN32)
 

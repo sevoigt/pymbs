@@ -1,11 +1,12 @@
 
-.vscode/*
-build/*
+.vscode
+build
 
 *.pyc
 *.pyo
 
 Thumbs.db
+.DS_Store
 
 **/output
 
