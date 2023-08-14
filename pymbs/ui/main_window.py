@@ -23,7 +23,7 @@ Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
 # -*- coding: utf-8 -*-
 
 
-from PyQt5 import QtCore, QtGui
+from PyQt6 import QtCore, QtGui
 from vtk.qt5.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 

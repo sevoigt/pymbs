@@ -7,18 +7,18 @@ import tempfile
 import numpy as np
 from numpy import zeros
 
-from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
+from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
         QHBoxLayout, QCheckBox, QLineEdit, QPushButton, QSlider, QDialog, \
         QMainWindow, QFileDialog, \
         QApplication, QLineEdit
 
 
-from PyQt5.QtGui import QDoubleValidator, QIcon, QPixmap, QCloseEvent
+from PyQt6.QtGui import QDoubleValidator, QIcon, QPixmap, QCloseEvent
 
-from PyQt5.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
+from PyQt6.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
                         QApplication, QTabWidget, QVBoxLayout,\
                         QScrollArea, QHBoxLayout, QLabel, QCheckBox, QSlider
-from PyQt5.QtCore import Qt, QSize, QMetaObject, QTimer
+from PyQt6.QtCore import Qt, QSize, QMetaObject, QTimer
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from vtk.util.colors import light_grey
 
@@ -308,7 +308,7 @@ class LabeledSlider(QWidget):
 
 
     def setOrientation(self, ori):
-        assert( ori in(Qt.Horizontal, Qt.Vertical) )
+        assert( ori in(Qt.Orientation.Horizontal, Qt.Orientation.Vertical) )
         self.slider.setOrientation(ori)
 
     def setWidth(self, width):
@@ -784,7 +784,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             qName = str(state.q[i])
 
             slider.setLabelText(qName)
-            slider.setOrientation(Qt.Horizontal)
+            slider.setOrientation(Qt.Orientation.Horizontal)
 
             # set slider range depending on joint type
             if ('_Tx' in qName) or ('_Ty' in qName) or ('_Tz' in qName):
@@ -1478,4 +1478,4 @@ def launchGui(grList, graph, modelname, gravity, state, options, **kwargs):
     iren.AddObserver('EndPickEvent', myCallback)
     iren.Initialize()
 
-    app.exec_()
+    app.exec()

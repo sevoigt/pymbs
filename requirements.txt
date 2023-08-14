@@ -1,7 +1,7 @@
 numpy>=1.21.4
 scipy>=1.7.3
 sympy>=1.9
-PyQt5>=5.15.6
+PyQt6>=6.5.1
 matplotlib>=3.5.1
 vtk>=9.1.0
 
