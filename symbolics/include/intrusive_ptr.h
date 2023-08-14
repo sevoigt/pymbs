@@ -40,6 +40,8 @@ namespace boost
 ///  See: http://www.boost.org/doc/libs/release/libs/smart_ptr
 ///
 
+
+
 template<class T> class intrusive_ptr
 {
 private:
@@ -75,6 +77,10 @@ public:
     {
         if(p_ != 0) intrusive_ptr_release(p_);
     }
+
+    virtual void intrusive_ptr_add_ref(const T* p) {}
+    
+    virtual void intrusive_ptr_release(const T* p) {}
 
     template<class U> intrusive_ptr(intrusive_ptr<U> const & rhs): p_(rhs.get())
     {
