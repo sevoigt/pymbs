@@ -12,7 +12,6 @@
   #include <sys/time.h>
   #include <sys/stat.h>
   #include <sys/types.h>
-  #include <sys/sysinfo.h>
   #include <sys/wait.h>
   #include <unistd.h>
   #include <iostream>
@@ -21,6 +20,9 @@
   #include <dlfcn.h>
 #endif
 
+#ifdef LINUX
+  #include <sys/sysinfo.h>
+#endif
 
 #include <math.h>
 
