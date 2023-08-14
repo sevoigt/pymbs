@@ -532,7 +532,7 @@ std::string Printer::print_Matrix( const Matrix *mat,
 	{
 		// Gesamtgroesse
 		size_t size = mat->getShape().getNumEl();
-		char Sep= '�'; //irgendwas damit man es erkennt ;)
+		char Sep= '!'; //irgendwas damit man es erkennt ;)
 		// Spalten oder Zeilenvektor?
 		if (mat->getShape().getDimension(1) > 1)
 			Sep = rowSep;
