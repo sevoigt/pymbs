@@ -824,7 +824,7 @@ class Gui(QMainWindow, pymbsMainWindow):
 
             initVal = self.options['qFlexScaling']
             self.qScalingSlider = LabeledSlider(self.tabSimulation)
-            self.qScalingSlider.setOrientation(Qt.Horizontal)
+            self.qScalingSlider.setOrientation(Qt.Orientation.Horizontal)
             self.qScalingSlider.name = 'q_flexible_scale'
             self.qScalingSlider.setLimits(10, max(2*10*initVal,1000))
             self.qScalingSlider.scale = 10.
@@ -844,7 +844,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             slider = LabeledSlider()
 
             slider.setLabelText(str(self.inputs[i]))
-            slider.setOrientation(Qt.Horizontal)
+            slider.setOrientation(Qt.Orientation.Horizontal)
             slider.setLimits(-500,500)
             slider.scale = 100.
             init = int(str(self.graph.getinitVal(self.inputs[i])))
