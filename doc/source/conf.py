@@ -10,13 +10,13 @@ import os
 # include folder where PyMbs is located
 sys.path.insert(0, os.path.abspath('../../../pymbs/'))
 
+import pymbs
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 project = 'pymbs'
-version = '0.3'
-release = '0.3.0'
+version = pymbs.__version__
 
 copyright = '2024, Carsten Knoll, Christian Schubert, '\
             'Jens Frenkel, Sebastian Voigt'
