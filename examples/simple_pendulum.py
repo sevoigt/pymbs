@@ -9,7 +9,7 @@ Model for a 1D pendulum
 # Import PyMbs functionality
 from pymbs.input import *
 
-# Create main object and inital reference frame 
+# Create main object and inital reference frame
 world = MbsSystem([0, 0, -1])
 
 # Mass, length and inertia of the rod
