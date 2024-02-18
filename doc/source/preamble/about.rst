@@ -10,39 +10,38 @@ Institute of Processing Machines and Mobile Machinery by a questing quartet:
 
     Carsten Knoll & Christian Schubert & Jens Frenkel & Sebastian Voigt
 
+
+`Chair of Construction Machines and Conveying Technology <https://tu-dresden.de/ing/maschinenwesen/imd/bm>`_
+
+`Chair of Control Theory <http://www.et.tu-dresden.de/rst/>`_
+
+* carsten(d)knoll(a)tu(min)dresden(d)de
+
+
 We startetd working on PyMbs in July 2009, as we faced the need of a
 convenient way to obtain the equations of motion of complex mechanical
 systems to feed a real time simulatiuon environment based on the Modelica
 modeling language. By the release of PyMbs 0.1 these aim could be achieved.
-Nevertheless PyMbs is subject to ongoing development to enhance its features
-and increase numeric performance. It is published under the MIT license.
 
-If you face any problems using PyMbs, feel free to contact us. As Christian's
-got a heart for PyMbs users, he will be your primary contact person. Of course
-you may consult any other developer as well.
+Finally `OpenModelica <https://openmodelica.org>`_ supported multibody
+simulation out of the box and should be used if you want to have something
+just working. However PyMbs was still used for research regarding efficient
+simulation of large systems and symbolic manipulation of systems of equation.
 
-.. centered:: Dresden University of Technology
+Today PyMbs is still used in engineering projects from time to time, especially
+in cases where:
 
-.. centered:: Institute of  Processing Machines and Mobile Machinery
+* commercial multibody software is just over the top
+* commercial multibody software can't handle a certain problem efficiently
+* the problem itself is not too complex but a lot of automation and processing
+  is involved - this is where PyMbs and Python shine
+* low level access to the equations of motion is required
+* the environment (programming language) does not support multibody simulation
+* PyMbs' symbolic capabilities are "misused", e.g. to generate explicit
+  equations for sensors within a system
 
-.. centered:: Tel.: +49 (351) 463-39278
+So PyMbs will hardly get new major features, but it is constantly maintained to
+work with latest Python and dependencies.
 
-.. centered:: Fax: +49 (351) 463-37731
-
-.. centered:: D-01062 Dresden, Germany
-
-`Chair of Construction Machines and Conveying Technology <http://tu-dresden.de/bft>`_
-
-* christian.schubert @ <tud>
-* jens.frenkel @ <tud>
-* sebastian.voigt @ mailbox.<tud>
-
-`Chair of Control Theory <http://www.et.tu-dresden.de/rst/>`_
-
-* carsten.knoll @ <tud>
-
-**Further Contributors:**
-
-* Christoph Pohl - christoph.pohl1 @ mailbox.<tud>
-
-<tud> = tu-dresden.de
+If you face any problems using PyMbs, feel free to file an issue on
+`GitHub <https://github.com/sevoigt/pymbs>`_.
