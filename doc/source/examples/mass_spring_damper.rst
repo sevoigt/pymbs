@@ -11,23 +11,23 @@ As in the previous example, we import PyMbs, set up an intial reference frame
 and add a few parameters:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
-    :lines: 27-29,31-33
+    :lines: 10-12,15-17
 
 Now we add the mass to the system and add a joint. ``Tz`` means that the mass
-can only undergo *translation* in z-direction. None if this is really new, but
+can only undergo *translation* in z-direction. None of this is really new, but
 we add another parameter to the joint, ``startVals=1``, which means the mass
 will have an initial displacement of one:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
-    :lines: 36-37
+    :lines: 20-21
 
 This is where it gets interesting. We want to add a force to the system
 to simulate the influence of a spring and damper on the mass. First, we need
-know the displacement and velocity of the mass. Therefore, we add a distance
+to know the displacement and velocity of the mass. Therefore, we add a distance
 sensor:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
-    :lines: 40
+    :lines: 24
 
 The ``Distance`` sensor measures the scalar distance between two coordinate
 systems, here the systems of ``movingBody`` and ``world``. Additionally, it
@@ -38,26 +38,26 @@ coefficient of :math:`d` the force is :math:`F_d = - d \dot{x}`. Therefore,
 we add an expression that includes both:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
-    :lines: 41
+    :lines: 25
 
 So far, this only calculates the value of the force, but it isn't applied to
 the system. To change this, we add a ``PtPForce`` between the body and the
 world:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
-    :lines: 42
+    :lines: 26
 
 As in the previous example, we need to add visualisations so that we
 can see the movement of our system:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
-    :lines: 45-46
+    :lines: 29-30
 
-In the end, we generate the equations of motion for our system and start the
-representation:
+In the end, we generate the equations of motion for our system and show the
+visualisation:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
-    :lines: 49-50
+    :lines: 33-34
 
 This is what it should look like:
 

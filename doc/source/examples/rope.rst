@@ -10,7 +10,7 @@ We start with importing ``time`` (you'll see why in a moment) and PyMbs, and
 set up our initial frame of reference as before:
 
 .. literalinclude:: ../../../examples/rope.py
-    :lines: 25-28
+    :lines: 10-14
 
 To make our script a bit more flexible, we add the length of the rope, the
 rotational damping, the mass density, the radius and the number of segments
@@ -18,13 +18,13 @@ used to simulate it as variables. Additionally, we choose which method is to
 be used to derive the equations of motion:
 
 .. literalinclude:: ../../../examples/rope.py
-    :lines: 30-37
+    :lines: 16-23
 
 Now we initialize the lists that will hold our bodies and joints. Also, we
 calculate the length, mass and inertia of each rope segment:
 
 .. literalinclude:: ../../../examples/rope.py
-    :lines: 40-46
+    :lines: 26-32
 
 The interesting part is creating all the bodies and joints. We loop over the
 number of segments, create a body and an additional frame at the end for each
@@ -34,7 +34,7 @@ load is added to each joint, with its value being calculated from multiplying
 the angular velocity (``s[1]``) with the rotational damping ``d``:
 
 .. literalinclude:: ../../../examples/rope.py
-    :lines: 49-65
+    :lines: 35-51
 
 Method of Equation Generation
 """""""""""""""""""""""""""""
@@ -49,7 +49,7 @@ larger systems. On my system, using eight segments as a benchmark, the
 You can test these for yourself using the ``time`` module:
 
 .. literalinclude:: ../../../examples/rope.py
-    :lines: 67-74
+    :lines: 53-60
 
 Not only is the time to generate the equations different, the complexity
 of the equations differs as well. Again for eight segments, the python code
@@ -61,7 +61,7 @@ other models *OrderN* might be beneficial.
 Now we can take a look at our rope swinging:
 
 .. literalinclude:: ../../../examples/rope.py
-    :lines: 76
+    :lines: 62
 
 This is what it should look like:
 
