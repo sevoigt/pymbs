@@ -15,6 +15,8 @@ from pymbs.common.functions import diag, rotMat
 
 
 # unitvectors for convenience
-Ex = eye(3)[:,0]
-Ey = eye(3)[:,1]
-Ez = eye(3)[:,2]
+# TODO: breaks autodoc on Read the Docs because there the compiled symbolics 
+# module is not available
+#Ex = eye(3)[:,0]
+#Ey = eye(3)[:,1]
+#Ez = eye(3)[:,2]
