@@ -15,7 +15,7 @@ equations on the equation level and the system level.  The resulting system of
 equations contains only the essential steps to calculate the outputs. Take for
 example this graph
 
-.. image:: img/Graph_1.*
+.. image:: img/graph_1.png
 
 The corresponding system of equations is
 
