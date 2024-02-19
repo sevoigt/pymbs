@@ -24,7 +24,23 @@ It is also possible to manipulate the degrees of freedom interactively.
 Installation
 ------------
 
-It was tested on Python 2.7. In this section the required modules are specified
+.. warning:: 
+	This installation guide is outdated. Basically you have to
+	
+	* clone the repo from GitHub
+	* use CMake to build the C++ symbolics module
+	* add pymbs to your environment/path so that it can be imported
+
+	We hope to have a package available again for convenience. Any help is highly appreciated...
+
+	PyMbs has been tested and works on Windows 10, Fedora Linux and Apple M1.	
+
+.. note:: 
+	A C-compiler must be available in the PATH to compile the model in the GUI for 
+	faster simulation. GCC is recommended as it works out of the box on Windows 
+	and Linux.
+
+*Outdated!* It was tested on Python 2.7. In this section the required modules are specified
 and afterwards a step-by-step instruction is given on how to install PyMbs on
 Windows machines, which is intended to help users who never got in touch with
 Python before.
@@ -32,11 +48,13 @@ Python before.
 Dependencies
 ^^^^^^^^^^^^
 
+See requirements.txt in the project root folder for all dependencides. The most important are
+
 * numpy
 * scipy
-* VTK
+* vtk
 * matplotlib
-* Qt5
+* PyQt6
 
 Windows
 ^^^^^^^
@@ -117,14 +135,14 @@ modeled. Consider the system of a crane crab given in figure
 
 Model Description
 ^^^^^^^^^^^^^^^^^
-Next the model of the Crane Crab is generated using PyMbs.
+Next the model of the crane crab is generated using PyMbs.
 
 * Start PyScripter (or your favourite Python editor) and copy the following code into
   the editor window. Please note that some systems mess up the apostrophe '?!
   If that is the case it is marked as red and has to be replaced manually by a proper one.::
 
 		# import PyMbs
-		from PyMbs.Input import *
+		from pymbs.input import *
 
 		# set up inertial frame
 		world=MbsSystem([0,0,-1])
