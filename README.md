@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/pymbs/badge/?version=latest)](https://pymbs.readthedocs.io/en/latest/?badge=latest)
+
 # PyMbs - Python Multibody Systems
 
 ## About
