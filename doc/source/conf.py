@@ -12,6 +12,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(__file__, '../../../')))
 
 import pymbs
 
+# mock the symbolics module - no need to build it for the docs
+import mock
+sys.modules['pymbs.symbolics'] = mock.Mock()
+
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
