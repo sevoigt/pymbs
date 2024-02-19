@@ -11,7 +11,7 @@ What is PyMbs?
 PyMbs is a tool to generate the equations of motion of holonomic multibody
 systems. The equations can be exported to several target languages like Matlab,
 Modelica, Python or C++. Thus the output of PyMbs is a mathematical model of
-the mechanical system which can be simulated by timestep integration.
+the mechanical system which can be simulated by timestep integration [#simulation]_.
 
 The description of the mechanical system is text-based but held as easy and
 convenient as possible. The user assembles the system from a range of
