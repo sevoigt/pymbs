@@ -8,7 +8,7 @@ import sys
 import os
 
 # include folder where PyMbs is located
-sys.path.insert(0, os.path.abspath('../../../pymbs/'))
+sys.path.insert(0, os.path.abspath(os.path.join(__file__, '../../../')))
 
 import pymbs
 
