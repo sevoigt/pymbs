@@ -63,7 +63,7 @@ Then, all you have to do is:
 
 To check your installation and see an example of PyMbs in action, try:
 
-    python Examples/Rope.py
+    python examples/rope.py
 
 ## Legacy Repo
 
