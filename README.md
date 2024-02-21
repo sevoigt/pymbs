@@ -1,4 +1,4 @@
-[![Documentation Status](https://readthedocs.org/projects/pymbs/badge/?version=main)](https://pymbs.readthedocs.io/?badge=main)
+[![Documentation Status](https://readthedocs.org/projects/pymbs/badge/?version=latest)](https://pymbs.readthedocs.io/?badge=latest)
 
 # PyMbs - Python Multibody Systems
 
