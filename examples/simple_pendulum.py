@@ -24,7 +24,7 @@ pend = world.addBody(mass=m, inertia=diag([0, I, 0]))
 pend.addFrame('link', [0, 0, 0.5 * l])
 
 # Add joint to constrain motion of the pendulum
-world.addJoint(world, pend.link, 'Ry')
+world.addJoint(world, pend.link, 'Ry', startVals=1)
 
 # Use a box to represente the pendulum
 world.addVisualisation.Box(pend, length=0.1, width=0.1, height=1.0)

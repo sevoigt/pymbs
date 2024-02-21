@@ -3,7 +3,7 @@ Damped oscillator
 
 Single mass being moved like it is connected to a spring and a damper by a
 force calculated from sensor data in `controller.py`. This is basically the
-same as `Examples/MassSpringDamper`, but using the `addController` method
+same as `examples/mass_spring_damper`, but using the `addController` method
 instead of `addExpression`, which is much more flexible due to allowing to
 execute arbitrary python code.
 """
@@ -17,7 +17,7 @@ m = world.addParam('m', 1.0)
 
 mass = world.addBody(mass = m)
 
-world.addJoint(world, mass, 'Tx')
+world.addJoint(world, mass, 'Tx', startVals=1)
 
 # add controller
 F = world.addController('F', controlForce, shape=(3, ))
