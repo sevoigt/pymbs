@@ -28,7 +28,8 @@ themselves:
     :lines: 24-28
 
 The trolley can move translational and the pendulum rotates around the mounting
-point on the trolley:
+point at the trolley. Note that we need to set the inital values here. The controller
+is rather basic and only works in a limited start angle range of the pendulum:
 
 .. literalinclude:: ../../../examples/controlled/inverted_pendulum/inverted_pendulum.py
     :lines: 30-31
@@ -75,7 +76,7 @@ This results from running the simulation:
 
 .. only:: latex
 
-    .. image:: inverted_pendulum.jpg
+    .. image:: inverted_pendulum.png
         :scale: 50 %
 
 In the end, the complete source looks like this:

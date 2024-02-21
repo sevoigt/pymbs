@@ -20,7 +20,7 @@ Institute of Processing Machines and Mobile Machinery by a questing quartet:
 
 We startetd working on PyMbs in July 2009, as we faced the need of a
 convenient way to obtain the equations of motion of complex mechanical
-systems to feed a real time simulatiuon environment based on the Modelica
+systems to feed a real time simulation environment based on the Modelica
 modeling language. By the release of PyMbs 0.1 these aim could be achieved.
 
 Finally `OpenModelica <https://openmodelica.org>`_ supported multibody
@@ -28,7 +28,7 @@ simulation out of the box and should be used if you want to have something
 just working. However PyMbs was still used for research regarding efficient
 simulation of large systems and symbolic manipulation of systems of equation.
 
-Today PyMbs is still used in engineering projects from time to time, especially
+Today PyMbs is still used in real-life engineering projects, especially
 in cases where:
 
 * commercial multibody software is just over the top
