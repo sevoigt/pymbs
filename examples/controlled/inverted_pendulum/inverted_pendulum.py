@@ -27,8 +27,8 @@ M2 = world.addParam('m2', 0.3)
 Trolley = world.addBody(M1)
 Load = world.addBody(M2, cg=[0, 0, -0.5])
 
-world.addJoint(world, Trolley, 'Tx')
-world.addJoint(Trolley, Load, 'Ry')
+world.addJoint(world, Trolley, 'Tx', startVals=0.6)
+world.addJoint(Trolley, Load, 'Ry', startVals=2.3)
 
 F = world.addController('F', controlForce, shape=(3, ))
 world.addLoad.CmpForce(F, Trolley, world, name='DrivingForce')
