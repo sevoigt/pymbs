@@ -127,13 +127,13 @@ for j in range(0,len(ropeSize)): #len(ropeSize)):
     print("Write Code %s,%s"%(dt,t))
     if (METHOD==3):
         #dt1 = world.genCode.Modelica('Rope_%s_OrderN'%ropeSize[j][0], './Output')
-		dt1 = 0
+        dt1 = 0
     elif (METHOD==2):
         #dt1 = world.genCode.Modelica('Rope_%s_Recursive'%ropeSize[j][0], './Output')
 		#world.genCode.Python('Rope_%s_Recursive'%ropeSize[j][0], './Output')
-		dt1 = 0
+        dt1 = 0
     elif (METHOD==1):
-        dt1 = world.genCode.Modelica('Rope_%s_Explicit'%ropeSize[j][0], './Output')
+        dt1 = world.genCode.Modelica('Rope_%s_Explicit'%ropeSize[j][0], './output')
     #dt1 = 0
     #world.graph.printStats()
     times.append((t,dt,dt1))

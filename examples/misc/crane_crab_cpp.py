@@ -38,10 +38,10 @@ world.addVisualisation.Sphere(pend, 0.1)
 # generate simulation code
 world.genEquations.Explicit()
 
-world.genCode.Modelica('CraneCrab', '.\output')
-world.genCode.Matlab('CraneCrab', 'output')
-world.genCode.Python('CraneCrab', 'output')
-world.genCode.C('CraneCrabRec', 'output')
+world.genCode.Modelica('CraneCrab', './output')
+world.genCode.Matlab('CraneCrab', './output')
+world.genCode.Python('CraneCrab', './output')
+world.genCode.C('CraneCrabRec', './output')
 
 # show system
 world.genMatlabAnimation('CraneCrab')
