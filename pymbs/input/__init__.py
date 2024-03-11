@@ -4,7 +4,7 @@ Everything that's needed to create the input version of the model
 
 from numpy import pi
 # somehow math.pi does not work?!
-#from math import pi # a simple float instance (here: better than pymbs.Symbolics.pi)
+#from math import pi # a simple float instance (here: better than pymbs.symbolics.pi)
 
 from pymbs.input.mbs_system import MbsSystem
 from pymbs.input.body import Body

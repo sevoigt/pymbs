@@ -4,7 +4,6 @@ Created on 05.07.2009
 
 @author: knoll
 
-
 Module containing auxillary mathematical classes.
 """
 

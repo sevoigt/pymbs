@@ -6,7 +6,7 @@ class AbstractSensor(MbsInputElement):
 
     def __init__(self, name, CS1, CS2, symb, CSref=None, category=VarKind.Sensor):
 
-        #!! TODO: asserts
+        #TODO: asserts
         MbsInputElement.__init__(self, name, CS1)
         self.child=CS2
 
