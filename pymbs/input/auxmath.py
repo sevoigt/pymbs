@@ -23,6 +23,3 @@ class Parameter(MbsElement):
         MbsElement.__init__(self, longName)
         self.symbol=Symbol(symbol_str, real=True)
         self.defaultValue=defaultValue
-
-
-

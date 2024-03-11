@@ -9,7 +9,7 @@ def sqrt(arg):
 
 def sin(arg):
     """
-    calculate sine
+    Calculate sine
     """
     if isinstance(arg, (int,float)):
         return np.sin(arg)
@@ -20,7 +20,7 @@ def sin(arg):
 
 def asin(arg):
     """
-    calculate arc sine
+    Calculate arc sine
     """
     if isinstance(arg, (int,float)):
         return np.arcsin(arg)
@@ -31,7 +31,7 @@ def asin(arg):
 
 def cos(arg):
     """
-    calculate cosine
+    Calculate cosine
     """
     if isinstance(arg, (int,float)):
         return np.cos(arg)
@@ -42,7 +42,7 @@ def cos(arg):
 
 def acos(arg):
     """
-    calculate arc cosine
+    Calculate arc cosine
     """
     if isinstance(arg, (int,float)):
         return np.arccos(arg)
@@ -53,7 +53,7 @@ def acos(arg):
 
 def tan(arg):
     """
-    calculate tangent
+    Calculate tangent
     """
     if isinstance(arg, (int,float)):
         return np.tan(arg)
@@ -64,7 +64,7 @@ def tan(arg):
 
 def atan(arg):
     """
-    calculate arc tangent
+    Calculate arc tangent
     """
     if isinstance(arg, (int,float)):
         return np.arctan(arg)
@@ -75,7 +75,7 @@ def atan(arg):
 
 def atan2(arg1, arg2):
     """
-    calculate arc tangent with two arguments
+    Calculate arc tangent with two arguments
     """
     if isinstance(arg1, (int,float)) and isinstance(arg2, (int,float)):
         return np.arctan2(arg1,arg2)
@@ -86,7 +86,7 @@ def atan2(arg1, arg2):
 
 def outer(arg1, arg2):
     """
-    outer or dyadic product
+    Outer or dyadic product
     """
     return symbolics.outer(arg1, arg2)
 
@@ -103,20 +103,21 @@ def der(arg):
 
 
 
-def diag(vect):
+def diag(vec):
     """
     pymbs.symbolics diagonal matrix
     """
-    if (isinstance(vect, list)):
-        L=len(vect)
-    elif (isinstance(vect, symbolics.Matrix)):
-        assert(len(vect.shape()) == 1)
-        L=vect.shape()[0]
+    if (isinstance(vec, list)):
+        L=len(vec)
+    elif (isinstance(vec, symbolics.Matrix)):
+        assert(len(vec.shape()) == 1)
+        L=vec.shape()[0]
     else:
-        raise ValueError('vect should be a list or a vector (pymbs.symbolics.Matrix) but an %s was encountered'%str(vect.__class__))
+        raise ValueError('vect should be a list or a vector (pymbs.symbolics.Matrix) but '
+                         f'a {vec.__class__} was encountered')
     M=symbolics.Matrix((L,L))
     for i in range(L):
-        v = vect[i]
+        v = vec[i]
         M[i,i] = v
     return M
 
@@ -130,8 +131,8 @@ def norm(vec):
     if (isinstance(vec, symbolics.zeros)):
         return 0
 
-    assert isinstance(vec, symbolics.Basic), "vec must be a symbolic type not a %s"%vec.__class__
-    assert (vec.shape() in ((3,), (3,1))), "vec must be a 3x1 vector but has shape %s"%vec.shape()
+    assert isinstance(vec, symbolics.Basic), f'vec must be a symbolic type not a {vec.__class__}'
+    assert vec.shape() in ((3,), (3,1)), f'vec must be a 3x1 vector but has shape {vec.shape()}'
 
     n = sqrt(vec[0]**2+vec[1]**2+vec[2]**2)
     if (isinstance(n, symbolics.Basic)):
@@ -143,9 +144,7 @@ def norm(vec):
 
 def symmetricMatrix(seq):
     """
-    creates a symmetric 3x3 matrix from
-    a sequence (list, tuple, Matrix)
-    with 6 elements
+    Creates a symmetric 3x3 matrix from a sequence (list, tuple, Matrix) with 6 elements
     """
 
     assert isinstance(seq, (list, tuple, symbolics.Matrix))
@@ -159,25 +158,26 @@ def symmetricMatrix(seq):
 
 def blockMatrix(elements):
     """
-    generates a matrix from a given list of elements, i.e. A = blockMatrix([[A,B], [C,D]])
+    Generates a matrix from a given list of elements, i.e. A = blockMatrix([[A,B], [C,D]])
     """
 
-    # Type Check
-    assert isinstance(elements, list), "elements must be a list, not %s (%s)"%\
-                                            (elements, elements.__class__)
-    assert len(elements) > 0, "element list must not be empty"
+    # Type check
+    assert isinstance(elements, list), \
+        f'elements must be a list, not {elements} ({elements.__class__})'
+    assert len(elements) > 0, 'element list must not be empty'
+    
     for i in elements:
-        assert isinstance(i, list), "elements in elements must be lists, not %s (%s)"%\
-                                            (i, i.__class__)
-        assert len(i) > 0, "element list must not be empty"
+        assert isinstance(i, list), \
+            f'elements in elements must be lists, not {i} ({i.__class__})'
+        assert len(i) > 0,'element list must not be empty'
 
         for a in i:
             assert isinstance(a, (symbolics.Matrix, symbolics.Variable, symbolics.zeros)), \
-                "only Matrices and Variables are allowed, not %s (%s)"%(a, a.__class__)
-            assert len(a.shape())==2, "Elements must be matrices themselves, but %s has shape %s"%\
-                                            (a, a.shape())
+                f'only Matrix and Variable are allowed, not {a} ({a.__class__})'
+            assert len(a.shape()) == 2, \
+                f'elements must be matrices themselves, but {a} has shape {a.shape()}'
 
-    # Calculate Shape
+    # Calculate shape
     rows = 0   # Rows
     cols = 0   # Columns
     for i in range(len(elements)):
@@ -187,7 +187,7 @@ def blockMatrix(elements):
         shape = elements[0][i].shape()
         cols += shape[1]
 
-    # Set up Matrix
+    # Set up matrix
     M = symbolics.Matrix((rows,cols))
 
     # Fill it
@@ -198,23 +198,21 @@ def blockMatrix(elements):
         for A in row:
             # A is the current element
             shape = A.shape()
-            assert rowCheck == shape[0], "Row size does not match! Expected %s but got %s"%\
-                                            (rowCheck, shape[0])
-            # copy it
+            assert rowCheck == shape[0], \
+                f'Row size does not match! Expected {rowCheck} but got {shape[0]}'
+            # Copy it
             for i in range(shape[0]):
                 for j in range(shape[1]):
                     M[m+i,n+j] = A[i,j]
-            # advance to the next column
+            # Advance to the next column
             n += shape[1]
 
         # After copying all elements, advance row and check columncount
-        assert cols == n, "Column count does not match! Expected %s but got %s"%\
-                                (cols, n)
+        assert cols == n, f'Column count does not match! Expected {cols} but got {n}'
         m += rowCheck
 
     # Finally check number of rows
-    assert rows == m, "Row count does not match! Expected %s but got %s"%\
-                            (rows, m)
+    assert rows == m, f'Row count does not match! Expected {rows} but got {m}'
 
     return M
 
@@ -222,18 +220,19 @@ def blockMatrix(elements):
 
 def blockVector(elements):
     """
-    generates a vector from a given list of elements, i.e. v = blockVector([a,b])
+    Generates a vector from a given list of elements, i.e. v = blockVector([a,b])
     """
 
     # Type Check
-    assert isinstance(elements, list), "elements must be a list, not %s (%s)"%\
-                                            (elements, elements.__class__)
-    assert len(elements) > 0, "element list must not be empty"
+    assert isinstance(elements, list), \
+        f'elements must be a list, not {elements} ({elements.__class__})'
+    assert len(elements) > 0, 'element list must not be empty'
+
     for a in elements:
         assert isinstance(a, (symbolics.Matrix, symbolics.Variable, symbolics.zeros)), \
-            "Only Matrices and Variables are allowed, not %s (%s)" % (a, a.__class__)
-        assert len(a.shape())==1, "Elements must be vectors themselves, but %s has shape %s"%\
-                                    (a, a.shape())
+            f'Only Matrix and Variable are allowed, not {a} ({a.__class__})'
+        assert len(a.shape()) == 1, \
+            f'Elements must be vectors themselves, but {a} has shape {a.shape()}'
 
     # Calculate Shape
     rows = 0   # Rows
@@ -249,45 +248,42 @@ def blockVector(elements):
     for a in elements:
         # a is the current element
         shape = a.shape()
-        # copy it
+        # Copy it
         for i in range(shape[0]):
             v[m+i] = a[i]
         m += (a.shape())[0]
 
     # Finally check number of rows
-    assert rows == m, "Row count does not match! Expected %s but got %s"%\
-                            (rows, m)
+    assert rows == m, f'Row count does not match! Expected {rows} but got {m}'
 
     return v
 
 
 
-# Class used for Symbolic Calculations only
 def transpose(arg):
-    '''
+    """
     Transpose of an expression
-    '''
+    """
 
     if isinstance(arg, (int,float)):
         return arg
     elif isinstance(arg, symbolics.Basic):
         return symbolics.transpose(arg)
     else:
-        raise TypeError("Type %s not supported in transpose!"%str(arg.__class__))
+        raise TypeError(f'Type {arg.__class__} not supported in transpose!')
+    
 
 
-
-# Class used for Symbolic Calculations only
 def skew(arg):
-    '''
+    """
     w=skew(v) returns a w, such that w*p = v x p
-    '''
+    """
 
     if isinstance(arg, symbolics.Matrix):
         v = arg
         assert v.shape() == (3,)
 
-        # we already know the what the skew thing is:
+        # We already know what the skew thing is:
         return symbolics.Matrix([[0, -v[2], v[1]],
                                  [v[2], 0, -v[0]],
                                  [-v[1], v[0], 0]])
@@ -295,28 +291,29 @@ def skew(arg):
     if (isinstance(arg, symbolics.Basic)):
         return symbolics.skew(arg)
 
-    raise TypeError("skew is not defined for %s (%s)"%(arg, str(arg.__class__)))
+    raise TypeError(f'skew is not defined for {arg} ({arg.__class__})')
+
+
 
 def skew_numpy(arg):
-    '''
+    """
     w=skew(v) returns a w, such that w*p = v x p
     numpy matrices only
-    '''
+    """
     if isinstance(arg, np.matrix):
         v = arg
         assert v.shape == (3,1)
 
         return np.matrix([[0, -v[2], v[1]],
-                                 [v[2], 0, -v[0]],
-                                 [-v[1], v[0], 0]])
+                          [v[2], 0, -v[0]],
+                          [-v[1], v[0], 0]])
 
 
 
-# Class used for Symbolic Calculations only
 def scalar_if_possible(arg):
-    '''
+    """
     Try to make the given expression scalar, i.e. if it is a matrix
-    '''
+    """
     if (isinstance(arg, symbolics.Matrix)):
         if (arg.shape() == (1,)):
             return arg[0]
@@ -331,9 +328,9 @@ def scalar_if_possible(arg):
 
 
 def vector_if_possible(arg):
-    '''
+    """
     Try to make the given expression a vector, i.e. if it is a matrix
-    '''
+    """
     if (isinstance(arg, np.matrix)):
         if (arg.shape[1] == 1):
             arg = [el[0] for el in arg.tolist()]
@@ -343,9 +340,9 @@ def vector_if_possible(arg):
 
 
 def scalar(arg):
-    '''
-    scalar, converts an expression to a scalar
-    '''
+    """
+    Converts an expression to a scalar
+    """
 
     if (isinstance(arg, (int,float))):
         return arg
@@ -354,31 +351,31 @@ def scalar(arg):
 
 
 
-
-# Class used for Symbolic Calculations only
 def solve(A,b):
-    '''
+    """
     Given Ax=b, one can write x = solve(A,b)
-    '''
+    """
     return symbolics.solve(A,b)
 
 
 
-# Class used for Symbolic Calculations only
 def element(A,row,col):
-    '''
+    """
     Returns a special element from a vector/matrix
-    '''
+    """
     return symbolics.element(A,row,col)
 
 
 
 def rotMat(angle, axis):
+    """
+    Returns a rotation matrix for a single rotation around the given axis
+    """
     # x-Axis
     if (axis in (1, 'x', 'X', 'Rx')):
         return symbolics.Matrix([[1,           0,          0],
-                       [0,  cos(angle), sin(angle)],
-                       [0, -sin(angle), cos(angle)]])
+                                 [0,  cos(angle), sin(angle)],
+                                 [0, -sin(angle), cos(angle)]])
     # y-Axis
     if (axis in (2, 'y', 'Y', 'Ry')):
         return symbolics.Matrix([[cos(angle), 0, -sin(angle)],
