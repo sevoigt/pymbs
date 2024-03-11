@@ -3,15 +3,15 @@ from pymbs.symbolics import Basic
 
 
 class State(MbsElement):
-    '''
-    State Object holds all Elements which are part of the state, 
+    """
+    State object holds all elements which are part of the state, 
     including algebraic variables
-    '''
+    """
 
     def __init__(self, q=None, qd=None, qdd=None, mu=None):
-        '''
+        """
         Constructor
-        '''
+        """
 
         if (q is None):
             q = list()
@@ -22,7 +22,7 @@ class State(MbsElement):
         if (mu is None):
             mu = list()
 
-        # Achtung Assertions: prüfen auf int muss noch geändert werden
+        # Todo Achtung Assertions: prüfen auf int muss noch geändert werden
         # Assertions
         assert( isinstance(q, list) )
         for e in q:
@@ -37,11 +37,11 @@ class State(MbsElement):
         for e in mu:
             assert( isinstance(e, (Basic,int)) )
 
-        # Constructor of Super Class
+        # Constructor of super class
         MbsElement.__init__(self, 'State')
 
-        # Save Parameters
+        # Save parameters
         self.q = q              # Positions
         self.qd = qd            # Velocities
         self.qdd = qdd          # Accelerations
-        self.mu = mu            # Constraint Forces/Torques
+        self.mu = mu            # Constraint forces/torques

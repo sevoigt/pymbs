@@ -3,9 +3,9 @@ from pymbs.symbolics import Matrix, Basic
 
 
 class AbstractFrame(MbsElement):
-    '''
+    """
     Base Class For All Coordinate Systems (Processing & Parent)
-    '''
+    """
     def __init__(self, name, p, R, graph=None):
         # Type Conversions
         if ( isinstance(p, list) ):
@@ -19,7 +19,8 @@ class AbstractFrame(MbsElement):
             R = Matrix(R)
 
         # Assertions
-        assert isinstance(p, Basic) and (p.shape() in ((3,), (3,1))), "p - Type: %s, Shape: %s, Value: %s"%(str(p.__class__), str(p.shape()), str(p))
+        assert isinstance(p, Basic) and (p.shape() in ((3,), (3,1))), \
+            f'p - Type: {p.__class__}, Shape: {p.shape()}, Value: {p}'
         assert isinstance(R, Basic) and (R.shape() == (3,3))
 #        for el in R:
 #            assert( isinstance(el, Basic) )
@@ -27,4 +28,3 @@ class AbstractFrame(MbsElement):
         MbsElement.__init__(self, name, graph)
         self.p=p
         self.R=R
-

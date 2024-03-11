@@ -8,13 +8,11 @@
 # Copyright:   (c) Martin 2012
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
+# Todo: place in some sort of i/o module, translate comments, testcase? sample file?
 import numpy as np
 
 
 class SIDFormatException(Exception):
-    '''
-    '''
-
     def __init__(self, message):
         Exception.__init__(self, message)
 
