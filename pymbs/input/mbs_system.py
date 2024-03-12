@@ -1480,7 +1480,7 @@ class MbsSystem(Body):
                     position_as_tuple = position[0],position[1],position[2]
                     points.append(position_as_tuple)
 
-                graphRep = gr.Flexible_Body(name, sensPos, sensOri, points)
+                graphRep = gr.FlexibleBody(name, sensPos, sensOri, points)
 
         else:
             # we should not end up here

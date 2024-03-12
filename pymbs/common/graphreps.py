@@ -1,6 +1,10 @@
-from pymbs.common.mbselement import MbsElement
+"""
+This module containts classes for graphical representations of the
+elements of the rigidbody world.
+"""
 
-import pymbs.symbolics as symbolics
+from pymbs.common.mbselement import MbsElement
+from pymbs import symbolics
 
 
 # Questions:
@@ -9,6 +13,10 @@ import pymbs.symbolics as symbolics
 # Can one CS have more than one GraphReps?
 
 class AbstractGraphRep(MbsElement):
+    """
+    Base class for all graphic representation types
+    """
+
     def __init__(self, name, r, T):
         MbsElement.__init__(self, name)
 
@@ -27,15 +35,15 @@ class File(AbstractGraphRep):
     Additional file-formats: *.obj
     """
 
-    def __init__(self, name, r, T, pathToFile, scale=1):
+    def __init__(self, name, r, T, path_to_file, scale=1):
 
-        assert isinstance(pathToFile, str)
-        #assert isinstance(scale, (int, float))
+        assert isinstance(path_to_file, str)
+        # assert isinstance(scale, (int, float))
         assert isinstance(scale, (int, float, symbolics.Basic))
 
         AbstractGraphRep.__init__(self, name, r, T)
 
-        self.pathToFile = pathToFile
+        self.path_to_file = path_to_file
         self.scale = scale
 
 
@@ -67,8 +75,8 @@ class Cylinder(AbstractGraphRep):
         assert isinstance(radius, (float, int, symbolics.Symbol))
         assert isinstance(l, (float, int, symbolics.Symbol))
 
-        if res == None:
-            res=20
+        if res is None:
+            res = 20
 
         assert isinstance(res, (float, int, symbolics.Symbol))
 
@@ -79,6 +87,7 @@ class Cylinder(AbstractGraphRep):
 
         self.res = res
 
+
 class Sphere(AbstractGraphRep):
     """
     Represents a sphere primitive
@@ -88,8 +97,8 @@ class Sphere(AbstractGraphRep):
 
         assert isinstance(radius, (float, int, symbolics.Symbol))
 
-        if res == None:
-            res=50
+        if res is None:
+            res = 50
 
         assert isinstance(res, (float, int, symbolics.Symbol))
 
@@ -102,16 +111,16 @@ class Sphere(AbstractGraphRep):
 
 class Line(AbstractGraphRep):
     """
-    Represents a line of length L in x-Direction with its origin in the middle
+    Represents a line of length <length> in x-Direction with its origin in the middle
     """
 
-    def __init__(self, name, r, T, L):
+    def __init__(self, name, r, T, length):
 
-        assert( isinstance(L, (float, int, symbolics.Symbol) ) )
+        assert (isinstance(length, (float, int, symbolics.Symbol)))
 
         AbstractGraphRep.__init__(self, name, r, T)
 
-        self.L = L
+        self.length = length
 
 
 class Frame(AbstractGraphRep):
@@ -127,6 +136,7 @@ class Frame(AbstractGraphRep):
 
         self.size = size
 
+
 class Arrow(AbstractGraphRep):
     """
     Represents an arrow
@@ -140,7 +150,8 @@ class Arrow(AbstractGraphRep):
 
         self.size = size
 
-class Flexible_Body(AbstractGraphRep):
+
+class FlexibleBody(AbstractGraphRep):
     """
     Represents a 'flexible body',line with starting point and endpoint
     """
@@ -150,10 +161,3 @@ class Flexible_Body(AbstractGraphRep):
         AbstractGraphRep.__init__(self, name, r, T)
 
         self.positions = points
-
-
-
-
-
-
-

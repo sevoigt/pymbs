@@ -34,7 +34,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as \
 from matplotlib.colors import ColorConverter
 
 from pymbs.common.graphreps import File, Box, Cylinder, Frame, Sphere, Line, \
-        Arrow, Flexible_Body
+        Arrow, FlexibleBody
 from pymbs.symbolics import VarKind
 from pymbs.common.pymbserror import PyMbsError
 
@@ -376,14 +376,14 @@ class VtkSceneObject():
         self.scale = 1.
 
         if isinstance(graphRep, File):
-            file = graphRep.pathToFile.lower()
+            file = graphRep.path_to_file.lower()
             if file.endswith('.stl') or file.endswith('.stlb'):
                 part = vtk.vtkSTLReader()
-                part.SetFileName(graphRep.pathToFile)
+                part.SetFileName(graphRep.path_to_file)
                 self.scale = float(graphRep.scale)
             elif file.endswith('.obj'):
                 part = vtk.vtkOBJReader()
-                part.SetFileName(graphRep.pathToFile)
+                part.SetFileName(graphRep.path_to_file)
                 self.scale = float(graphRep.scale)
             else:
                 print('Cannot handle file format %s' % file[-4:])
@@ -413,7 +413,7 @@ class VtkSceneObject():
         elif isinstance(graphRep, Line):
             part = vtk.vtkLineSource()
             part.SetPoint1(0,0,0)
-            part.SetPoint2([graphRep.L,0,0])
+            part.SetPoint2([graphRep.length,0,0])
 
         elif isinstance(graphRep, Arrow):
             part = vtk.vtkArrowSource()
@@ -421,7 +421,7 @@ class VtkSceneObject():
             part.SetTipLength(0.35/graphRep.size)
             self.scale = [graphRep.size,1.0,1.0]
 
-        elif isinstance(graphRep, Flexible_Body):
+        elif isinstance(graphRep, FlexibleBody):
 
             points = vtk.vtkPoints()
             for point in graphRep.positions:
@@ -1383,7 +1383,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             r = str(d.r)
             T = str(d.T)
             if isinstance(d, File):
-                file = d.pathToFile.lower()
+                file = d.path_to_file.lower()
                 scale = float(d.scale)
                 f.write('data.append([\'File\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'Filename\',\'%s\'),(\'scale\',%s)]])\n'%(d.name,r,T,file,scale))
             elif isinstance(d, Cylinder):
@@ -1395,7 +1395,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             elif isinstance(d, Frame):
                 f.write('data.append([\'Frame\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'size\',%s)]])\n'%(d.name,r,T,d.size))
             elif isinstance(d, Line):
-                f.write('data.append([\'Line\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'L\',%s)]])\n'%(d.name,r,T,d.L))
+                f.write('data.append([\'Line\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'L\',%s)]])\n'%(d.name,r,T,d.length))
             elif isinstance(d, Arrow):
                 f.write('data.append([\'Arrow\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'size\',%s)]])\n'%(d.name,r,T,d.size))
             else:
