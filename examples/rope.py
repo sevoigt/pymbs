@@ -57,6 +57,6 @@ elif method == "Recursive":
     world.genEquations.Recursive()
 elif method == "Explicit":
     world.genEquations.Explicit()
-print("Time needed for generating equations: %5.2f s" % (time.time() - t))
+print(f'Time needed for generating equations: {(time.time() - t):.2f} s')
 
 world.show('Rope')

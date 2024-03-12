@@ -11,11 +11,11 @@ from pymbs.input.body import Body
 from pymbs.input.frame import Frame
 
 from pymbs.symbolics import zeros, eye, sin, cos, Matrix
-from pymbs.common.functions import diag, rotMat
+from pymbs.common.functions import diag, rot_mat
 
 
 # unitvectors for convenience
-# TODO: breaks autodoc on Read the Docs because there the compiled symbolics 
+# TODO: breaks autodoc on Read the Docs because there the compiled symbolics
 # module is not available
 #Ex = eye(3)[:,0]
 #Ey = eye(3)[:,1]

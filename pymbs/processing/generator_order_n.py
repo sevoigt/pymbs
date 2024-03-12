@@ -2,7 +2,7 @@ from pymbs.processing.generator import *
 from pymbs.processing.loads.constraint import Constraint
 
 from pymbs.common.functions import skew, transpose, solve, der, scalar, scalar_if_possible,\
-                                    blockMatrix, blockVector, outer, vector_if_possible
+                                    block_matrix, block_vector, outer, vector_if_possible
 from pymbs.common.state import State
 
 from pymbs.symbolics import zeros, Matrix, jacobian, eye, Graph, VarKind
@@ -241,10 +241,10 @@ class Generator_OrderN(Generator):
                     # These are needed for the OrderN algorithm
                     body._beta_star = graph.addEquation(BETA_STAR%bName, body._K_om_tilde*body._K_om_tilde)             # (16)
                     R_tmp = graph.addEquation(RR%(bName,pName)+"_1", -body._R*body._p_z_tilde)
-                    body._RR = graph.addEquation(RR%(bName,pName), blockMatrix([[body._R, zeros((3,3))], [R_tmp, body._R]]) )       # (22 a)
+                    body._RR = graph.addEquation(RR%(bName,pName), block_matrix([[body._R, zeros((3,3))], [R_tmp, body._R]]) )       # (22 a)
                     a_tmp1 = graph.addEquation(A_STAR%bName+"_1", joint.qd*body._K_om_tilde*joint.Phi, shape=(3,))
                     a_tmp2 = graph.addEquation(A_STAR%bName+"_2", body._R*parentBody._beta_star*body._p_z+2*joint.qd*body._K_om_tilde*joint.Psi)
-                    body._a_star = graph.addEquation(A_STAR%bName, blockVector([ a_tmp1, a_tmp2 ]))                                 # (22 b)
+                    body._a_star = graph.addEquation(A_STAR%bName, block_vector([ a_tmp1, a_tmp2 ]))                                 # (22 b)
 
                     # Constraints
                     if (self.hasConstraints):
@@ -318,10 +318,10 @@ class Generator_OrderN(Generator):
                     # These are needed for the OrderN algorithm
                     body._beta_star = graph.addEquation(BETA_STAR%bName, body._K_om_tilde*body._K_om_tilde)             # (16)
                     R_tmp = graph.addEquation(RR%(bName,pName)+"_1", -body._R*body._p_z_tilde)
-                    body._RR = graph.addEquation(RR%(bName,pName), blockMatrix([[body._R, zeros((3,3))], [R_tmp, body._R]]) )       # (22 a)
+                    body._RR = graph.addEquation(RR%(bName,pName), block_matrix([[body._R, zeros((3,3))], [R_tmp, body._R]]) )       # (22 a)
                     a_tmp1 = graph.addEquation(A_STAR%bName+"_1", joint.qd*body._K_om_tilde*joint.Phi, shape=(3,))
                     a_tmp2 = graph.addEquation(A_STAR%bName+"_2", body._R*parentBody._beta_star*body._p_z+2*joint.qd*body._K_om_tilde*joint.Psi)
-                    body._a_star = graph.addEquation(A_STAR%bName, blockVector([ a_tmp1, a_tmp2 ]))                                 # (22 b)
+                    body._a_star = graph.addEquation(A_STAR%bName, block_vector([ a_tmp1, a_tmp2 ]))                                 # (22 b)
 
                     # Constraints
                     if (self.hasConstraints):
@@ -355,7 +355,7 @@ class Generator_OrderN(Generator):
                          contains the deflection of the flexible body
                          first three rows contain rotation, last three rows contain displacement
                         '''
-                        V_node_joint = graph.addEquation(V_NODE%(bName,node.node_number),blockMatrix([[node.PSI], [node.PHI_loc]]))
+                        V_node_joint = graph.addEquation(V_NODE%(bName,node.node_number),block_matrix([[node.PSI], [node.PHI_loc]]))
                         body._V = graph.addEquation(V%(bName,node.node_number),V_node_joint)
 
 
@@ -614,20 +614,20 @@ class Generator_OrderN(Generator):
                 J_1 = graph.addEquation(J%bName+"_1", body.mass*body._l_tilde)
                 J_2 = graph.addEquation(J%bName+"_2", -J_1)
                 J_3 = graph.addEquation(J%bName+"_3", body.mass*eye((3,3)))
-                body._J = graph.addEquation(J%bName, blockMatrix([[body.inertia, J_1], [J_2, J_3]]))        # (21 a)
+                body._J = graph.addEquation(J%bName, block_matrix([[body.inertia, J_1], [J_2, J_3]]))        # (21 a)
     #            D_1 = graph.addEquation(D%bName+"_1", body._L_ext + body._l_tilde*body._F_ext - body._K_om_tilde*body.inertia*body.K_om)
                 # Warum  + body._K_om_tilde*body.inertia*body.K_om und nicht -
                 D_1 = graph.addEquation(D%bName+"_1", body._L_ext + body._K_om_tilde*body.inertia*body.K_om)
                 D_2 = graph.addEquation(D%bName+"_2", body._F_ext - body.mass*body._beta_star*body.cg)
-                body._d = graph.addEquation(D%bName, blockVector([D_1, D_2]))                               # (21 b)
-                tmp_e = blockVector([joint.Phi, joint.Psi])
+                body._d = graph.addEquation(D%bName, block_vector([D_1, D_2]))                               # (21 b)
+                tmp_e = block_vector([joint.Phi, joint.Psi])
                 body._e = graph.addEquation(E%bName, tmp_e)                   # (22 c)
                 body._e_index = self.getIndex(tmp_e)
                 if (self.hasKinematicLoops):
                     #D_GAMMA_1 = graph.addEquation(D_GAMMA%bName+"_1", body._l_tilde*body._WF_constraint + body._WT_constraint)
                     #body._d_gamma = graph.addEquation(D_GAMMA%bName, blockMatrix([[D_GAMMA_1], [body._WF_constraint]]))     # (47)
                     # Umrechnung Kraft<->Moment ist schon in _WT_constraint enthalten
-                    body._d_gamma = graph.addEquation(D_GAMMA%bName, blockMatrix([[body._WT_constraint], [body._WF_constraint]]))     # (47)
+                    body._d_gamma = graph.addEquation(D_GAMMA%bName, block_matrix([[body._WT_constraint], [body._WF_constraint]]))     # (47)
 
                 # Calculate J_hat and d_hat
                 J_hat = body._J
@@ -674,7 +674,7 @@ class Generator_OrderN(Generator):
                     J_q = transpose(parentBody._V)*body._J_a*parentBody._V
                     body._J_q = graph.addEquation(Jq%(bName),J_q)
 #-------fragen ob das richtig ist-----------------------------------------------------------
-                    D_a =transpose(body._RR)*(body._J_hat_red*(1/(transpose(body._e)*body._J_hat*body._e))*(transpose(body._e)*blockVector([body._L_ext,body._F_ext])-transpose(body._e)*body._J_hat*body._a_star-transpose(body._e)*body._d_hat)+body._J_hat*body._a_star+body._d_hat)
+                    D_a =transpose(body._RR)*(body._J_hat_red*(1/(transpose(body._e)*body._J_hat*body._e))*(transpose(body._e)*block_vector([body._L_ext,body._F_ext])-transpose(body._e)*body._J_hat*body._a_star-transpose(body._e)*body._d_hat)+body._J_hat*body._a_star+body._d_hat)
                     body._D_a = graph.addEquation(Da%bName,D_a)
 
 
@@ -838,7 +838,7 @@ class Generator_OrderN(Generator):
                 Ct_T = graph.addEquation(C_T_T%bName,transpose(Ct))
                 # M_c matrix (SID-File) is equivalent to Mc matrix in Christian´s Lyx-File
                 #M_c_T = graph.addEquation(M_C_T%(bName),blockMatrix([[Cr_T],[Ct_T]]))
-                M_c = graph.addEquation(M_C%(bName),blockMatrix([[Cr_T],[Ct_T]]))
+                M_c = graph.addEquation(M_C%(bName),block_matrix([[Cr_T],[Ct_T]]))
                 Mc_hat = M_c
 #-----------------Gravitationsvektor fehlt---------------------------------
                 # weight, see Wallrap "Dynamik flexibler Mehrkörpersysteme" page 300 eq. (6.253)
@@ -868,20 +868,20 @@ class Generator_OrderN(Generator):
                 J_2 = graph.addEquation(J%bName+"_2", -J_1)
                 J_3 = graph.addEquation(J%bName+"_3", body.mass*eye((3,3)))
 
-                body._J = graph.addEquation(J%bName, blockMatrix([[body.inertia, J_1], [J_2, J_3]]))      # (21 a)
+                body._J = graph.addEquation(J%bName, block_matrix([[body.inertia, J_1], [J_2, J_3]]))      # (21 a)
 #------h_g fehlt----- stimmt hier '-' , es stand vorher '+' Gravitation fehlt
                 D_1 = graph.addEquation(D%bName+"_1", body._L_ext)
                 D_2 = graph.addEquation(D%bName+"_2", body._F_ext)
-                body._d = graph.addEquation(D%bName, blockVector([D_1, D_2]) + blockVector([h_omega_r, h_omega_t]))                             # (21 b)
+                body._d = graph.addEquation(D%bName, block_vector([D_1, D_2]) + block_vector([h_omega_r, h_omega_t]))                             # (21 b)
                 # joint.Phi, joint.Psi is no part of PHI and PSI from SID-File!!
-                tmp_e = blockVector([joint.Phi, joint.Psi])
+                tmp_e = block_vector([joint.Phi, joint.Psi])
                 body._e = graph.addEquation(E%bName, tmp_e)                   # (22 c)
                 body._e_index = self.getIndex(tmp_e)
                 if (self.hasKinematicLoops):
                     #D_GAMMA_1 = graph.addEquation(D_GAMMA%bName+"_1", body._l_tilde*body._WF_constraint + body._WT_constraint)
                     #body._d_gamma = graph.addEquation(D_GAMMA%bName, blockMatrix([[D_GAMMA_1], [body._WF_constraint]]))     # (47)
                     # Umrechnung Kraft<->Moment ist schon in _WT_constraint enthalten
-                    body._d_gamma = graph.addEquation(D_GAMMA%bName, blockMatrix([[body._WT_constraint], [body._WF_constraint]]))     # (47)
+                    body._d_gamma = graph.addEquation(D_GAMMA%bName, block_matrix([[body._WT_constraint], [body._WF_constraint]]))     # (47)
 
                 # Calculate J_hat and d_hat
                 J_hat = body._J
@@ -949,7 +949,7 @@ class Generator_OrderN(Generator):
                     J_q = transpose(parentBody._V)*body._J_a*parentBody._V
                     body._J_q = graph.addEquation(Jq%(bName),J_q)
 #---------fragen ob das richtig ist-----------------------------------------------------------
-                    D_a =transpose(body._RR)*(body._J_hat_red*(1/(transpose(body._e)*body._J_hat*body._e))*(transpose(body._e)*blockVector([body._L_ext,body._F_ext])-transpose(body._e)*body._J_hat*body._a_star-transpose(body._e)*body._d_hat)+body._J_hat*body._a_star+body._d_hat)
+                    D_a =transpose(body._RR)*(body._J_hat_red*(1/(transpose(body._e)*body._J_hat*body._e))*(transpose(body._e)*block_vector([body._L_ext,body._F_ext])-transpose(body._e)*body._J_hat*body._a_star-transpose(body._e)*body._d_hat)+body._J_hat*body._a_star+body._d_hat)
                     body._D_a = graph.addEquation(Da%bName,D_a)
 
                 if (self.hasKinematicLoops):

@@ -3,7 +3,7 @@ Model of a crane crab with a load, i.e. a sliding pendulum
 """
 
 # import PyMbs
-from pymbs.input import MbsSystem, rotMat, diag, pi
+from pymbs.input import MbsSystem, rot_mat, diag, pi
 
 # set up inertial frame
 world = MbsSystem([0, 0, -1])
@@ -20,7 +20,7 @@ pend = world.addBody(mass=m2, inertia=diag([0, I2, 0]), name='Pendulum')
 
 # add frames
 pend.addFrame(name='joint' , p=[0, 0, l2])
-pend.addFrame(name='middle', p=[0, 0, l2/2], R=rotMat(pi/2,'x'))
+pend.addFrame(name='middle', p=[0, 0, l2/2], R=rot_mat(pi/2,'x'))
 
 # add joints
 world.addJoint(world, trolley, dofList='Tx', startVals=1)

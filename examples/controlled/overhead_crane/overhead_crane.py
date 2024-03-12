@@ -19,11 +19,11 @@ trolley.addFrame('hook', [0, 0, -0.2])
 
 rope_one = world.addBody(rope_mass)
 rope_one.addFrame('joint', [0, 0, 0.5*ropelength])
-rope_one.addFrame('vis', R = rotMat(pi/2, 'x'))
+rope_one.addFrame('vis', R = rot_mat(pi/2, 'x'))
 
 rope_two = world.addBody(rope_mass)
 rope_two.addFrame('joint', [0, 0, 0.5*ropelength])
-rope_two.addFrame('vis', R = rotMat(pi/2, 'x'))
+rope_two.addFrame('vis', R = rot_mat(pi/2, 'x'))
 rope_two.addFrame('load', [0, 0, -0.5*ropelength])
 
 load = world.addBody(load_mass)

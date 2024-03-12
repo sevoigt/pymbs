@@ -767,7 +767,7 @@ class MbsSystem(Body):
                     # create scalar Parameters for eacht component
                     p_temp[idx]=self.addParam(name=partName, symbol_str=partSymbolString, defaultValue=v)
 
-                return functions.symmetricMatrix(p_temp)
+                return functions.symmetric_matrix(p_temp)
 
 
         # End of <if isinstance(defaultValue, (list, tuple)):>

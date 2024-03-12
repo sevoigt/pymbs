@@ -129,7 +129,7 @@ Ground.addFrame(name='KS_1',p=[0,0,0])
 
 BP = Ground.KS_1
 
-BP.addFrame(name='BP_visual', p=[0,0,0],R=rotMat(pi/2,'x'))
+BP.addFrame(name='BP_visual', p=[0,0,0],R=rot_mat(pi/2,'x'))
 
 BP.addFrame(name='BP_Anlenkpunkt_1', p=[R1*cos(phi_BP_1),R1*sin(phi_BP_1),0])
 BP.addFrame(name='BP_Anlenkpunkt_2', p=[R1*cos(phi_BP_2),R1*sin(phi_BP_2),0])
@@ -145,7 +145,7 @@ BP.addFrame(name='BP_Feder',p=[0,0,1.1])
 
 AP = world.addBody(name='Arbeitsplattform', mass=m2,inertia=diag([I2x,I2y,I2z]))
 
-AP.addFrame(name='AP_visual', p=[0,0,0],R=rotMat(pi/2,'x'))
+AP.addFrame(name='AP_visual', p=[0,0,0],R=rot_mat(pi/2,'x'))
 
 AP.addFrame(name='AP_Anlenkpunkt_1', p=[R2*cos(phi_AP_1),R2*sin(phi_AP_1),0])
 AP.addFrame(name='AP_Anlenkpunkt_2', p=[R2*cos(phi_AP_2),R2*sin(phi_AP_2),0])
@@ -224,64 +224,64 @@ Zyl_stange_6.addFrame('Zyl_stange_6_cs_2', p=[0,0,0])
 
 # Für Visualisierung im PyMbs
 Zyl_geh_1 = world.addBody( mass=m_Zyl_Geh,cg=[cg_Zyl_Geh_x,0,0], inertia=diag([I_Zyl_Geh_x,I_Zyl_Geh_y,I_Zyl_Geh_z]),name='Zyl_geh_1')
-Zyl_geh_1.addFrame('Zyl_geh_1_visual', p=[0,0,l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_geh_1.addFrame('Zyl_geh_1_visual', p=[0,0,l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_geh_1.addFrame('Zyl_geh_1_cs', p=[0,0,0])
 Zyl_geh_1.addFrame('Zyl_geh_1_cs_2', p=[0,0,0])
 
 Zyl_geh_2 = world.addBody( mass=m_Zyl_Geh,cg=[cg_Zyl_Geh_x,0,0], inertia=diag([I_Zyl_Geh_x,I_Zyl_Geh_y,I_Zyl_Geh_z]),name='Zyl_geh_2')
-Zyl_geh_2.addFrame('Zyl_geh_2_visual', p=[0,0,l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_geh_2.addFrame('Zyl_geh_2_visual', p=[0,0,l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_geh_2.addFrame('Zyl_geh_2_cs', p=[0,0,0])
 Zyl_geh_2.addFrame('Zyl_geh_2_cs_2', p=[0,0,0])
 
 Zyl_geh_3 = world.addBody( mass=m_Zyl_Geh,cg=[cg_Zyl_Geh_x,0,0], inertia=diag([I_Zyl_Geh_x,I_Zyl_Geh_y,I_Zyl_Geh_z]),name='Zyl_geh_3')
-Zyl_geh_3.addFrame('Zyl_geh_3_visual', p=[0,0,l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_geh_3.addFrame('Zyl_geh_3_visual', p=[0,0,l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_geh_3.addFrame('Zyl_geh_3_cs', p=[0,0,0])
 Zyl_geh_3.addFrame('Zyl_geh_3_cs_2', p=[0,0,0])
 
 Zyl_geh_4 = world.addBody( mass=m_Zyl_Geh,cg=[cg_Zyl_Geh_x,0,0], inertia=diag([I_Zyl_Geh_x,I_Zyl_Geh_y,I_Zyl_Geh_z]),name='Zyl_geh_4')
-Zyl_geh_4.addFrame('Zyl_geh_4_visual', p=[0,0,l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_geh_4.addFrame('Zyl_geh_4_visual', p=[0,0,l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_geh_4.addFrame('Zyl_geh_4_cs', p=[0,0,0])
 Zyl_geh_4.addFrame('Zyl_geh_4_cs_2', p=[0,0,0])
 
 Zyl_geh_5 = world.addBody( mass=m_Zyl_Geh,cg=[cg_Zyl_Geh_x,0,0], inertia=diag([I_Zyl_Geh_x,I_Zyl_Geh_y,I_Zyl_Geh_z]),name='Zyl_geh_5')
-Zyl_geh_5.addFrame('Zyl_geh_5_visual', p=[0,0,l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_geh_5.addFrame('Zyl_geh_5_visual', p=[0,0,l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_geh_5.addFrame('Zyl_geh_5_cs', p=[0,0,0])
 Zyl_geh_5.addFrame('Zyl_geh_5_cs_2', p=[0,0,0])
 
 Zyl_geh_6 = world.addBody( mass=m_Zyl_Geh,cg=[cg_Zyl_Geh_x,0,0], inertia=diag([I_Zyl_Geh_x,I_Zyl_Geh_y,I_Zyl_Geh_z]),name='Zyl_geh_6')
-Zyl_geh_6.addFrame('Zyl_geh_6_visual', p=[0,0,l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_geh_6.addFrame('Zyl_geh_6_visual', p=[0,0,l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_geh_6.addFrame('Zyl_geh_6_cs', p=[0,0,0])
 Zyl_geh_6.addFrame('Zyl_geh_6_cs_2', p=[0,0,0])
 
 ################################################################################
 
 Zyl_stange_1 = world.addBody( mass=m_Zyl_Stange,cg=[cg_Zyl_Stange_x,0,0], inertia=diag([I_Zyl_Stange_x,I_Zyl_Stange_y,I_Zyl_Stange_z]),name='Zyl_stange_1')
-Zyl_stange_1.addFrame('Zyl_stange_1_visual', p=[0,0,-l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_stange_1.addFrame('Zyl_stange_1_visual', p=[0,0,-l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_stange_1.addFrame('Zyl_stange_1_cs', p=[0,0,0])
 Zyl_stange_1.addFrame('Zyl_stange_1_cs_2', p=[0,0,0])
 
 Zyl_stange_2 = world.addBody( mass=m_Zyl_Stange,cg=[cg_Zyl_Stange_x,0,0], inertia=diag([I_Zyl_Stange_x,I_Zyl_Stange_y,I_Zyl_Stange_z]),name='Zyl_stange_2')
-Zyl_stange_2.addFrame('Zyl_stange_2_visual', p=[0,0,-l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_stange_2.addFrame('Zyl_stange_2_visual', p=[0,0,-l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_stange_2.addFrame('Zyl_stange_2_cs', p=[0,0,0])
 Zyl_stange_2.addFrame('Zyl_stange_2_cs_2', p=[0,0,0])
 
 Zyl_stange_3 = world.addBody( mass=m_Zyl_Stange,cg=[cg_Zyl_Stange_x,0,0], inertia=diag([I_Zyl_Stange_x,I_Zyl_Stange_y,I_Zyl_Stange_z]),name='Zyl_stange_3')
-Zyl_stange_3.addFrame('Zyl_stange_3_visual', p=[0,0,-l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_stange_3.addFrame('Zyl_stange_3_visual', p=[0,0,-l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_stange_3.addFrame('Zyl_stange_3_cs', p=[0,0,0])
 Zyl_stange_3.addFrame('Zyl_stange_3_cs_2', p=[0,0,0])
 
 Zyl_stange_4 = world.addBody( mass=m_Zyl_Stange,cg=[cg_Zyl_Stange_x,0,0], inertia=diag([I_Zyl_Stange_x,I_Zyl_Stange_y,I_Zyl_Stange_z]),name='Zyl_stange_4')
-Zyl_stange_4.addFrame('Zyl_stange_4_visual', p=[0,0,-l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_stange_4.addFrame('Zyl_stange_4_visual', p=[0,0,-l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_stange_4.addFrame('Zyl_stange_4_cs', p=[0,0,0])
 Zyl_stange_4.addFrame('Zyl_stange_4_cs_2', p=[0,0,0])
 
 Zyl_stange_5 = world.addBody( mass=m_Zyl_Stange,cg=[cg_Zyl_Stange_x,0,0], inertia=diag([I_Zyl_Stange_x,I_Zyl_Stange_y,I_Zyl_Stange_z]),name='Zyl_stange_5')
-Zyl_stange_5.addFrame('Zyl_stange_5_visual', p=[0,0,-l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_stange_5.addFrame('Zyl_stange_5_visual', p=[0,0,-l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_stange_5.addFrame('Zyl_stange_5_cs', p=[0,0,0])
 Zyl_stange_5.addFrame('Zyl_stange_5_cs_2', p=[0,0,0])
 
 Zyl_stange_6 = world.addBody( mass=m_Zyl_Stange,cg=[cg_Zyl_Stange_x,0,0], inertia=diag([I_Zyl_Stange_x,I_Zyl_Stange_y,I_Zyl_Stange_z]),name='Zyl_stange_6')
-Zyl_stange_6.addFrame('Zyl_stange_6_visual', p=[0,0,-l_zyl/2],R=rotMat(pi/2,'x'))
+Zyl_stange_6.addFrame('Zyl_stange_6_visual', p=[0,0,-l_zyl/2],R=rot_mat(pi/2,'x'))
 Zyl_stange_6.addFrame('Zyl_stange_6_cs', p=[0,0,0])
 Zyl_stange_6.addFrame('Zyl_stange_6_cs_2', p=[0,0,0])
 

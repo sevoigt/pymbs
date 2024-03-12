@@ -56,7 +56,7 @@ world.addFrame('FR_cyl6', p=[0, r1*cos( -1/15*pi), r1*sin( -1/15*pi)])
 
 
 # visualisation
-world.addFrame('FR_visual',R=rotMat(pi/2,'z'))
+world.addFrame('FR_visual',R=rot_mat(pi/2,'z'))
 world.addVisualisation.Cylinder(world.FR_visual, radius=r1, height=0.01)
 
 world.addVisualisation.Sphere(world.FR_cyl1, radius=0.12)
@@ -94,7 +94,7 @@ world.addJoint(world, tp, ['Tx','Ty','Tz','Rx','Ry','Rz'])
 
 
 # visualisation
-tp.addFrame('FR_visual',R=rotMat(pi/2,'z'))
+tp.addFrame('FR_visual',R=rot_mat(pi/2,'z'))
 world.addVisualisation.Frame(tp, size=2)
 world.addVisualisation.Cylinder(tp.FR_visual, radius=r2, height=0.01)
 
@@ -170,12 +170,12 @@ world.addLoop.Hexapod(tp.FR_cyl6, cylPist6)
 
 
 # visualisation for housings
-cylHous1.addFrame('FR_visual', p=[0.5,0,0], R=rotMat(pi/2,'z'))
-cylHous2.addFrame('FR_visual', p=[0.5,0,0], R=rotMat(pi/2,'z'))
-cylHous3.addFrame('FR_visual', p=[0.5,0,0], R=rotMat(pi/2,'z'))
-cylHous4.addFrame('FR_visual', p=[0.5,0,0], R=rotMat(pi/2,'z'))
-cylHous5.addFrame('FR_visual', p=[0.5,0,0], R=rotMat(pi/2,'z'))
-cylHous6.addFrame('FR_visual', p=[0.5,0,0], R=rotMat(pi/2,'z'))
+cylHous1.addFrame('FR_visual', p=[0.5,0,0], R=rot_mat(pi/2,'z'))
+cylHous2.addFrame('FR_visual', p=[0.5,0,0], R=rot_mat(pi/2,'z'))
+cylHous3.addFrame('FR_visual', p=[0.5,0,0], R=rot_mat(pi/2,'z'))
+cylHous4.addFrame('FR_visual', p=[0.5,0,0], R=rot_mat(pi/2,'z'))
+cylHous5.addFrame('FR_visual', p=[0.5,0,0], R=rot_mat(pi/2,'z'))
+cylHous6.addFrame('FR_visual', p=[0.5,0,0], R=rot_mat(pi/2,'z'))
 
 world.addVisualisation.Cylinder(cylHous1.FR_visual, radius=rHous, height=h)
 world.addVisualisation.Cylinder(cylHous2.FR_visual, radius=rHous, height=h)
@@ -186,12 +186,12 @@ world.addVisualisation.Cylinder(cylHous6.FR_visual, radius=rHous, height=h)
 
 
 # visualisation of pistons
-cylPist1.addFrame('FR_visual', p=[-0.5,0,0], R=rotMat(pi/2,'z'))
-cylPist2.addFrame('FR_visual', p=[-0.5,0,0], R=rotMat(pi/2,'z'))
-cylPist3.addFrame('FR_visual', p=[-0.5,0,0], R=rotMat(pi/2,'z'))
-cylPist4.addFrame('FR_visual', p=[-0.5,0,0], R=rotMat(pi/2,'z'))
-cylPist5.addFrame('FR_visual', p=[-0.5,0,0], R=rotMat(pi/2,'z'))
-cylPist6.addFrame('FR_visual', p=[-0.5,0,0], R=rotMat(pi/2,'z'))
+cylPist1.addFrame('FR_visual', p=[-0.5,0,0], R=rot_mat(pi/2,'z'))
+cylPist2.addFrame('FR_visual', p=[-0.5,0,0], R=rot_mat(pi/2,'z'))
+cylPist3.addFrame('FR_visual', p=[-0.5,0,0], R=rot_mat(pi/2,'z'))
+cylPist4.addFrame('FR_visual', p=[-0.5,0,0], R=rot_mat(pi/2,'z'))
+cylPist5.addFrame('FR_visual', p=[-0.5,0,0], R=rot_mat(pi/2,'z'))
+cylPist6.addFrame('FR_visual', p=[-0.5,0,0], R=rot_mat(pi/2,'z'))
 
 world.addVisualisation.Cylinder(cylPist1.FR_visual, radius=rPist, height=h)
 world.addVisualisation.Cylinder(cylPist2.FR_visual, radius=rPist, height=h)

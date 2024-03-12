@@ -19,7 +19,7 @@ I2=world.addParam('I2', m2*l2**2/12, name='inertia 2')
 crab=world.addBody(mass=m1, name='Crab')
 pend=world.addBody(mass=m2, inertia=diag([0,I2,0]), name='Pendulum')
 pend.addFrame('joint' , [0, 0, l2])
-pend.addFrame('middle', [0, 0, l2/2], rotMat(pi/2,'x'))
+pend.addFrame('middle', [0, 0, l2/2], rot_mat(pi/2,'x'))
 
 # add joints
 world.addJoint(world, crab, 'Tx', 1, name='TransCrab')

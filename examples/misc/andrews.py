@@ -133,13 +133,13 @@ world.addVisualisation.Frame(K3.Spring, 0.01)
 
 world.addVisualisation.Line(K1, 0.007) #rr
 world.addVisualisation.Line(K2, -0.028) #-d
-K3.addFrame('Line', R=rotMat(3.141/2, 'z'))
+K3.addFrame('Line', R=rot_mat(3.141/2, 'z'))
 world.addVisualisation.Line(K3.Line, 0.035) #ss
-K4.addFrame('Line', R=rotMat(-3.141/2, 'z'))
+K4.addFrame('Line', R=rot_mat(-3.141/2, 'z'))
 world.addVisualisation.Line(K4.Line, 0.02) #e
 world.addVisualisation.Line(K5, 0.04) #zt
 world.addVisualisation.Line(K6.K7, 0.02) #zf
-K7.addFrame('Line', R=rotMat(3.141/2, 'z'))
+K7.addFrame('Line', R=rot_mat(3.141/2, 'z'))
 world.addVisualisation.Line(K7.Line, 0.04) #u
 
 # Generate equations, code and show assembly
