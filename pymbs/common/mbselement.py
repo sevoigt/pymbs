@@ -1,8 +1,9 @@
 from pymbs.symbolics import Graph
 
+
 class MbsElement(object):
     """
-    Basic Class Of All Mbs Elements For Calculation Purposes
+    Baseclass for all mbs elements for calculation purposes
     """
 
     def __init__(self, name, graph=None):
@@ -10,12 +11,11 @@ class MbsElement(object):
         Constructor
         """
         assert isinstance(name, str), 'name must be a string'
-        assert (isinstance(graph, Graph) or (graph is None)), \
+        assert isinstance(graph, Graph) or (graph is None), \
             'Graph must be a symbolics.Graph object'
-                
+
         self.name = name.replace(" ", "_")
         self.graph = graph
-        
 
     def __repr__(self):
         """
