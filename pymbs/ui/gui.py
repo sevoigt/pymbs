@@ -7,18 +7,18 @@ import tempfile
 import numpy as np
 from numpy import zeros
 
-from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
+from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
         QHBoxLayout, QCheckBox, QLineEdit, QPushButton, QSlider, QDialog, \
         QMainWindow, QFileDialog, \
         QApplication, QLineEdit
 
 
-from PyQt5.QtGui import QDoubleValidator, QIcon, QPixmap, QCloseEvent
+from PyQt6.QtGui import QDoubleValidator, QIcon, QPixmap, QCloseEvent
 
-from PyQt5.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
+from PyQt6.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
                         QApplication, QTabWidget, QVBoxLayout,\
                         QScrollArea, QHBoxLayout, QLabel, QCheckBox, QSlider
-from PyQt5.QtCore import Qt, QSize, QMetaObject, QTimer
+from PyQt6.QtCore import Qt, QSize, QMetaObject, QTimer
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from vtk.util.colors import light_grey
 
@@ -34,7 +34,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as \
 from matplotlib.colors import ColorConverter
 
 from pymbs.common.graphreps import File, Box, Cylinder, Frame, Sphere, Line, \
-        Arrow, Flexible_Body
+        Arrow, FlexibleBody
 from pymbs.symbolics import VarKind
 from pymbs.common.pymbserror import PyMbsError
 
@@ -308,7 +308,7 @@ class LabeledSlider(QWidget):
 
 
     def setOrientation(self, ori):
-        assert( ori in(Qt.Horizontal, Qt.Vertical) )
+        assert( ori in(Qt.Orientation.Horizontal, Qt.Orientation.Vertical) )
         self.slider.setOrientation(ori)
 
     def setWidth(self, width):
@@ -376,14 +376,14 @@ class VtkSceneObject():
         self.scale = 1.
 
         if isinstance(graphRep, File):
-            file = graphRep.pathToFile.lower()
+            file = graphRep.path_to_file.lower()
             if file.endswith('.stl') or file.endswith('.stlb'):
                 part = vtk.vtkSTLReader()
-                part.SetFileName(graphRep.pathToFile)
+                part.SetFileName(graphRep.path_to_file)
                 self.scale = float(graphRep.scale)
             elif file.endswith('.obj'):
                 part = vtk.vtkOBJReader()
-                part.SetFileName(graphRep.pathToFile)
+                part.SetFileName(graphRep.path_to_file)
                 self.scale = float(graphRep.scale)
             else:
                 print('Cannot handle file format %s' % file[-4:])
@@ -413,7 +413,7 @@ class VtkSceneObject():
         elif isinstance(graphRep, Line):
             part = vtk.vtkLineSource()
             part.SetPoint1(0,0,0)
-            part.SetPoint2([graphRep.L,0,0])
+            part.SetPoint2([graphRep.length,0,0])
 
         elif isinstance(graphRep, Arrow):
             part = vtk.vtkArrowSource()
@@ -421,7 +421,7 @@ class VtkSceneObject():
             part.SetTipLength(0.35/graphRep.size)
             self.scale = [graphRep.size,1.0,1.0]
 
-        elif isinstance(graphRep, Flexible_Body):
+        elif isinstance(graphRep, FlexibleBody):
 
             points = vtk.vtkPoints()
             for point in graphRep.positions:
@@ -784,7 +784,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             qName = str(state.q[i])
 
             slider.setLabelText(qName)
-            slider.setOrientation(Qt.Horizontal)
+            slider.setOrientation(Qt.Orientation.Horizontal)
 
             # set slider range depending on joint type
             if ('_Tx' in qName) or ('_Ty' in qName) or ('_Tz' in qName):
@@ -824,7 +824,7 @@ class Gui(QMainWindow, pymbsMainWindow):
 
             initVal = self.options['qFlexScaling']
             self.qScalingSlider = LabeledSlider(self.tabSimulation)
-            self.qScalingSlider.setOrientation(Qt.Horizontal)
+            self.qScalingSlider.setOrientation(Qt.Orientation.Horizontal)
             self.qScalingSlider.name = 'q_flexible_scale'
             self.qScalingSlider.setLimits(10, max(2*10*initVal,1000))
             self.qScalingSlider.scale = 10.
@@ -844,7 +844,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             slider = LabeledSlider()
 
             slider.setLabelText(str(self.inputs[i]))
-            slider.setOrientation(Qt.Horizontal)
+            slider.setOrientation(Qt.Orientation.Horizontal)
             slider.setLimits(-500,500)
             slider.scale = 100.
             init = int(str(self.graph.getinitVal(self.inputs[i])))
@@ -1383,7 +1383,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             r = str(d.r)
             T = str(d.T)
             if isinstance(d, File):
-                file = d.pathToFile.lower()
+                file = d.path_to_file.lower()
                 scale = float(d.scale)
                 f.write('data.append([\'File\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'Filename\',\'%s\'),(\'scale\',%s)]])\n'%(d.name,r,T,file,scale))
             elif isinstance(d, Cylinder):
@@ -1395,7 +1395,7 @@ class Gui(QMainWindow, pymbsMainWindow):
             elif isinstance(d, Frame):
                 f.write('data.append([\'Frame\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'size\',%s)]])\n'%(d.name,r,T,d.size))
             elif isinstance(d, Line):
-                f.write('data.append([\'Line\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'L\',%s)]])\n'%(d.name,r,T,d.L))
+                f.write('data.append([\'Line\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'L\',%s)]])\n'%(d.name,r,T,d.length))
             elif isinstance(d, Arrow):
                 f.write('data.append([\'Arrow\',[(\'Name\',\'%s\'),(\'r\',\'%s\'),(\'T\',\'%s\'),(\'size\',%s)]])\n'%(d.name,r,T,d.size))
             else:
@@ -1417,8 +1417,9 @@ class Gui(QMainWindow, pymbsMainWindow):
         Overload closeEvent to stop simulation, in case it was running
         when the window was closed
         """
-        self.SimThread.stop()
-        self.SimThread.join()
+        if self.SimThread.is_alive():
+            self.SimThread.stop()
+            self.SimThread.join()
         event.accept()
 
 
@@ -1477,4 +1478,4 @@ def launchGui(grList, graph, modelname, gravity, state, options, **kwargs):
     iren.AddObserver('EndPickEvent', myCallback)
     iren.Initialize()
 
-    app.exec_()
+    app.exec()

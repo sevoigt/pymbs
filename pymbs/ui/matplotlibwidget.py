@@ -18,8 +18,8 @@ Copyright © 2005 Florent Rougon, 2006 Darren Dale
 
 __version__ = "1.0.0"
 
-from PyQt5.QtWidgets import QSizePolicy
-from PyQt5.QtCore import QSize
+from PyQt6.QtWidgets import QSizePolicy
+from PyQt6.QtCore import QSize
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
@@ -80,7 +80,7 @@ class MatplotlibWidget(Canvas):
         Canvas.__init__(self, self.figure)
         self.setParent(parent)
 
-        Canvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
+        Canvas.setSizePolicy(self, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         Canvas.updateGeometry(self)
 
     def sizeHint(self):
@@ -97,7 +97,7 @@ class MatplotlibWidget(Canvas):
 #===============================================================================
 if __name__ == '__main__':
     import sys
-    from PyQt5.QtWidgets import QMainWindow, QApplication
+    from PyQt6.QtWidgets import QMainWindow, QApplication
     from numpy import linspace
 
     class ApplicationWindow(QMainWindow):

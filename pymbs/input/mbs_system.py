@@ -84,12 +84,12 @@ from pymbs.ui.integrator import Integrator
 
 class MbsSystem(Body):
     """
-    The 'world', which is a kind of body, manages (mainly collects) all 
+    The 'world', which is a kind of body, manages (mainly collects) all
     these elements: bodies, joints, loads, loops, sensors, constraints and
-    expressions. It gives access to the transformation module which is the 
+    expressions. It gives access to the transformation module which is the
     user interface to the functionality of pymbs.
     """
-    
+
     def __init__(self, gravity_vect=[0,0,-1], name="world"):
         # create Frame (without position and orientation)
 
@@ -127,11 +127,11 @@ class MbsSystem(Body):
         self.state=None
 
         self.gravity_vect=symbolics.Matrix(gravity_vect)
-        # make sure that the gravity direction vector has a length of one or 
+        # make sure that the gravity direction vector has a length of one or
         # zero
         #  assert(self.gravity_vect.norm() in [0,1])
 
-        self.gravity_const = self.addParam(name='gravity', symbol_str='g', 
+        self.gravity_const = self.addParam(name='gravity', symbol_str='g',
                                            defaultValue=9.81, positive=True)
         self.time = self.graph.getVariable('time')
 
@@ -210,7 +210,7 @@ class MbsSystem(Body):
                         inertia=symbolics.zeros((3,3)), \
                         name=None):
         '''
-         With *addBody* you can insert a rigid body to your multibody system.
+        With *addBody* you can insert a rigid body to your multibody system.
         TODO: Mentioning of body fixed frame.
 
         :param name: Name of the body.
@@ -767,7 +767,7 @@ class MbsSystem(Body):
                     # create scalar Parameters for eacht component
                     p_temp[idx]=self.addParam(name=partName, symbol_str=partSymbolString, defaultValue=v)
 
-                return functions.symmetricMatrix(p_temp)
+                return functions.symmetric_matrix(p_temp)
 
 
         # End of <if isinstance(defaultValue, (list, tuple)):>
@@ -1480,7 +1480,7 @@ class MbsSystem(Body):
                     position_as_tuple = position[0],position[1],position[2]
                     points.append(position_as_tuple)
 
-                graphRep = gr.Flexible_Body(name, sensPos, sensOri, points)
+                graphRep = gr.FlexibleBody(name, sensPos, sensOri, points)
 
         else:
             # we should not end up here
@@ -1603,9 +1603,9 @@ class MbsSystem(Body):
         :param l0: Unstretched length of the spring in [m]
         :type l0: Number or Parameter
         """
-        
+
         dx = self.addSensor.Distance(f'dx_{name}', CS1, CS2, name=f'dx_{name}')
-        F = self.addExpression(symbol_str=f'force_{name}', 
+        F = self.addExpression(symbol_str=f'force_{name}',
                                exp= -c*(dx[0]-l0) - d*dx[1])
         self.addLoad.PtPForce(F, CS1, CS2, name=f'PtPForce_{name}')
 

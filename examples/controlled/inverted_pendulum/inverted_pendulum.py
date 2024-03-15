@@ -16,9 +16,8 @@ import os
 from pymbs.input import MbsSystem
 from controller import controlForce
 
-# path to 3d models
+# path to 3D-models
 models = os.path.join(os.path.dirname(__file__), '../../stl')
-
 
 world = MbsSystem([0, 0, -1])
 
@@ -28,17 +27,17 @@ M2 = world.addParam('m2', 0.3)
 Trolley = world.addBody(M1)
 Load = world.addBody(M2, cg=[0, 0, -0.5])
 
-world.addJoint(world, Trolley, 'Tx')
-world.addJoint(Trolley, Load, 'Ry')
+world.addJoint(world, Trolley, 'Tx', startVals=0.6)
+world.addJoint(Trolley, Load, 'Ry', startVals=2.3)
 
 F = world.addController('F', controlForce, shape=(3, ))
 world.addLoad.CmpForce(F, Trolley, world, name='DrivingForce')
 
-# Visualisierung
+# Visualisation
 world.addVisualisation.Box(world, length=3, width=0.05, height=0.05)
 world.addVisualisation.Box(Trolley, length=0.1, width=0.1, height=0.1)
 world.addVisualisation.File(Load, os.path.join(models, 'load.stl'))
 
-# Bewegungsgleichungen berechnen und Modell darstellen
+# Generate equations and show model
 world.genEquations.Recursive()
 world.show('InvertedPendulum')

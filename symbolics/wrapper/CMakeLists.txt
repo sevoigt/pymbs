@@ -85,11 +85,13 @@ ADD_LIBRARY( SympyWrapper SHARED ${SympyWrapper_headers} ${SympyWrapper_sources}
 ADD_DEPENDENCIES( SympyWrapper Symbolics Functions Graph Writer )
 TARGET_LINK_LIBRARIES( SympyWrapper Symbolics Functions Graph Printer Writer ${Python_LIBRARIES})
 SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES     OUTPUT_NAME "symbolics" )
+SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES     PREFIX "" )
+
 IF(WIN32)
     SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES     SUFFIX ".pyd" )
-ELSE(WIN32)
-    SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES     PREFIX "" )
-ENDIF(WIN32)
+ELSEIF(APPLE)
+	SET_TARGET_PROPERTIES( SympyWrapper PROPERTIES 	   SUFFIX ".so")
+ENDIF()
 
 INSTALL( TARGETS SympyWrapper DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../../pymbs/symbolics )
 

@@ -1,7 +1,11 @@
-﻿class PyMbsError(Exception):
-    '''
+﻿"""
+Module with PyMbs exceptions
+"""
+
+class PyMbsError(Exception):
+    """
     PyMbs' own exception type.
-    '''
+    """
 
     def __init__(self, message):
         self.msg = message

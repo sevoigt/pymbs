@@ -1,27 +1,9 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
+"""
+Model of a crane crab with a load, i.e. a sliding pendulum
+"""
 
 # import PyMbs
-from PyMbs.Input import *
+from pymbs.input import MbsSystem, rot_mat, diag, pi
 
 # set up inertial frame
 world = MbsSystem([0, 0, -1])
@@ -38,7 +20,7 @@ pend = world.addBody(mass=m2, inertia=diag([0, I2, 0]), name='Pendulum')
 
 # add frames
 pend.addFrame(name='joint' , p=[0, 0, l2])
-pend.addFrame(name='middle', p=[0, 0, l2/2], R=rotMat(pi/2,'x'))
+pend.addFrame(name='middle', p=[0, 0, l2/2], R=rot_mat(pi/2,'x'))
 
 # add joints
 world.addJoint(world, trolley, dofList='Tx', startVals=1)

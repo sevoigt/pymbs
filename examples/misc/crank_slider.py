@@ -19,7 +19,7 @@ If not, see <http://www.gnu.org/licenses/>.
 Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
                      Jens Frenkel, Sebastian Voigt
 '''
-from PyMbs.Symbolics import VarKind
+from pymbs.symbolics import VarKind
 
 '''
 Created on 17.08.2009
@@ -28,7 +28,7 @@ Created on 17.08.2009
 
 '''
 
-from PyMbs.Input import *
+from pymbs.input import *
 
 world=MbsSystem([0,0,-1])
 

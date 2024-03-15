@@ -1,31 +1,6 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 06.02.2010
-
-@author: Christian Schubert
-
-'''
+"""
+Model of a crane crab with equation system in DAE form
+"""
 
 # import PyMbs
 from pymbs.input import *
@@ -45,7 +20,7 @@ I2=world.addParam('inertia 2', 'I2', (m2*l2**2)/12)
 crab=world.addBody('Crab', mass=m1, inertia=diag([0,I1,0]))
 pend=world.addBody('Pendulum', mass=m2, inertia=diag([0,I2,0]))
 pend.addFrame('joint' , [0, 0, l2])
-pend.addFrame('middle', [0, 0, l2/2], rotMat(pi/2,'x'))
+pend.addFrame('middle', [0, 0, l2/2], rot_mat(pi/2,'x'))
 
 # add joints
 world.addJoint('TransCrab', world, crab, ['Tx', 'Tz', 'Ry'], [0,0,0])
@@ -68,8 +43,8 @@ world.addVisualisation.Sphere(pend, 0.1)
 world.genEquations(explicit=True, kinematicsOnly=False, diff=[0,1,2])
 
 # generate simulation code
-world.genCode('mo', 'CraneCrab_DAE', './Output')
-world.genCode('m', 'CraneCrab_DAE', './Output')
+world.genCode('mo', 'CraneCrab_DAE', './output')
+world.genCode('m', 'CraneCrab_DAE', './output')
 #world.genCode('py', 'CraneCrab')
 
 # show system

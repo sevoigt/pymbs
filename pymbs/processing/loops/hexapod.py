@@ -1,7 +1,7 @@
 from numpy import pi
 
 from pymbs.processing.loops.loop import Loop, eps
-from pymbs.common.functions import sqrt, norm, transpose, rotMat
+from pymbs.common.functions import sqrt, norm, transpose, rot_mat
 from pymbs.processing import Frame
 
 from pymbs.symbolics import Matrix, jacobian, inv, der, zeros, eye, \
@@ -163,9 +163,9 @@ class Hexapod(Loop):
 
 
         # rotation of the moving platform (kardan angles)
-        Tx = rotMat(u3, 'x')
-        Ty = rotMat(u4, 'y')
-        Tz = rotMat(u5, 'z')
+        Tx = rot_mat(u3, 'x')
+        Ty = rot_mat(u4, 'y')
+        Tz = rot_mat(u5, 'z')
 
         T = transpose(Tx) * transpose(Ty) * transpose(Tz)
 

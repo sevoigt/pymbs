@@ -131,8 +131,9 @@ def compile_gcc(path, modulename):
     Use gcc to compile c-module to shared lib
     """    
     ext = 'dll' if platform.system() == 'Windows' else 'so'
+    declspec = '-fdeclspec' if platform.system() == 'Darwin' else ''
 
-    return Popen(f'gcc -Ofast -shared {modulename}.c -fPIC -o {modulename}.{ext}',
+    return Popen(f'gcc -Ofast -shared {modulename}.c -fPIC {declspec} -o {modulename}.{ext}',
                     stdout=PIPE, stderr=STDOUT, shell=True, cwd=path)
 
 

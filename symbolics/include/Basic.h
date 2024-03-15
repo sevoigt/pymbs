@@ -126,7 +126,7 @@ namespace Symbolics
         virtual size_t getArgsSize() const = 0;
         virtual BasicPtr const& getArg(size_t i) const = 0;
 
-        // derivative if time
+        // derivative of time
         virtual BasicPtr der() = 0;
         // derivative of symbol
         virtual BasicPtr der(BasicPtr const& symbol) = 0;

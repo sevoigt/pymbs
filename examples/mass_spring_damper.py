@@ -7,7 +7,7 @@ Model for a 1D mass attached to a parallel spring-damper.
 # documentation (see doc/examples).
 
 # set up PyMbs and the multi-body system
-from pymbs.input import *
+from pymbs.input import MbsSystem
 
 world = MbsSystem([0, 0, -1])
 
@@ -22,7 +22,7 @@ world.addJoint(world, movingBody, 'Tz', startVals=1)
 
 # Add force to simulate a spring-damper combination
 l = world.addSensor.Distance('l', movingBody, world)
-F = world.addExpression('F', -(c*l[0] + d*l[1]))
+F = world.addExpression('F', -(c * l[0] + d * l[1]))
 world.addLoad.PtPForce(F, movingBody, world)
 
 # Add visualisations

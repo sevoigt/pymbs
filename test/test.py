@@ -2,7 +2,7 @@ import unittest
 
 print("-------- Unittests --------------\n")
 import pymbs.common.functions
-from pymbs.common.functions import skew, subs, element, solve, symmetricMatrix
+from pymbs.common.functions import skew, subs, element, solve, symmetric_matrix
 import pymbs.common.simple
 from pymbs.symbolics import __version__, eye, Matrix, Symbol, cos, sin
 from numpy import cross
@@ -65,7 +65,7 @@ class TestFunctions(unittest.TestCase):
 
     def test_sympify(self):
         # tests whether specifying a local variable helps
-        
+
         # sympify without locals
         tmp1 = pymbs.symbolics.sympify('transpose(a)')
 
@@ -74,11 +74,11 @@ class TestFunctions(unittest.TestCase):
         exec('from pymbs.common.Functions import *', local_dict)
         tmp2 = pymbs.symbolics.sympify('transpose(a)', locals=local_dict)
         tmp3 = pymbs.common.Functions.transpose(a)
-        
+
         # Testen
         # self.assertTrue( tmp1.__class__ != tmp2.__class__ )
         self.assertTrue( tmp2.__class__ == tmp3.__class__ )
-        
+
 
     def test_transpose(self):
         # transposes a Symbol:
@@ -105,11 +105,11 @@ class TestFunctions(unittest.TestCase):
 
         t = transpose(A)*B - B*transpose(A)
         self.assertFalse(t == 0)
-        
+
         # Test simplification
         t1 = transpose(a) + transpose(-a)
         self.assertTrue(t1 == 0)
-        
+
         # Put a transpose into a transpose
         t2 = transpose(transpose(a))
         self.assertTrue(t2 == a)
@@ -218,7 +218,7 @@ class TestFunctions(unittest.TestCase):
         f = pymbs.symbolics.Symbol('f')
 
 
-        M=symmetricMatrix([a, b, c, d, e, f])
+        M=symmetric_matrix([a, b, c, d, e, f])
 
         M2=Matrix([[a, b, d],
                    [b, c, e],
@@ -457,10 +457,10 @@ class TestFunctions(unittest.TestCase):
         be = Symbol('be')
         ga = Symbol('ga')
 
-        Tal1 = rotMat(al1, 'x')
-        Tal2 = rotMat(al2, 'x')
-        Tbe = rotMat(be, 'y')
-        Tga = rotMat(ga, 'z')
+        Tal1 = rot_mat(al1, 'x')
+        Tal2 = rot_mat(al2, 'x')
+        Tbe = rot_mat(be, 'y')
+        Tga = rot_mat(ga, 'z')
 
         t7 = Tal1*Tal2*Tbe*Tga*v
         t7 = Tga.T*Tbe.T*Tal2.T*Tal1.T*t7
@@ -797,7 +797,7 @@ class TestInput(unittest.TestCase):
                                 torqueVect, name='bucket_torque')
 
         # invalid shape of Expr.
-        self.assertRaises(AssertionError, world.addLoad.CmpForce, 
+        self.assertRaises(AssertionError, world.addLoad.CmpForce,
                                       world.CS_Load1, world.CS_Load2,
                                       force1, 'foo_name')
         self.assertRaises(AssertionError, world.addLoad.CmpTorque,
@@ -805,7 +805,7 @@ class TestInput(unittest.TestCase):
                                       force1, 'foo_name_')
 
         # existing Name
-        self.assertRaises(ValueError, world.addLoad.CmpForce, 
+        self.assertRaises(ValueError, world.addLoad.CmpForce,
                           world.CS_Load1, world.CS_Load2,
                            forceVect, 'bucket_force')
 
@@ -879,18 +879,18 @@ class TestInput(unittest.TestCase):
 
         dist = world.addSensor.Position(body1.CS_A, world.CS_A,
                                         'dist', name='body1_dist')
-        pos = world.addSensor.Position(body1.CS_A, world.CS_A, 
+        pos = world.addSensor.Position(body1.CS_A, world.CS_A,
                                        'pos', name='body1_pos')
-        vel = world.addSensor.Velocity(body1.CS_A, world.CS_A, 
+        vel = world.addSensor.Velocity(body1.CS_A, world.CS_A,
                                        'vel', name='body1_vel')
         acc = world.addSensor.Acceleration(body1.CS_A, world.CS_A,
                                            'acc', name='body1_acc')
 
-        ori = world.addSensor.Orientation(body1.CS_A, world.CS_A, 
+        ori = world.addSensor.Orientation(body1.CS_A, world.CS_A,
                                           'ori', name='body1_ori')
         angvel = world.addSensor.AngularVelocity(body1.CS_A, world.CS_A,
                                                  'angvel', name='body1_angvel')
-        angacc = world.addSensor.AngularAcceleration(body1.CS_A, world.CS_A, 
+        angacc = world.addSensor.AngularAcceleration(body1.CS_A, world.CS_A,
                                                      'angacc', name='body1_angacc')
 
         # existing name
@@ -898,7 +898,7 @@ class TestInput(unittest.TestCase):
                               body1.CS_A, world.CS_A, 'dist_', name='body1_dist')
 
         # existing symbol
-        self.assertRaises(ValueError, world.addSensor.Position, 
+        self.assertRaises(ValueError, world.addSensor.Position,
                               body1.CS_A, world.CS_A, 'dist', name='body1_dist_')
 
         self.assertTrue( pos.shape == (3,1) )
@@ -921,21 +921,21 @@ class TestInput(unittest.TestCase):
         body1 = world.addBody('cube', 10)
         body1.addFrame('CS_A')
 
-        dist = world.addSensor.Position(body1, world, 
+        dist = world.addSensor.Position(body1, world,
                                         'dist', name='body1_dist')
 
-        pos = world.addSensor.Position(body1, world, 
+        pos = world.addSensor.Position(body1, world,
                                        'pos', name='body1_pos')
-        vel = world.addSensor.Velocity(body1, world, 
+        vel = world.addSensor.Velocity(body1, world,
                                        'vel', name='body1_vel')
-        acc = world.addSensor.Acceleration(body1, world, 
+        acc = world.addSensor.Acceleration(body1, world,
                                            'acc', name='body1_acc')
 
-        ori = world.addSensor.Orientation(body1, world, 
+        ori = world.addSensor.Orientation(body1, world,
                                           'ori', name='body1_ori')
-        angvel = world.addSensor.AngularVelocity(body1, world, 
+        angvel = world.addSensor.AngularVelocity(body1, world,
                                                  'angvel', name='body1_angvel')
-        angacc = world.addSensor.AngularAcceleration(body1, world, 
+        angacc = world.addSensor.AngularAcceleration(body1, world,
                                                      'angacc', name='body1_angacc')
 
 
@@ -953,7 +953,7 @@ class TestInput(unittest.TestCase):
         pos = world.sensorDict['body1_pos']
         self.assertTrue(pos.parent == body1._CS_0)
         self.assertTrue(pos.child == world._CS_0)
-        
+
     def test_addJointSensor(self):
 
         box1 = world.addBody('box1', 10)

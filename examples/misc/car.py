@@ -1,32 +1,6 @@
-# -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
-Created on 28.07.2009
-
-@author: frenkel
-
-model-description for a simple car with one chassi an 4 wheels
-'''
+"""
+Model description for a simple car with a chassis and four wheels
+"""
 
 from pymbs.input import *
 
@@ -117,11 +91,11 @@ world.addLoad.CmpTorque(eMA_BR, wBR.CS_cg, body.BodyShellBR, name='Antrieb_BR')
 eM_L = world.addExpression('eM_L', [0, 0, M_L], name='Force_M_L')
 world.addLoad.CmpTorque(eM_L, body.BodyShellFL, wFL.CS_cg, name='Lenkung')
 # <!-- Wheel FL -->
-world.addLoad.CmpForce(FC_FL, wFL.CS_cg, world.CS_world, 'FCWheel_FL',
-                       hFL.CS_cg)
+world.addLoad.CmpForce(FC_FL, wFL.CS_cg, world.CS_world, hFL.CS_cg,
+                       name='FCWheel_FL')
 # <!-- Wheel FR -->
-world.addLoad.CmpForce(FC_FR, wFR.CS_cg, world.CS_world, 'FCWheel_FR',
-                       hFR.CS_cg)
+world.addLoad.CmpForce(FC_FR, wFR.CS_cg, world.CS_world, hFR.CS_cg, 
+                       name='FCWheel_FR')
 
 #  ''' Loads and Sensors for Wheels '''
 world.addTyreSensorsLoads('Wheel_FL', hFL.CS_cg, wFL)
@@ -144,8 +118,8 @@ world.addVisualisation.Frame(body.SteeringWheel, 1, name="PO_SteeringWheel")
 print("System has been assembled")
 
 world.genEquations.Recursive()
-world.genCode.Modelica('FahrzeugMBS', './Output')
-world.genCode.Matlab('FahrzeugMBS', './Output')
+world.genCode.Modelica('FahrzeugMBS', './output')
+world.genCode.Matlab('FahrzeugMBS', './output')
 #world.genEquations(explicit=True)
-#world.genCode('m', 'FahrzeugMBS_exp', '.\Output', debugMode=True)
+#world.genCode('m', 'FahrzeugMBS_exp', '.\output', debugMode=True)
 world.show('Car')

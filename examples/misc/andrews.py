@@ -133,13 +133,13 @@ world.addVisualisation.Frame(K3.Spring, 0.01)
 
 world.addVisualisation.Line(K1, 0.007) #rr
 world.addVisualisation.Line(K2, -0.028) #-d
-K3.addFrame('Line', R=rotMat(3.141/2, 'z'))
+K3.addFrame('Line', R=rot_mat(3.141/2, 'z'))
 world.addVisualisation.Line(K3.Line, 0.035) #ss
-K4.addFrame('Line', R=rotMat(-3.141/2, 'z'))
+K4.addFrame('Line', R=rot_mat(-3.141/2, 'z'))
 world.addVisualisation.Line(K4.Line, 0.02) #e
 world.addVisualisation.Line(K5, 0.04) #zt
 world.addVisualisation.Line(K6.K7, 0.02) #zf
-K7.addFrame('Line', R=rotMat(3.141/2, 'z'))
+K7.addFrame('Line', R=rot_mat(3.141/2, 'z'))
 world.addVisualisation.Line(K7.Line, 0.04) #u
 
 # Generate equations, code and show assembly
@@ -155,11 +155,11 @@ E = world.addExpression('E', E_K1+E_K2+E_K3+E_K4+E_K5+E_K6+E_K7, name='Energy',
                         category=VarKind.Sensor)
 
 world.genEquations.Explicit(diff=[0, 1, 2], simplify=False)
-#world.genCode.Matlab('Andrew', './Output',  symbolic=False) # set false!
-#world.genCode.Modelica('Andrew', './Output')     # Modelica
-#world.genCode.Python('Andrew', './Output')     # Python
-#world.genCode.Fortran('Andrew', './Output')      # Fortran
-#world.genCode.Cpp('Andrew', './Output')    # C++
-#world.genMatlabAnimation('Andrew', './Output',
+#world.genCode.Matlab('Andrew', './output',  symbolic=False) # set false!
+#world.genCode.Modelica('Andrew', './output')     # Modelica
+#world.genCode.Python('Andrew', './output')       # Python
+#world.genCode.Fortran('Andrew', './output')      # Fortran
+#world.genCode.Cpp('Andrew', './output')          # C++
+#world.genMatlabAnimation('Andrew', './output',
 #                         axislimits=(-0.07, 0.02, -0.02, 0.07, -0.01, 0.01))
 world.show('Andrews_Squeezing_Mechanism')

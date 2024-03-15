@@ -7,7 +7,7 @@ from .joint import Joint
 from .frame import Frame
 from .body import Body
 
-#!! TODO: rename to AbstractLoop
+#TODO: rename to AbstractLoop
 # .. and the whole module to Loops
 class Constraint(MbsInputElement):
     """
