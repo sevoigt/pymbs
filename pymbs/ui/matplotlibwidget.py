@@ -21,7 +21,7 @@ __version__ = "1.0.0"
 from PyQt6.QtWidgets import QSizePolicy
 from PyQt6.QtCore import QSize
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
 
 from matplotlib import rcParams
@@ -75,7 +75,7 @@ class MatplotlibWidget(Canvas):
         if xlim is not None:
             self.axes.set_xlim(*xlim)
         if ylim is not None:
-            self.axes.set_ylim(*ylim)        
+            self.axes.set_ylim(*ylim)
 
         Canvas.__init__(self, self.figure)
         self.setParent(parent)

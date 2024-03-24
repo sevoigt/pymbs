@@ -28,7 +28,7 @@ from pymbs.ui.matplotlibwidget import MatplotlibWidget
 # Now pymbs imports NavigationToolbar2QT which should be compatible with older
 # matplotlib versions as well
 
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as \
+from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as \
         NavigationToolbar
 
 from matplotlib.colors import ColorConverter
