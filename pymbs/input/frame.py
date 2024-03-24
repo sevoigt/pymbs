@@ -1,6 +1,6 @@
 from pymbs.common.abstractframe import AbstractFrame
-from .input_element import MbsInputElement
 from pymbs.symbolics import zeros, eye
+from .input_element import MbsInputElement
 
 
 class Frame(AbstractFrame, MbsInputElement):
@@ -8,7 +8,7 @@ class Frame(AbstractFrame, MbsInputElement):
         MbsInputElement.__init__(self, name, parent)
         AbstractFrame.__init__(self, name, p, R)
 
-        self.coordList=[]
+        self.coordList = []
 
 
     def addFrame(self, name, p=zeros((3,)), R=eye((3,3))):
@@ -21,15 +21,15 @@ class Frame(AbstractFrame, MbsInputElement):
         :param p: Position vector of coordinate origin
         :param R: Rotation matrix
         """
-        CS=Frame(name, self, p, R)
-        self.children.append(CS)
-        self.coordList.append(CS)
+        cs = Frame(name, self, p, R)
+        self.children.append(cs)
+        self.coordList.append(cs)
 
         # add to object namespace
-        assert not hasattr(self, name), "name %s already occupied" % name
-        self.__dict__[name]=CS
+        assert not hasattr(self, name), f'name {name} already occupied'
+        self.__dict__[name]=cs
 
-        return CS
+        return cs
 
     def getParentBody(self):
 
