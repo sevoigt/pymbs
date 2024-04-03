@@ -29,7 +29,7 @@ rcParams['font.size'] = 9
 
 class MatplotlibWidget(Canvas):
     """
-    MatplotlibWidget inherits PyQt4.QtGui.QWidget
+    MatplotlibWidget inherits QWidget
     and matplotlib.backend_bases.FigureCanvasBase
 
     Options: option_name (default_value)
@@ -119,4 +119,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = ApplicationWindow()
     win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
