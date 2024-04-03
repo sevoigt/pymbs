@@ -1,26 +1,32 @@
 import os
 import sys
-import vtk
 import time
 import tempfile
+import vtk  # vtk widget remains blank without this?!
 
 import numpy as np
 from numpy import zeros
 
-from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, QLabel, \
-        QHBoxLayout, QCheckBox, QLineEdit, QPushButton, QSlider, QDialog, \
-        QMainWindow, QFileDialog, \
-        QApplication, QLineEdit
-
-
-from PyQt6.QtGui import QDoubleValidator, QIcon, QPixmap, QCloseEvent
-
-from PyQt6.QtWidgets import QPushButton, QWidget, QDialog, QMainWindow,\
-                        QApplication, QTabWidget, QVBoxLayout,\
-                        QScrollArea, QHBoxLayout, QLabel, QCheckBox, QSlider
+from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, \
+                            QLabel, QHBoxLayout, QCheckBox, QLineEdit, \
+                            QPushButton, QSlider, QDialog, QMainWindow, \
+                            QFileDialog, QApplication
+from PyQt6.QtGui import QDoubleValidator, QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize, QMetaObject, QTimer
-from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
-from vtk.util.colors import light_grey
+
+from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from vtkmodules.util.colors import light_grey
+from vtkmodules.vtkRenderingCore import vtkRenderer, vtkActor, vtkPolyDataMapper
+from vtkmodules.vtkInteractionStyle import vtkInteractorStyleTrackballCamera
+from vtkmodules.vtkIOGeometry import vtkSTLReader, vtkOBJReader
+from vtkmodules.vtkFiltersSources import vtkCylinderSource, vtkCubeSource, \
+                                         vtkArrowSource, vtkLineSource, \
+                                         vtkSphereSource, vtkTextSource, \
+                                         vtkParametricFunctionSource
+from vtkmodules.vtkFiltersGeneral import vtkAxes
+from vtkmodules.vtkCommonCore import vtkPoints
+from vtkmodules.vtkCommonComputationalGeometry import vtkParametricSpline
+from vtkmodules.vtkCommonMath import vtkMatrix4x4
 
 from pymbs.ui.matplotlibwidget import MatplotlibWidget
 
@@ -347,7 +353,7 @@ class LabeledSlider(QWidget):
 
     @property
     def value(self):
-        '''The scaled value (= what we need for calcualtions)'''
+        '''The scaled value (= what we need for calculations)'''
         val = float(self.slider.value())
         if (self.scale is not None):
             val = val / self.scale
@@ -367,10 +373,10 @@ class VtkSceneObject():
 
         if isinstance(graphRep.color, (list, tuple)):
             self.color = graphRep.color
-        elif graphRep.color == None:
+        elif graphRep.color is None:
             self.color = light_grey
         else:
-            print("Wrong color argument for {0}, ignoring it".format(graphRep))
+            print(f'Wrong color argument for {graphRep}, ignoring it')
             self.color = light_grey
 
         self.scale = 1.
@@ -378,79 +384,79 @@ class VtkSceneObject():
         if isinstance(graphRep, File):
             file = graphRep.path_to_file.lower()
             if file.endswith('.stl') or file.endswith('.stlb'):
-                part = vtk.vtkSTLReader()
+                part = vtkSTLReader()
                 part.SetFileName(graphRep.path_to_file)
                 self.scale = float(graphRep.scale)
             elif file.endswith('.obj'):
-                part = vtk.vtkOBJReader()
+                part = vtkOBJReader()
                 part.SetFileName(graphRep.path_to_file)
                 self.scale = float(graphRep.scale)
             else:
-                print('Cannot handle file format %s' % file[-4:])
+                print(f'Cannot handle file format {file[-4:]}')
 
         elif isinstance(graphRep, Cylinder):
-            part = vtk.vtkCylinderSource()
+            part = vtkCylinderSource()
             part.SetResolution(graphRep.res)
             part.SetRadius(graphRep.radius)
             part.SetHeight(graphRep.l)
 
         elif isinstance(graphRep, Box):
-            part = vtk.vtkCubeSource()
+            part = vtkCubeSource()
             part.SetXLength(graphRep.lx)
             part.SetYLength(graphRep.ly)
             part.SetZLength(graphRep.lz)
 
         elif isinstance(graphRep, Sphere):
-            part = vtk.vtkSphereSource()
+            part = vtkSphereSource()
             part.SetRadius(graphRep.radius)
             part.SetThetaResolution(graphRep.res)
             part.SetPhiResolution(graphRep.res)
 
         elif isinstance(graphRep, Frame):
-            part = vtk.vtkAxes()
+            part = vtkAxes()
             part.SetScaleFactor(graphRep.size)
 
         elif isinstance(graphRep, Line):
-            part = vtk.vtkLineSource()
+            part = vtkLineSource()
             part.SetPoint1(0,0,0)
             part.SetPoint2([graphRep.length,0,0])
 
         elif isinstance(graphRep, Arrow):
-            part = vtk.vtkArrowSource()
+            part = vtkArrowSource()
             part.InvertOn()
             part.SetTipLength(0.35/graphRep.size)
             self.scale = [graphRep.size,1.0,1.0]
 
         elif isinstance(graphRep, FlexibleBody):
 
-            points = vtk.vtkPoints()
+            points = vtkPoints()
             for point in graphRep.positions:
                 points.InsertNextPoint(point)
 
-            spline = vtk.vtkParametricSpline()
+            spline = vtkParametricSpline()
             spline.SetPoints(points)
 
-            part = vtk.vtkParametricFunctionSource()
+            part = vtkParametricFunctionSource()
             part.SetParametricFunction(spline)
             part.Update()
 
         else:
-            part = vtk.vtkTextSource()
+            part = vtkTextSource()
             part.SetText('GraphRep class not yet implemented')
 
         # Map geometry to OpenGL data
-        mapper = vtk.vtkPolyDataMapper()
+        mapper = vtkPolyDataMapper()
         mapper.SetInputConnection(part.GetOutputPort())
 
         # Create Actor for moving, rotating, scaling, appearance etc.
-        self.actor = vtk.vtkActor()
+        self.actor = vtkActor()
         self.actor.SetMapper(mapper)
         self.actor.GetProperty().SetColor(self.color)
         self.actor.GetProperty().SetOpacity(1)
         self.actor.SetScale(self.scale)
 
         # turn of lighting of vtkAxes for better visibility
-        if isinstance(part, vtk.vtkAxes):
+        if isinstance(part, vtkAxes):
             self.actor.GetProperty().SetLighting(False)
 
 
@@ -968,12 +974,6 @@ class Gui(QMainWindow, pymbsMainWindow):
         self.recordButton.clicked.connect(self.recorder.toggle)
 
 
-    def closeEvent(self, a0: QCloseEvent) -> None:
-        self.SimThread.stop()
-        self.ResultThread.stop()
-        return super().closeEvent(a0)
-
-
     def getSensorData(self):
         '''
         Return the current state of the system and the dictionary with the
@@ -981,7 +981,6 @@ class Gui(QMainWindow, pymbsMainWindow):
         '''
 
         return (self.sensorState, self.sensorValues)
-
 
 
     def compileModelF90(self):
@@ -1226,7 +1225,7 @@ class Gui(QMainWindow, pymbsMainWindow):
     def updateSceneModelica(self):
 
         for obj in self.vtkObjects:
-            poke = vtk.vtkMatrix4x4()
+            poke = vtkMatrix4x4()
 
             T = str(obj.T)
             r = str(obj.r)
@@ -1277,7 +1276,7 @@ class Gui(QMainWindow, pymbsMainWindow):
         for obj in self.vtkObjects:
 
             if ((len(obj.r) == 1) and (len(obj.T) == 1)):
-                poke = vtk.vtkMatrix4x4()
+                poke = vtkMatrix4x4()
 
                 obj_r = str(obj.r[0])
                 obj_T = str(obj.T[0])
@@ -1302,7 +1301,7 @@ class Gui(QMainWindow, pymbsMainWindow):
 
 
             else:
-                points = vtk.vtkPoints()
+                points = vtkPoints()
 
                 for position in obj.r:
 
@@ -1313,14 +1312,14 @@ class Gui(QMainWindow, pymbsMainWindow):
 
                     points.InsertNextPoint(pos_as_tuple)
 
-                spline = vtk.vtkParametricSpline()
+                spline = vtkParametricSpline()
                 spline.SetPoints(points)
 
-                part = vtk.vtkParametricFunctionSource()
+                part = vtkParametricFunctionSource()
                 part.SetParametricFunction(spline)
                 part.Update()
 
-                mapper = vtk.vtkPolyDataMapper()
+                mapper = vtkPolyDataMapper()
                 mapper.SetInputConnection(part.GetOutputPort())
 
                 # Create Actor for moving, rotating, scaling, appearance etc.
@@ -1451,7 +1450,7 @@ def launchGui(grList, graph, modelname, gravity, state, options, **kwargs):
         forwards = [0,1,0]
 
     # Set renderer and window
-    ren = vtk.vtkRenderer()
+    ren = vtkRenderer()
     renWin = gui.VtkScene.GetRenderWindow()
     renWin.AddRenderer(ren)
 
@@ -1473,7 +1472,7 @@ def launchGui(grList, graph, modelname, gravity, state, options, **kwargs):
 
     # Setup interaction with renderer window (mouse control etc.)
     iren = gui.VtkScene
-    iren.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
+    iren.SetInteractorStyle(vtkInteractorStyleTrackballCamera())
     iren.SetRenderWindow(renWin)
     iren.AddObserver('EndPickEvent', myCallback)
     iren.Initialize()
