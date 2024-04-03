@@ -1,13 +1,32 @@
+"""
+This module contains a thread class used in the pymbs ui/app to run the
+simulation and animation in the background.
+"""
+
 import threading
 import time
 
 class PyMbsThread(threading.Thread):
+    """
+    Usage:
+    def myFunc():
+        print 'doing something'
+        time.sleep(1)
 
-    def __init__(self, function, realTime=False):
+
+    t = PymbsThread(myFunc)
+    t.start()	# starts Thread
+    t.stop()    # stop Thread
+    t.reinit()  # "reset" thread
+    t.start()   # start Thread again
+    t.stop()
+    """
+
+    def __init__(self, function, realtime=False):
         threading.Thread.__init__(self)
         self.execute = False
         self.function = function
-        self.realTime = realTime
+        self.realtime = realtime
         self.scaling = 1
 
         # Start-Time (Model)
@@ -20,7 +39,7 @@ class PyMbsThread(threading.Thread):
         if (self.execute):
             self.stop()
 
-        self.__init__(self.function, self.realTime)
+        self.__init__(self.function, self.realtime)
 
 
     def run(self):
@@ -37,7 +56,7 @@ class PyMbsThread(threading.Thread):
         while self.execute:
 
             # synchronise with real time
-            if (self.realTime):
+            if (self.realtime):
                 # Real Elapsed Time
                 real = self.scaling*(time.time() - self.real_offset)
                 # Model Elapsed Time
@@ -59,21 +78,3 @@ class PyMbsThread(threading.Thread):
 
         # Debug
         # print "Stopped Thread " + str(id(self))
-
-
-'''
-Usage:
-======
-
-def myFunc():
-    print 'doing something'
-    time.sleep(1)
-
-
-t = PymbsThread(myFunc)
-t.start()	# starts Thread
-t.stop()    # stop Thread
-t.reinit()  # "reset" thread
-t.start()   # start Thread again
-t.stop()
-'''

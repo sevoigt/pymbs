@@ -957,10 +957,10 @@ class Gui(QMainWindow, pymbsMainWindow):
 
 
         # Create simulation thread
-        self.SimThread = PyMbsThread(self.simulate, realTime=True)
+        self.SimThread = PyMbsThread(self.simulate, realtime=True)
 
         # Create result thread
-        self.ResultThread = PyMbsThread(self.playResults, realTime=True)
+        self.ResultThread = PyMbsThread(self.playResults, realtime=True)
 
 
         # create recorder instance and connect required signals and slots
