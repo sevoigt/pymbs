@@ -17,7 +17,7 @@ class Integrator(integrate.ode):
 
     def __init__(self, handle, y0, yd0, dt=0.01, rtol=1e-3, atol=1e-6):
         """
-        Provide the initial vlaues and the integrator settings for the time
+        Provide the initial values and the integrator settings for the time
         stepping simulation.
         """
         integrate.ode.__init__(self, handle)
@@ -33,7 +33,7 @@ class Integrator(integrate.ode):
     def set_step_size(self, dt):
         """
         Set the step size for the simulation. This is the 'communication step
-        size' and not the fixed time step.
+        size' and not the fixed time step of the integrator.
         """
         self.dt = float(dt)
 
@@ -47,8 +47,10 @@ class Integrator(integrate.ode):
 
     def step(self):
         """
-        Perform a simulatin step. This is
+        Perform a simulation step. This is a 'communication step', i.e. the
+        integrator may perform an arbitrary number of steps under the hood.
+        Once it is done we get the resulting state of the model at the new
+        time t + dt.
         """
         self.integrate(self.t + self.dt)
-        #print(str.format('y={0}', self.y)) # for debug
         return self.y
