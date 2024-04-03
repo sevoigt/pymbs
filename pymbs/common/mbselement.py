@@ -1,5 +1,6 @@
 """
-This module contains a common baseclass for all elements of a multibody system (mbs)
+This module contains a common baseclass for all elements of a
+multibody system (mbs)
 """
 
 from keyword import iskeyword

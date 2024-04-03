@@ -1,9 +1,18 @@
+"""
+This module contains the Frame class which is basically a cartesian
+coordinate system
+"""
+
 from pymbs.common.abstractframe import AbstractFrame
 from pymbs.symbolics import zeros, eye
 from .input_element import MbsInputElement
 
 
 class Frame(AbstractFrame, MbsInputElement):
+    """
+    A cartesian coordinate system with a positon and an orientation (rotation)
+    in three-dimensional space.
+    """
     def __init__(self, name, parent, p, R):
         MbsInputElement.__init__(self, name, parent)
         AbstractFrame.__init__(self, name, p, R)
@@ -31,9 +40,10 @@ class Frame(AbstractFrame, MbsInputElement):
 
         return cs
 
+    # TODO: the parent-child relationship is not obvious / there seems to
+    # be an implicit distinction between frame and body here respectively
     def getParentBody(self):
 
         # will be overridden in Body-Class, such that
         # a body returns self
         return self.parent.getParentBody()
-

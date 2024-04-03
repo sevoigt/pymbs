@@ -1,5 +1,5 @@
 """
-Classes for bodies used for the model description
+This module contains classes for bodies to be used for the model description
 """
 
 import numpy as np

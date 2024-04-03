@@ -1,5 +1,6 @@
 """
-Module with constraints and loops
+This module contains classes for constraints and loops to be used for the
+model description
 """
 
 from .input_element import MbsInputElement
