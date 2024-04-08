@@ -155,11 +155,11 @@ E = world.addExpression('E', E_K1+E_K2+E_K3+E_K4+E_K5+E_K6+E_K7, name='Energy',
                         category=VarKind.Sensor)
 
 world.genEquations.Explicit(diff=[0, 1, 2], simplify=False)
-#world.genCode.Matlab('Andrew', './output',  symbolic=False) # set false!
-#world.genCode.Modelica('Andrew', './output')     # Modelica
-#world.genCode.Python('Andrew', './output')       # Python
-#world.genCode.Fortran('Andrew', './output')      # Fortran
-#world.genCode.Cpp('Andrew', './output')          # C++
-#world.genMatlabAnimation('Andrew', './output',
+#world.genCode.Matlab('andrews', './output',  symbolic=False) # set false!
+#world.genCode.Modelica('andrews', './output')     # Modelica
+#world.genCode.Python('andrews', './output')       # Python
+#world.genCode.Fortran('andrews', './output')      # Fortran
+#world.genCode.Cpp('andrews', './output')          # C++
+#world.genMatlabAnimation('andrews', './output',
 #                         axislimits=(-0.07, 0.02, -0.02, 0.07, -0.01, 0.01))
-world.show('Andrews_Squeezing_Mechanism')
+world.show('andrews_squeezing_mechanism')
