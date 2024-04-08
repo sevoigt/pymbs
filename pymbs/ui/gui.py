@@ -28,19 +28,18 @@ from vtkmodules.vtkCommonCore import vtkPoints
 from vtkmodules.vtkCommonComputationalGeometry import vtkParametricSpline
 from vtkmodules.vtkCommonMath import vtkMatrix4x4
 
-from pymbs.ui.matplotlibwidget import MatplotlibWidget
 
 # Note: NavigationToolbar2QTAgg was removed in matplotlib 1.5.0
 # Now pymbs imports NavigationToolbar2QT which should be compatible with older
 # matplotlib versions as well
 
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as \
-        NavigationToolbar
+                                              NavigationToolbar
 
 from matplotlib.colors import ColorConverter
 
-from pymbs.common.graphreps import File, Box, Cylinder, Frame, Sphere, Line, \
-        Arrow, FlexibleBody
+from pymbs.common.graphreps import File, Box, Cylinder, Frame, Sphere, \
+                                   Line, Arrow, FlexibleBody
 from pymbs.symbolics import VarKind
 from pymbs.common.pymbserror import PyMbsError
 
@@ -48,7 +47,7 @@ from pymbs.ui.thread import PyMbsThread
 from pymbs.ui.integrator import Integrator
 from pymbs.ui.matlab_player import MatlabPlayer
 from pymbs.ui.pi_recorder import PIRecorder
-
+from pymbs.ui.matplotlibwidget import MatplotlibWidget
 from pymbs.ui.compile import compileF90, compileC
 
 from pymbs import __version__ as pymbs_VERSION

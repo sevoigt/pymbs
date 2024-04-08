@@ -2,7 +2,7 @@
 Model of an overhead crane with a trolley and load pendulum.
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem, rot_mat, pi
 from controller import trolley_force, rope_force
 
 ropelength = 1

@@ -3,7 +3,7 @@ Model of an Andrews squeezing mechanism.
 """
 
 from pymbs.symbolics import VarKind
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag, rot_mat
 
 
 # Set up world
@@ -100,7 +100,7 @@ world.addJoint(name='rot_epsilon', CS1=world.A, CS2=K7, dofList='Rz',
 
 # Loops
 useLoops = True
-if (useLoops):
+if useLoops:
     world.addJoint(name='Rot4', CS1=K3.C, CS2=K4, dofList='Rz')
     world.addJoint(name='Rot6', CS1=K3.C, CS2=K6, dofList='Rz')
 

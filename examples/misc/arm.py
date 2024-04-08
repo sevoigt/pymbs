@@ -2,7 +2,7 @@
 Simple model of a rotating arm
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag
 
 world = MbsSystem([0, -1, 0])
 
