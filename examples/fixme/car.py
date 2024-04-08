@@ -2,7 +2,7 @@
 Model description for a simple car with a chassis and four wheels
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag, zeros, eye
 
 world = MbsSystem([0, 0, -1])
 

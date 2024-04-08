@@ -3,7 +3,7 @@ Another version of the crane crab example
 """
 
 # import PyMbs
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag, rot_mat, pi
 
 # set up inertial frame
 world=MbsSystem([0,0,-1])
@@ -22,7 +22,7 @@ pend.addFrame('joint' , [0, 0, l2])
 pend.addFrame('middle', [0, 0, l2/2], rot_mat(pi/2,'x'))
 
 # add joints
-world.addJoint(world, crab, 'Tx', 1, name='TransCrab')
+world.addJoint(world, crab, 'Tx', 0.1, name='TransCrab')
 world.addJoint(crab, pend.joint, 'Ry', -1, name='RotPendulum')
 
 # add load element and sensor
@@ -38,11 +38,11 @@ world.addVisualisation.Sphere(pend, 0.1)
 # generate simulation code
 world.genEquations.Explicit()
 
-world.genCode.Modelica('CraneCrab', './output')
-world.genCode.Matlab('CraneCrab', './output')
-world.genCode.Python('CraneCrab', './output')
-world.genCode.C('CraneCrabRec', './output')
+world.genCode.Modelica('crane_crab', './output')
+world.genCode.Matlab('crane_crab', './output')
+world.genCode.Python('crane_crab', './output')
+#world.genCode.C('crane_crab', './output')  # TODO: if enabled, pymbs produces faulty visual sensors python module
 
 # show system
-world.genMatlabAnimation('CraneCrab')
-world.show('CraneCrab')
+world.genMatlabAnimation('crane_crab', './output')
+world.show('crane_crab')
