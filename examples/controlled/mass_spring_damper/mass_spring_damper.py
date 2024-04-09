@@ -8,7 +8,7 @@ instead of `addExpression`, which is much more flexible due to allowing to
 execute arbitrary python code.
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem
 from controller import controlForce
 
 world=MbsSystem([0,0,-1])

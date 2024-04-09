@@ -2,7 +2,7 @@
 Simple model of a rotating arm
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag
 
 world = MbsSystem([0, -1, 0])
 
@@ -22,6 +22,6 @@ world.addJoint(world, arm, 'Rz', name='RotArm')
 world.addVisualisation.Box(arm, 10, 1, 1)
 
 world.genEquations.Recursive()
-world.genCode.Modelica('Arm', './output')
+world.genCode.Modelica('arm', './output')
 
-world.show('Arm')
+world.show('arm')

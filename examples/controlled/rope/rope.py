@@ -2,7 +2,7 @@
 Model of a planar rope attaced to a sliding mass
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag, pi
 from controller import controlForce
 
 world = MbsSystem([0, 0, -1])
@@ -56,8 +56,8 @@ for i in range(0, segments):
         # Add sensor for the position of the end tip of the rope
         pos = world.addSensor.Position('position', world, bodies[i])
     else:
-        s = world.addSensor.Joint(symbol='state%i_'%i, joint=joints[i])
-    D = world.addExpression(symbol_str='T%i_'%i, exp=-d*s[1])
+        s = world.addSensor.Joint(symbol=f'state{i}_', joint=joints[i])
+    D = world.addExpression(symbol_str=f'T{i}_', exp=-d*s[1])
     world.addLoad.Joint(joint=joints[i], symbol=D)
 
 world.genEquations.Recursive()

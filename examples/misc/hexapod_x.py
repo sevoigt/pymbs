@@ -1,43 +1,15 @@
-# -*- coding: iso-8859-1 -*-
-'''
-This file is part of PyMbs.
+"""
+Model for a hexapod with spercial joints between the cylinders
+and the platforms
+"""
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-
-Created on 27.03.2012
-
-@author: Sebastian Voigt
-'''
-
-
-
-
-from pymbs.input import *
-
-
+from pymbs.input import MbsSystem, rot_mat, diag
 from math import pi, sin, cos
-
 
 
 # hexapod longitudinal axis points in x-direction
 
 world = MbsSystem([-1,0,0])
-
 
 
 
@@ -65,8 +37,6 @@ world.addVisualisation.Sphere(world.FR_cyl3, radius=0.12)
 world.addVisualisation.Sphere(world.FR_cyl4, radius=0.12)
 world.addVisualisation.Sphere(world.FR_cyl5, radius=0.12)
 world.addVisualisation.Sphere(world.FR_cyl6, radius=0.12)
-
-
 
 
 
@@ -104,8 +74,6 @@ world.addVisualisation.Sphere(tp.FR_cyl3, radius=0.1)
 world.addVisualisation.Sphere(tp.FR_cyl4, radius=0.1)
 world.addVisualisation.Sphere(tp.FR_cyl5, radius=0.1)
 world.addVisualisation.Sphere(tp.FR_cyl6, radius=0.1)
-
-
 
 
 
@@ -202,11 +170,9 @@ world.addVisualisation.Cylinder(cylPist6.FR_visual, radius=rPist, height=h)
 
 
 
-
-
 #-------------------------------------------------------------------------------
 #                       generate equations and show
 #-------------------------------------------------------------------------------
 
 world.genEquations.Recursive()
-world.show('Hexapod_x')
+world.show('hexapod_x')

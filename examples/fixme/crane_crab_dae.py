@@ -3,7 +3,7 @@ Model of a crane crab with equation system in DAE form
 """
 
 # import PyMbs
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag, rot_mat
 
 # set up inertial frame
 world=MbsSystem([0,0,-1])

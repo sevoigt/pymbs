@@ -2,7 +2,7 @@
 Model description for a simple car with a chassis and four wheels
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag, zeros, eye
 
 world = MbsSystem([0, 0, -1])
 
@@ -94,7 +94,7 @@ world.addLoad.CmpTorque(eM_L, body.BodyShellFL, wFL.CS_cg, name='Lenkung')
 world.addLoad.CmpForce(FC_FL, wFL.CS_cg, world.CS_world, hFL.CS_cg,
                        name='FCWheel_FL')
 # <!-- Wheel FR -->
-world.addLoad.CmpForce(FC_FR, wFR.CS_cg, world.CS_world, hFR.CS_cg, 
+world.addLoad.CmpForce(FC_FR, wFR.CS_cg, world.CS_world, hFR.CS_cg,
                        name='FCWheel_FR')
 
 #  ''' Loads and Sensors for Wheels '''
@@ -118,8 +118,8 @@ world.addVisualisation.Frame(body.SteeringWheel, 1, name="PO_SteeringWheel")
 print("System has been assembled")
 
 world.genEquations.Recursive()
-world.genCode.Modelica('FahrzeugMBS', './output')
-world.genCode.Matlab('FahrzeugMBS', './output')
+world.genCode.Modelica('car', './output')
+world.genCode.Matlab('car', './output')
 #world.genEquations(explicit=True)
 #world.genCode('m', 'FahrzeugMBS_exp', '.\output', debugMode=True)
 world.show('Car')

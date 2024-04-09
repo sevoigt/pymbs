@@ -21,7 +21,7 @@ __version__ = "1.0.0"
 from PyQt6.QtWidgets import QSizePolicy
 from PyQt6.QtCore import QSize
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
 
 from matplotlib import rcParams
@@ -29,7 +29,7 @@ rcParams['font.size'] = 9
 
 class MatplotlibWidget(Canvas):
     """
-    MatplotlibWidget inherits PyQt4.QtGui.QWidget
+    MatplotlibWidget inherits QWidget
     and matplotlib.backend_bases.FigureCanvasBase
 
     Options: option_name (default_value)
@@ -75,7 +75,7 @@ class MatplotlibWidget(Canvas):
         if xlim is not None:
             self.axes.set_xlim(*xlim)
         if ylim is not None:
-            self.axes.set_ylim(*ylim)        
+            self.axes.set_ylim(*ylim)
 
         Canvas.__init__(self, self.figure)
         self.setParent(parent)
@@ -119,4 +119,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = ApplicationWindow()
     win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

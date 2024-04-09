@@ -1,5 +1,5 @@
 """
-Classes for bodies used for the model description
+This module contains classes for bodies to be used for the model description
 """
 
 import numpy as np
@@ -62,7 +62,7 @@ class FlexibleBody(AbstractBody, Frame):
         # read a SID-File from the given path
         f = open(filepath, 'r')
         try:
-            # create a sid object which includes the informations for
+            # create a sid object which includes the information for
             # generating a flexible body
             self.sid = SID(f)
         except SIDFormatException as fe:

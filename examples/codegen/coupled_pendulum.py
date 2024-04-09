@@ -2,7 +2,7 @@
 Model description for a simple pendulum adapted from Matlab-example
 """
 
-from pymbs.input import *
+from pymbs.input import MbsSystem, diag, eye, zeros
 
 world = MbsSystem([0, -1, 0])
 
@@ -28,7 +28,5 @@ j2 = world.addJoint(world.CS_p1, pend2.CS_joint, 'Rz', name='RevPendulum2')
 
 world.addLoop.Transmission(j1, j2, 1, 'Fix')
 
-print("System has been assembled")
-
 world.genEquations.Explicit()
-world.genCode.Matlab('CoupledPendulum', './output')
+world.genCode.Matlab('coupled_pendulum', './output')
