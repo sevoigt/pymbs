@@ -53,8 +53,8 @@ for i in range(0, nseg):
     else:
         joints_Ry[i], joints_Tx[i] = world.addJoint(bodies[i-1], bodies[i], ['Ry', 'Tx'], [0, pitch])
 
-    world.addVisualisation.Line(bodies[i].start, -(pitch-link_width))
-    world.addVisualisation.Sphere(bodies[i], link_width/2, res=10, color=[0.8, 0.5, 0.5])
+    world.addVisualisation.Line(bodies[i].start, -(pitch-link_width), name=f'line_{i}')
+    world.addVisualisation.Sphere(bodies[i], link_width/2, res=10, color=[0.8, 0.5, 0.5], name=f'sphere_{i}')
 
     # Add force
     cs1 = world.start if i == 0 else bodies[i-1].end
@@ -65,6 +65,11 @@ for i in range(0, nseg):
     dphi = world.addSensor.Joint(symbol = f'ry_{i}', joint=joints_Ry[i])
     t = world.addExpression(symbol_str=f'tau_{i}', exp= -c_r*dphi[0] - d_r*dphi[1])
     world.addLoad.Joint(joint=joints_Ry[i], symbol=t)
+
+    # Debug visualisation
+    #world.addVisualisation.Frame(bodies[i], size=0.3)
+    #world.addVisualisation.Frame(bodies[i].start, size=0.1)
+    #world.addVisualisation.Frame(bodies[i].end  , size=0.1)
 
 
 t = time.time()
