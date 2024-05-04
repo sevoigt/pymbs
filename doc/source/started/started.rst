@@ -24,21 +24,29 @@ It is also possible to manipulate the degrees of freedom interactively.
 Installation
 ------------
 
-.. warning:: 
+.. warning::
 	This installation guide is outdated. Basically you have to
-	
+
 	* clone the repo from GitHub
 	* use CMake to build the C++ symbolics module
 	* add pymbs to your environment/path so that it can be imported
 
 	We hope to have a package available again for convenience. Any help is highly appreciated...
 
-	PyMbs has been tested and works on Windows 10, Fedora Linux and Apple M1.	
+	PyMbs has been tested and works on Windows 10, Fedora Linux and Apple M1.
 
-.. note:: 
-	A C-compiler must be available in the PATH to compile the model in the GUI for 
-	faster simulation. GCC is recommended as it works out of the box on Windows 
+.. note::
+	A C-compiler must be available in the PATH to compile the model in the GUI for
+	faster simulation. GCC is recommended as it works out of the box on Windows
 	and Linux.
+
+.. warning::
+    There is an issue under Wayland on Linux preventing the PyMbs window from being shown.
+    To workaround the issue do
+
+    `export QT_QPA_PLATFORM=xcb`
+
+    in your shell / session (see https://github.com/pyvista/pyvistaqt/issues/445)
 
 *Outdated!* It was tested on Python 2.7. In this section the required modules are specified
 and afterwards a step-by-step instruction is given on how to install PyMbs on
