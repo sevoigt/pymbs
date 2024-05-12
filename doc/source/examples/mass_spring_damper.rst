@@ -7,7 +7,7 @@ in the absence of other forces. If you want to try it first, or look
 at the complete source code,
 see :download:`mass_spring_damper.py <../../../examples/mass_spring_damper.py>`.
 
-As in the previous example, we import PyMbs, set up an intial reference frame
+As in the previous example, we import PyMbs, set up an initial reference frame
 and add a few parameters:
 
 .. literalinclude:: ../../../examples/mass_spring_damper.py
