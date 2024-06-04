@@ -50,7 +50,7 @@ resides here.
 want to change the output for a code generator, you'll have to modify the
 respective file in ``symbolics/writer/``.
 
-``test/`` contains the unittests. Some of them are obsolete, others need
+``test/`` contains the unit tests. Some of them are obsolete, others need
 expansion. Writing new tests is a great way to get started on improving PyMbs!
 
 Building PyMbs under Windows
@@ -71,7 +71,7 @@ Studio project file which you can then build using the Visual Studio IDE.
 Running the Tests
 -----------------
 
-There are a couple of files containing unittests. Running each of these
+There are a couple of files containing unit tests. Running each of these
 commands should result in no error::
 
     python test/test_symbolics.py
@@ -172,7 +172,7 @@ comments, followed by a colon. For example, the interface
     #: >>> world.addLoad.PtPForce(F, body_one, body_two)
     self.addLoad = AddLoad(self)
 
-Alternativly use can add an `ivar` (instance variable) info field to the
+Alternatively user can add an `ivar` (instance variable) info field to the
 docstring of the class. However, these can not be linked to and should
 therefore be using sparingly.
 

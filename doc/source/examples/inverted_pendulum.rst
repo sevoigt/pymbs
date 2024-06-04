@@ -6,7 +6,7 @@ Inverted Pendulum
 In this example, we would like to introduce the controller functionality of
 PyMbs. With it, you can introduce loads depending on the state of the system
 using arbitrary python code. We want to simulate a simple pendulum hanging from
-a travelling trolley, with a force acting on the trolley to keeep the pendulum
+a travelling trolley, with a force acting on the trolley to keep the pendulum
 in an upright position. If you want to try it first, or look at the complete
 source code, see :download:`inverted_pendulum.py
 <../../../examples/controlled/inverted_pendulum/inverted_pendulum.py>`.
@@ -28,7 +28,7 @@ themselves:
     :lines: 24-28
 
 The trolley can move translational and the pendulum rotates around the mounting
-point at the trolley. Note that we need to set the inital values here. The controller
+point at the trolley. Note that we need to set the initial values here. The controller
 is rather basic and only works in a limited start angle range of the pendulum:
 
 .. literalinclude:: ../../../examples/controlled/inverted_pendulum/inverted_pendulum.py

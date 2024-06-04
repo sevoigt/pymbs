@@ -1456,7 +1456,10 @@ def launchGui(grList, graph, modelname, gravity, state, options, **kwargs):
     # Add actor to renderer and set background color
     for i in gui.vtkObjects:
         ren.AddActor(i.actor)
-    ren.SetBackground(0.1, 0.2, 0.4)
+
+    ren.GradientBackgroundOn()
+    ren.SetBackground2(26/255,  52/255,  78/255)
+    ren.SetBackground(157/255, 150/255, 150/255)
 
     gui.updateKinematics()
 

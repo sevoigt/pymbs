@@ -18,10 +18,10 @@ Institute of Processing Machines and Mobile Machinery by a questing quartet:
 * carsten(d)knoll(a)tu(min)dresden(d)de
 
 
-We startetd working on PyMbs in July 2009, as we faced the need of a
+We started working on PyMbs in July 2009, as we faced the need of a
 convenient way to obtain the equations of motion of complex mechanical
 systems to feed a real time simulation environment based on the Modelica
-modeling language. By the release of PyMbs 0.1 these aim could be achieved.
+modelling language. By the release of PyMbs 0.1 these aim could be achieved.
 
 Finally `OpenModelica <https://openmodelica.org>`_ supported multibody
 simulation out of the box and should be used if you want to have something

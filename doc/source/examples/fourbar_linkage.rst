@@ -8,7 +8,7 @@ try it first, or look at the complete source code, see
 :download:`fourbar_linkage.py <../../../examples/fourbar_linkage.py>`.
 
 As usual, we start with importing PyMbs, creating a model system and adding
-various parameters. Here, they are the lengths, masses and interiae of the
+various parameters. Here, they are the lengths, masses and inertias of the
 bars to be connected:
 
 .. literalinclude:: ../../../examples/fourbar_linkage.py

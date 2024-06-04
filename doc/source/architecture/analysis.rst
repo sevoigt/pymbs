@@ -19,14 +19,14 @@ example this graph
 
 The corresponding system of equations is
 
-.. math::	
+.. math::
   :label: system-large
 
 	  a &= 1\\
 	  b &= 0\\
 	  c &= 5 \cdot k\\
 	  d &= a \cdot c\\
-	  e &= 2 \cdot a + 2\\ 
+	  e &= 2 \cdot a + 2\\
 	  f &= b \cdot k\\
 	  g &= d + e + f
 
@@ -36,12 +36,12 @@ to reduce the system all zeros are eliminated.  The second step is to do the
 same for all variables equal one. The last step is to replace all variables
 used only once. The resulting system of equations reads as follows
 
-.. math::	
+.. math::
     :label: system-small
-        
+
     c &= 5 \cdot k\\
     g &= c + 4
- 
+
 
 Now, only two steps are required to calculate :math:`g`.
 
@@ -81,7 +81,7 @@ With the list of required variables from each node the edges of the tree can be
 constructed. To store the edges, every node has two list. One for the parent
 nodes and one for the child nodes. A parent node is a node which is used to
 calculate the expression of the node. In addition a global list of all nodes
-exists to avoid to iterate through the tree when searching nodes.  
+exists to avoid to iterate through the tree when searching nodes.
 
 Reducing the System of Equation
 -------------------------------
@@ -92,7 +92,7 @@ The reduce algorithm has to find all nodes, which are
 #. have only one parent.
 
 Because this is one of the main parts of the analysing module it should work
-efficient and fast. 
+efficient and fast.
 
 The algorithm for the first point is divided in the following four steps.  The
 first step is to find all nodes with no parents to extract all constants.  This
@@ -107,7 +107,7 @@ of the children and rearranges the abstract syntax tree by removing the
 corresponding edges. After this changes it is possible that a child node
 equation becomes equal to zero or one. Also this node should be replaced to
 obtain an equation system that is suitable for calculating the outputs
-efficiently. These four steps are executed recursively for each child node.   
+efficiently. These four steps are executed recursively for each child node.
 
 The algorithm for the second point looks similar to the algorithm for the first
 point.  The difference is that this algorithm does not work recursively.  The
@@ -135,7 +135,7 @@ a list. The next step is to collect all parents from the nodes inside the list.
 This is done by an recursive algorithm and a following loop. The recursive
 algorithm gets the list of required nodes.  It steps through all parents of the
 nodes and sets the required flag. Afterwards the loop checks the global list of
-nodes and collects all nodes with active *requried* flag.  With the list of all
+nodes and collects all nodes with active *required* flag.  With the list of all
 required nodes the third step starts to arrange the required nodes in a way
 that every expression of a node can be calculated. Therefore every variable
 inside the expression has to be calculated beforehand. This problem is solved
