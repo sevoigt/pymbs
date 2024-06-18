@@ -463,6 +463,12 @@ class VtkSceneObject():
         self.actor.GetProperty().SetColor(self.color)
         self.actor.GetProperty().SetOpacity(1)
         self.actor.GetProperty().ShadingOn()
+
+        self.actor.GetProperty().SetInterpolationToFlat()   # fast and simple
+        #self.actor.GetProperty().SetInterpolationToPhong()
+        #self.actor.GetProperty().SetInterpolationToPBR()
+        #self.actor.GetProperty().SetInterpolationToGouraud()
+
         self.actor.SetScale(self.scale)
 
         # turn of lighting of vtkAxes for better visibility
