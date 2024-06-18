@@ -443,15 +443,26 @@ class VtkSceneObject():
             part = vtkTextSource()
             part.SetText('GraphRep class not yet implemented')
 
+        part.Update()
+
+        # Compute normals
+        normals = vtk.vtkPolyDataNormals()
+        #normals.AutoOrientNormalsOn()
+        #normals.ComputeCellNormalsOn()
+        #normals.SetFeatureAngle(60.0)
+        normals.SetInputConnection(part.GetOutputPort())
+
         # Map geometry to OpenGL data
         mapper = vtkPolyDataMapper()
-        mapper.SetInputConnection(part.GetOutputPort())
+        mapper.SetInputConnection(normals.GetOutputPort())
+        mapper.ScalarVisibilityOff()
 
         # Create Actor for moving, rotating, scaling, appearance etc.
         self.actor = vtkActor()
         self.actor.SetMapper(mapper)
         self.actor.GetProperty().SetColor(self.color)
         self.actor.GetProperty().SetOpacity(1)
+        self.actor.GetProperty().ShadingOn()
         self.actor.SetScale(self.scale)
 
         # turn of lighting of vtkAxes for better visibility
@@ -1448,6 +1459,7 @@ def launchGui(grList, graph, modelname, gravity, state, options, **kwargs):
         up = [0,0,1]
         forwards = [0,1,0]
 
+
     # Set renderer and window
     ren = vtkRenderer()
     renWin = gui.VtkScene.GetRenderWindow()
@@ -1462,6 +1474,20 @@ def launchGui(grList, graph, modelname, gravity, state, options, **kwargs):
     ren.SetBackground(157/255, 150/255, 150/255)
 
     gui.updateKinematics()
+
+    # SSAO - Screen Space Ambient Occlusion -> no effect? models look worse...
+    basicPasses = vtk.vtkRenderStepsPass()
+    sceneSize = 10                      # typically the diagonal of the bounding box in [m]
+
+    ssao = vtk.vtkSSAOPass()
+    ssao.SetRadius(0.1 * sceneSize)     # comparison radius
+    ssao.SetBias(0.001 * sceneSize)     # comparison bias
+    ssao.SetKernelSize(128)             # number of samples used
+    ssao.BlurOff()                       # do not blur occlusion
+    ssao.SetDelegatePass(basicPasses)
+
+    #ren.SetPass(ssao)
+    #ren.UseSSAOOn()    # messes up background, would require two renderes for fore- and background
 
     # change camera
     ren.GetActiveCamera().SetViewUp(up)
