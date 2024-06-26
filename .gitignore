@@ -13,6 +13,11 @@ Thumbs.db
 
 __pycache__
 
+# tool settings
+*.sublime-project
+*.sublime-workspace
+.spyproject
+
 # precompiled symbolics module
 symbolics.pyd
 symbolics.lib
