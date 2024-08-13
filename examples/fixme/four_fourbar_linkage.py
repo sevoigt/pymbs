@@ -1,33 +1,12 @@
 # -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
-
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert,
-                     Jens Frenkel, Sebastian Voigt
-'''
-from PyMbs.Symbolics import VarKind
-
-'''
-Created on 01.04.2011
+"""
+A combination of four fourbar mechanisms
 
 @author: Franziska Jung
-'''
+"""
 
-from PyMbs.Input import *
+from pymbs.input import MbsSystem, diag, pi
+from pymbs.symbolics import VarKind
 
 # set up world
 world = MbsSystem([0,-1,0])
@@ -96,11 +75,11 @@ world.addJoint(name='Rot9', CS1=K5.KX, CS2=K9, dofList='Rz', startVals=0.7-pi)
 
 # Loops
 dae = False
-if (dae == True):
-    world.addConstraint('Constr_1', K1.K6, K6.K1, [1,1,0], [0,0,0])
-    world.addConstraint('Constr_2', K2.K7, K7.K2, [1,1,0], [0,0,0])
-    world.addConstraint('Constr_3', K3.K8, K8.K3, [1,1,0], [0,0,0])
-    world.addConstraint('Constr_4', K4.K9, K9.K4, [1,1,0], [0,0,0])
+if dae:
+    world.addConstraint(K1.K6, K6.K1, [1,1,0], [0,0,0], name='Constr_1')
+    world.addConstraint(K2.K7, K7.K2, [1,1,0], [0,0,0], name='Constr_2')
+    world.addConstraint(K3.K8, K8.K3, [1,1,0], [0,0,0], name='Constr_3')
+    world.addConstraint(K4.K9, K9.K4, [1,1,0], [0,0,0], name='Constr_4')
 
 else:
     world.addLoop.FourBar(K1.K6, K6.K1, posture=1)
@@ -127,6 +106,7 @@ world.addSensor.Orientation(CS1=world, CS2=K7.K2, symbol='RotMat2')
 world.addSensor.Orientation(CS1=world, CS2=K8.K3, symbol='RotMat3')
 world.addSensor.Orientation(CS1=world, CS2=K9.K4, symbol='RotMat4')
 
+'''
 E_K1 = world.addSensor.Energy(body=K1, symbol_str='E_K1', name='E_K1')
 E_K2 = world.addSensor.Energy(body=K2, symbol_str='E_K2', name='E_K2')
 E_K3 = world.addSensor.Energy(body=K3, symbol_str='E_K3', name='E_K3')
@@ -138,9 +118,10 @@ E_K8 = world.addSensor.Energy(body=K8, symbol_str='E_K8', name='E_K8')
 E_K9 = world.addSensor.Energy(body=K9, symbol_str='E_K9', name='E_K9')
 
 E = world.addExpression(name='Energy', symbol_str='E', exp=E_K1+E_K2+E_K3+E_K4+E_K5+E_K6+E_K7+E_K8+E_K9, category=VarKind.Sensor)
+'''
 
 # Generate Equations, Code and Show Assembly
 world.genEquations.Recursive()
-world.genCode.Modelica('fourFourBarLinkage', '.\Output')
-world.genMatlabAnimation('fourFourBarLinkage', '.\Output', axislimits=(-0.02, 0.1, -0.02, 0.02, -0.01, 0.01))
-world.show('fourFourBarLinkage_Mechanism')
+#world.genCode.Modelica('four_fourbar_linkage', './output')
+#world.genMatlabAnimation('four_fourbar_linkage', './output', axislimits=(-0.02, 0.1, -0.02, 0.02, -0.01, 0.01))
+world.show('four_fourbar_linkage_mechanism')

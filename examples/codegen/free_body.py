@@ -1,41 +1,23 @@
 # -*- coding: utf-8 -*-
-'''
-This file is part of PyMbs.
+"""
+Model of a free moving body with six degrees of freedom.
+The sensors are used to verify the pymbs model against
+other (commercial) multibody software packages.
 
-PyMbs is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-PyMbs is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public 
-License along with PyMbs.
-If not, see <http://www.gnu.org/licenses/>.
-
-Copyright 2011, 2012 Carsten Knoll, Christian Schubert, 
-                     Jens Frenkel, Sebastian Voigt
-'''
-
-'''
 Created on 05.07.2009
-
 @author: Christian Schubert
+"""
 
-'''
 from pymbs.input import *
 
 world=MbsSystem([0,0,-1])
 
-m=world.addParam('m', 1,'mass')
-I=world.addParam('Inertia', [1,1,1],'inertia')
-a=world.addParam('a', 1,'length')
+m=world.addParam('m', 1, name='mass')
+I=world.addParam('Inertia', [1,1,1], name='inertia')
+a=world.addParam('a', 1, name='length')
 
-k=world.addParam('c', 100,'stiffness')
-d=world.addParam('d', 10,'damping_coeff')
+k=world.addParam('c', 100, name='stiffness')
+d=world.addParam('d', 10,name='damping_coeff')
 
 world.addFrame('CS_world', zeros((3,)), eye(3))
 
@@ -102,6 +84,4 @@ world.addLoad.CmpForce(F_URR,world.CS_world, body.CS_Bottum_Rear_Right  )
 print("System has been assembled")
 
 world.genEquations.Recursive()
-world.genCode.Modelica('FreeBody', '.\Output')
-
-print("Done")
+world.genCode.Modelica('free_body', './output')
