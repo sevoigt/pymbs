@@ -9,7 +9,6 @@ the local x-y plane.
 
 from pymbs.input import MbsSystem, diag, rot_mat, pi
 
-
 world = MbsSystem([0, -1, 0], name='Bar1')
 
 # Parameter
@@ -69,8 +68,6 @@ world.addSensor.Position('r2_B', world.CS_A, bar2.CS_B, world.CS_A, name='r2_B')
 world.addSensor.Position('r3a_B', world.CS_A, bar3a.CS_B, world.CS_A, name='r3a_B')
 world.addSensor.Position('r3b_C', world.CS_A, bar3b.CS_C, world.CS_A, name='r3b_C')
 
-print("System has been assembled")
-
 
 # Visualisation
 world.addVisualisation.Box(bar2.CS_Graphic, 0.174, 0.005, 0.005, name='bar2')
@@ -78,7 +75,6 @@ world.addVisualisation.Box(bar3a.CS_Graphic, 0.1, 0.005, 0.005, name='bar3a')
 world.addVisualisation.Box(bar3b.CS_Graphic, 0.1, 0.01, 0.01, name='bar3b')
 world.addVisualisation.Cylinder(bar2.CS_B_Graphic, 0.005, 0.005, name='bar2_cyl')
 
-print("System has been assembled")
 
 world.genEquations.Explicit()
 world.show('threebar_linkage_trans')

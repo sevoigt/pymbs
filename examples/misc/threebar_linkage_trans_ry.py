@@ -12,19 +12,19 @@ from pymbs.input import MbsSystem, diag
 world = MbsSystem([0, 0, -1], name="Bar1")
 
 # Parameter
-l1 = world.addParam('l1', 0.13, 'Length 1')
+l1 = world.addParam('l1', 0.13, name='Length 1')
 
-m2 = world.addParam('m2', 0.6, 'Mass 2')
-l2 = world.addParam('l2', 0.174, 'Length 2')
-I2 = world.addParam('I2', m2 / 12 * l2**2, 'Inertia 2')
+m2 = world.addParam('m2', 0.6, name='Mass 2')
+l2 = world.addParam('l2', 0.174, name='Length 2')
+I2 = world.addParam('I2', m2 / 12 * l2**2, name='Inertia 2')
 
-m3a = world.addParam('m3a', 0.025, 'Mass 3a')
-l3a = world.addParam('l3a', 0.1, 'Length 3a')
-I3a = world.addParam('I3a', m3a / 12 * l3a**2, 'Inertia 3a')
+m3a = world.addParam('m3a', 0.025, name='Mass 3a')
+l3a = world.addParam('l3a', 0.1, name='Length 3a')
+I3a = world.addParam('I3a', m3a / 12 * l3a**2, name='Inertia 3a')
 
-m3b = world.addParam('m3b', 0.025, 'Mass 3b')
-l3b = world.addParam('l3b', 0.1, 'Length 3b')
-I3b = world.addParam('I3b', m3b / 12 * l3b**2, 'Inertia 3b')
+m3b = world.addParam('m3b', 0.025, name='Mass 3b')
+l3b = world.addParam('l3b', 0.1, name='Length 3b')
+I3b = world.addParam('I3b', m3b / 12 * l3b**2, name='Inertia 3b')
 
 # Create Bodies with Coordinate Systems
 # Bar1 = Inertial System
@@ -76,6 +76,4 @@ world.addVisualisation.Cylinder(bar2.CS_B, 0.005, 0.005, name='bar2_cyl')
 
 
 world.genEquations.Explicit()
-# world.genCode.Modelica('threebar_linkage_trans', './output')
-
 world.show('threebar_linkage_trans')
