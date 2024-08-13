@@ -1,23 +1,16 @@
-#-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
-#
-# Author:      Martin
-#
-# Created:     12.11.2012
-# Copyright:   (c) Martin 2012
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
+"""
+Model of a triple pendulum where the parts are connected by one
+rotational degree of freedom
+"""
 
-# import PyMbs
-from PyMbs.Input import *
-# set up inertial frame
+from pymbs.input import *
+
 world = MbsSystem([-1,0,0])
 
 
 # Hinzufuegen eines Koordinatensystems, welches um 90 Grad um die z-Achse gedreht
 # ist, damit Aufhaengung richtig gedreht ist
-world.addFrame('base_gedreht',R=rotMat(pi/2,'z'))
+world.addFrame('base_gedreht',R=rot_mat(pi/2,'z'))
 
 # einezelne Pendel und Haken als Koerper erzeugen
 haken = world.addBody(mass = 1, cg = [0,0,0], inertia = diag([0,1,0]), name = 'Haken')
@@ -34,9 +27,9 @@ verb_pendel3_Masse = pendel3.addFrame('Verbindung_Pendel3_Masse',[-3,0,0])
 # Erzeugung der Koordinatensysteme in der Mitte der Pendel um Koerper
 # als Pendel zu visualisieren, Visualisierungen muessen immer in der Mitte,
 # befestigt werden, damit sie an der richtigen Position sind.
-visualisierung_pendel = pendel.addFrame('vis',p=[-1.5, 0, 0],R=rotMat(pi/2,'z'))
-visualisierung_pendel2 = pendel2.addFrame('vis2',p=[-1.5, 0, 0],R=rotMat(pi/2,'z'))
-visualisierung_pendel3 = pendel3.addFrame('vis3',p=[-1.5, 0, 0],R=rotMat(pi/2,'z'))
+visualisierung_pendel = pendel.addFrame('vis',p=[-1.5, 0, 0],R=rot_mat(pi/2,'z'))
+visualisierung_pendel2 = pendel2.addFrame('vis2',p=[-1.5, 0, 0],R=rot_mat(pi/2,'z'))
+visualisierung_pendel3 = pendel3.addFrame('vis3',p=[-1.5, 0, 0],R=rot_mat(pi/2,'z'))
 
 # Verbinden der Koerper durch Gelenke
 world.addJoint(name = 'Rotation', CS1 = world, CS2 = pendel, dofList = 'Ry')
@@ -53,9 +46,5 @@ world.addVisualisation.Sphere(verb_pendel3_Masse, radius=0.2)
 world.addVisualisation.Cylinder(world.base_gedreht, radius=2, height=0.01)
 
 world.genEquations.OrderN()
-world.genCode.Matlab('test_dreifachpendel', '.\Output', debugMode=False)
-world.show('Dreifachpendel')
-
-
-
-
+world.genCode.Matlab('triple_pendulum', './output')
+world.show('triple_pendulum')
