@@ -597,8 +597,7 @@ class MbsSystem(Body):
         :param symbol_str: Symbol that shall be used for the input.
         :type symbol_str: String.
         :param shape: Optional parameter, defining the shape of the input. Use
-                     (m,n) if it is a m x n Matrix. By default (1,1), i.e.
-                     a scalar input is assumed.
+                     (m,n) if it is a m x n Matrix. If empty or None, a scalar input is assumed.
         :type shape: Tuple of two numbers (int/float).
 
         :param limits: Limits for the corresponding slider in the simulation tab.
@@ -619,8 +618,9 @@ class MbsSystem(Body):
 
         if (shape is None):
             shape = tuple()
-        assert isinstance(shape, tuple) , "Input %s shape is not a tuple"%symbol_str
+        assert isinstance(shape, tuple) , f'Input {symbol_str} shape is not a tuple'
 
+        # TODO: limits is never used
         if (limits is None):
             limits = [-1, 1]
         assert( isinstance(limits, list) )
@@ -629,6 +629,7 @@ class MbsSystem(Body):
         # Symbol anlegen
         symbol = self.graph.addVariable(name=symbol_str, shape=shape, varKind=VarKind.Input)
 
+        # TODO defaultValue is never used
         # right hand side is a zero of appropriate size
         if (len(shape) == 0):
             defaultValue = 0
