@@ -60,7 +60,7 @@ m_refCount(0)
         }
         else
         {
-          throw InternalError("Feature not supported!");
+          throw InternalError("Feature not supported! Variable: " + jj->first->getName() + ". State Kind: " + (str)(jj->first->stateKind()));
         }
       }
 
@@ -72,7 +72,7 @@ m_refCount(0)
         Assignment e((*ii));
         m_assignments.push_back(e);
       }
-  }    
+  }
 }
 /*****************************************************************************/
 

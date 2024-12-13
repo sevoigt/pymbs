@@ -66,16 +66,16 @@ class Constraint(Load):
         axis = ['X', 'Y', 'Z']
         for i in [0,1,2]:
             # Translation
-            if (self.transLock[i]):
+            if self.transLock[i]:
                 tmp = [0,0,0]; tmp[i] = 1
                 self.transPick.append(tmp)
-                constraint_force.append(graph.addVariable('F_%s_%s'%(axis[i], self.name)))
+                constraint_force.append(graph.addVariable(f'F_{axis[i]}_{self.name}'))
 
             # Rotation
-            if (self.rotLock[i]):
+            if self.rotLock[i]:
                 tmp = [0,0,0]; tmp[i] = 1
                 self.rotPick.append(tmp)
-                constraint_torque.append(graph.addVariable('T_%s_%s'%(axis[i],self.name)))
+                constraint_torque.append(graph.addVariable(f'T_{axis[i]}_{self.name}'))
 
         # Number of Constraints
         nf = len(constraint_force)
