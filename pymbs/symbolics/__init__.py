@@ -11,5 +11,5 @@ from .symbolics import CMatrix as SymmetricMatrix, \
 
 from .symbolics import acos, asin, atan, atan2, sin, cos, tan, \
                        element, scalar, skew, der, solve, \
-                       transpose, outer, jacobian, inv, \
+                       transpose, outer, jacobian, inv, sign,\
                        If, Less, Greater, Equal

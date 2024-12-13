@@ -13,12 +13,12 @@ static void CSign_del(CSignObject *self);
 
 // Dokumentation
 static char CSign_doc[] = 
-    "Function Sign, directly implemented in C++";
+    "Function sign, directly implemented in C++";
 
 // TypeObject
 PyTypeObject Symbolics::Python::CSignObjectType = {
 	PyVarObject_HEAD_INIT(NULL, 0)
-	"symbolics.Sign",        /* tp_name           */
+	"symbolics.sign",        /* tp_name           */
     sizeof(CSignObject),        /* tp_basicsize      */
     0,                            /* tp_itemsize       */
     0,                            /* tp_dealloc        */
@@ -83,12 +83,12 @@ static int CSign_init(CSignObject *self, PyObject *args, PyObject *kwds)
          size_t nArgs = PyTuple_Size(args);
         if (nArgs > 1)
         {
-            PyErr_SetString(SymbolicsError, "len(args) must not exceed one, i.e. Sign(expression)!");
+            PyErr_SetString(SymbolicsError, "len(args) must not exceed one, i.e. sign(expression)!");
             return -1;
         }
         if (nArgs < 1)
         {
-            PyErr_SetString(SymbolicsError, "len(args) must be one, i.e. Sign(expression)!");
+            PyErr_SetString(SymbolicsError, "len(args) must be one, i.e. sign(expression)!");
             return -1;
         }
        // Expression extrahieren
