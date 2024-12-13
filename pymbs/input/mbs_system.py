@@ -2673,7 +2673,7 @@ class AddLoop(object):
         # call world function
         return self.world._addLoop(name, 'FourBarTrans', CS1, CS2, posture)
 
-    def Transmission(self, j1, j2, ratio=1, name=None):
+    def Transmission(self, j1, j2, ratio=1.0, name=None):
         '''
         The transmission loop introduces a relation between two joints, such
         that their joint coordinates q1 and q2 are related by the following
@@ -2749,7 +2749,7 @@ class AddVisualisation(object):
 
     # _addVisualisation(self, name, cs, typeString, *args):
 
-    def File(self, cs, fileName, scale=1, name=None, color=None):
+    def File(self, cs, fileName, scale=1.0, name=None, color=None):
         '''
         Attach a File-Object given by *fileName* to the Coordinate System given
         by *cs*. Since the python visualisation is based on VTK, all file formats
@@ -2777,7 +2777,7 @@ class AddVisualisation(object):
         # call world function
         return self.world._addVisualisation(name, cs, 'file', fileName, scale, color=color)
 
-    def Line(self, cs, length=1, name=None, color=None):
+    def Line(self, cs, length=1.0, name=None, color=None):
         '''
         Add a line object which starts at [0,0,0] and ends at [*length*,0,0],
         i.e. spans in x-direction.
@@ -2800,7 +2800,7 @@ class AddVisualisation(object):
         # call world function
         return self.world._addVisualisation(name, cs, 'line', length, color=color)
 
-    def Box(self, cs, length=1, width=1, height=1, name=None, color=None):
+    def Box(self, cs, length=1.0, width=1.0, height=1.0, name=None, color=None):
         '''
         Add a line object which whose dimensions are called:
         * x - *length*
@@ -2830,7 +2830,7 @@ class AddVisualisation(object):
         # call world function
         return self.world._addVisualisation(name, cs, 'box', length, width, height, color=color)
 
-    def Cylinder(self, cs, radius=1, height=1, res=20, name=None, color=None):
+    def Cylinder(self, cs, radius=1.0, height=1.0, res=20, name=None, color=None):
         '''
         Add a cylindrical graphical representation to a coordinate system given
         by *cs*. Its groundplane forms a circle with the radius given by *radius*
@@ -2857,7 +2857,7 @@ class AddVisualisation(object):
         # call world function
         return self.world._addVisualisation(name, cs, 'cylinder', radius, height, res, color=color)
 
-    def Sphere(self, cs, radius=1, res=50, name=None, color=None):
+    def Sphere(self, cs, radius=1.0, res=50, name=None, color=None):
         '''
         Attaches a sphere with the radius *radius* to a given coordinate system
         *cs*. The origin lies directly in the middle of the sphere.
@@ -2880,7 +2880,7 @@ class AddVisualisation(object):
         # call world function
         return self.world._addVisualisation(name, cs, 'sphere', radius, res, color=color)
 
-    def Frame(self, cs, size=1, name=None):
+    def Frame(self, cs, size=1.0, name=None):
         '''
         Attaches a graphical representation of a coordinate system. It consists
         of three lines, each pointing in the direction of an axis. Use size to
@@ -2905,7 +2905,7 @@ class AddVisualisation(object):
         # call world function
         return self.world._addVisualisation(name, cs, 'coordsys', size)
 
-    def Arrow(self, cs, size=1, name=None):
+    def Arrow(self, cs, size=1.0, name=None):
         '''
         Add a arrow graphical representation to a coordinate system given
         by *cs*.
