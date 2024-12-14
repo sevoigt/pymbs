@@ -4,7 +4,7 @@ symbolic expressions for the sensors.
 """
 
 # Set up PyMbs and the multibody-system
-from pymbs.input import *
+from pymbs.input import MbsSystem
 
 world = MbsSystem([0, 0, -1])
 
