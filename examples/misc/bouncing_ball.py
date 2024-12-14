@@ -24,4 +24,4 @@ world.addVisualisation.Sphere(ball, r)
 world.addVisualisation.Box(world, 1, 1, 0.01)
 
 world.genEquations.Explicit()
-world.show('BouncingBall')
+world.show('bouncing_ball')

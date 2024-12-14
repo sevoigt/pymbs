@@ -31,4 +31,4 @@ world.addVisualisation.Frame(world)
 
 # Generate equations and show the system
 world.genEquations.Recursive()
-world.show('MassSpringDamper')
+world.show('mass_spring_damper')

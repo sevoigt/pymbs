@@ -39,4 +39,4 @@ world.genEquations.Explicit(graphOptimizations=True)
 #world.genCode.Modelica('pendulum_simple', './output')
 #world.genCode.Python('pendulum_simple', './output')
 
-world.show()
+world.show('simple_pendulum')

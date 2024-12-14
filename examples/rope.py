@@ -59,4 +59,4 @@ elif method == "Explicit":
     world.genEquations.Explicit()
 print(f'Time needed for generating equations: {(time.time() - t):.2f} s')
 
-world.show('Rope')
+world.show('rope')

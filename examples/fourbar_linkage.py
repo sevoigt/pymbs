@@ -56,4 +56,4 @@ world.addVisualisation.Line(bar3, 4)
 world.addVisualisation.Line(bar4, 5)
 
 world.genEquations.Recursive()
-world.show('FourBarLinkage')
+world.show('fourbar_linkage')

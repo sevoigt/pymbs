@@ -1,5 +1,5 @@
 """
-Shows how to get access to the symbolic equations of motion and to the 
+Shows how to get access to the symbolic equations of motion and to the
 symbolic expressions for the sensors.
 """
 
@@ -69,4 +69,4 @@ for eqn in eqns_sens:
 
 # -----------------------------------------------------------------------------
 
-world.show('Pendulum')
+world.show('pendulum')
