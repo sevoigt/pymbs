@@ -18,6 +18,7 @@ class Frame(AbstractFrame, MbsInputElement):
         AbstractFrame.__init__(self, name, p, R)
 
         self.coordList = []
+        self._frames = {}
 
 
     def addFrame(self, name, p=zeros((3,)), R=eye((3,3))):
@@ -36,9 +37,20 @@ class Frame(AbstractFrame, MbsInputElement):
 
         # add to object namespace
         assert not hasattr(self, name), f'name {name} already occupied'
-        self.__dict__[name]=cs
+        self._frames[name] = cs
 
         return cs
+
+
+    def __getattr__(self, name):
+        """
+        Make child-frames accessible as attributes via their name
+        """
+        if name in self._frames:
+            return self._frames[name]
+        else:
+            raise AttributeError(f'frame {self.name} does not have a child frame {name}')
+
 
     # TODO: the parent-child relationship is not obvious / there seems to
     # be an implicit distinction between frame and body here respectively
