@@ -1044,6 +1044,7 @@ class Gui(QMainWindow, pymbsMainWindow):
 
 
     def compileModelC(self):
+        self.compileCButton.setEnabled(False)
         print('Creating and compiling C sources...')
         print("Writing sources to '%s'"%tempfile.gettempdir())
 
