@@ -128,12 +128,17 @@ def compileC(modulename, path):
 
 def compile_gcc(path, modulename):
     """
-    Use gcc to compile c-module to shared lib
+    Use gcc to compile C-module to shared lib
+
+    By default, the C-code is using __declspec(export) to expose the functions
+    in the library on Windows systems. Below are workarounds to make the code
+    compile on Linux and MacOS 'as is' too.
     """
     ext = 'dll' if platform.system() == 'Windows' else 'so'
-    declspec = '-fdeclspec' if platform.system() == 'Darwin' else ''
+    declspec_macos = '-fdeclspec' if platform.system() == 'Darwin' else ''
+    declspec_linux = '-D"__declspec(x)="' if platform.system() == 'Linux' else ''
 
-    return Popen(f'gcc -Ofast -shared {modulename}.c -fPIC {declspec} -o {modulename}.{ext}',
+    return Popen(f'gcc -Ofast -shared {declspec_linux} {declspec_macos} {modulename}.c -fPIC -o {modulename}.{ext}',
                     stdout=PIPE, stderr=STDOUT, shell=True, cwd=path)
 
 
