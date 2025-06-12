@@ -832,17 +832,25 @@ class PublicMethods(object):
         from pymbs.input import MbsSystem
         assert isinstance(model, MbsSystem)
 
-        _Graph = model.graph
+        _graph = model.graph
+        tempdir = tempfile.gettempdir()
+
+        # Clean up any existing files from previous runs of the same model
+        for i in os.listdir(tempdir):
+            if i.startswith(f'{modelname}_der_state') or \
+               i.startswith(f'{modelname}_sensors') or \
+               i.startswith(f'{modelname}_visual') or \
+               i.startswith('functionmodule.'):
+               os.remove(os.path.join(tempdir, i))
 
         # Write Python Code
-        print("Writing model code for GUI to temporary directory: '%s'"%tempfile.gettempdir())
+        print(f"Writing model code for GUI to temporary directory: {tempdir}")
+        _graph.writeCode('py', modelname, tempdir)
 
-        _Graph.writeCode('py', modelname, tempfile.gettempdir())
-
-        # this is the list of graphRep objects:
+        # This is the list of graphRep objects:
         grList = list(model.graphRepDict.values())
 
-        launchGui(grList, _Graph, modelname, _gravity,
+        launchGui(grList, _graph, modelname, _gravity,
                   model.state, options, **kwargs)
 
 
@@ -850,7 +858,7 @@ class PublicMethods(object):
     def genMatlabAnimation(model, modelname, dirname = '.', **kwargs):
         from pymbs.input import MbsSystem
         assert isinstance(model, MbsSystem)
-        
+
         _Graph = model.graph
         _Graph.writeCode('m', modelname, dirname, **kwargs)
 
@@ -864,7 +872,7 @@ class PublicMethods(object):
     @staticmethod
     def exportGraphReps(model, fileName):
 
-        #check whether _Graph was already created        
+        #check whether _Graph was already created
         try:
             _Graph = model.graph
         except NameError:
