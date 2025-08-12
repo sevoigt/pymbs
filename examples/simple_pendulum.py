@@ -1,4 +1,4 @@
-﻿"""
+"""
 Model for a 1D pendulum
 """
 

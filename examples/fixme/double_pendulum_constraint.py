@@ -4,7 +4,7 @@ Created on 02.10.2009
 @author: Christian Schubert
 
 Double pendulum modelled with a constraint between the two bodies
-This results in a system of differential-algebraic-equations (dae)
+This results in a system of differential-algebraic-equations (DAE)
 """
 
 from pymbs.input import MbsSystem, diag

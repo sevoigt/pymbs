@@ -1,4 +1,4 @@
-from pymbs.symbolics import Symbol, Matrix
+from pymbs.symbolics import Symbol
 from .input_element import MbsInputElement
 
 from .frame import Frame
@@ -22,7 +22,7 @@ class Joint(MbsInputElement):
         assert CS1.__class__ == Frame
         assert CS2.__class__ == Frame
 
-        if (dof is not None) and (not dof in ('Tx', 'Ty', 'Tz',  'Rx', 'Ry', 'Rz')):
+        if (dof is not None) and (dof not in ('Tx', 'Ty', 'Tz',  'Rx', 'Ry', 'Rz')):
             raise ValueError("Invalid DOF-Specifier for Joint %s" % name)
 
         # append dof-suffix to name
@@ -36,10 +36,10 @@ class Joint(MbsInputElement):
         self.child=CS2
         self.dof=dof
 
-        if startVal == None:
+        if startVal is None:
             startVal=0
 
-        if startVal_d == None:
+        if startVal_d is None:
             startVal_d=0
 
         self.q0=startVal
