@@ -13,18 +13,18 @@ from pymbs.input import MbsSystem, diag
 world = MbsSystem([0, 0, -1])
 
 # Mass, length and inertia of the rod
-m = world.addParam('m', 1.0)
-l = world.addParam('l', 1.0)
-I = world.addParam('Inertia', (m * l**2) / 12)
+m = world.addParam("m", 1.0)
+l = world.addParam("l", 1.0)
+I = world.addParam("Inertia", (m * l**2) / 12)
 
 # Add pendulum
 pend = world.addBody(mass=m, inertia=diag([0, I, 0]))
 
 # Add additional coordinate system at upper end of the rod
-pend.addFrame('link', [0, 0, 0.5 * l])
+pend.addFrame("link", [0, 0, 0.5 * l])
 
 # Add joint to constrain motion of the pendulum
-world.addJoint(world, pend.link, 'Ry', startVals=1)
+world.addJoint(world, pend.link, "Ry", startVals=1)
 
 # Use a box to represente the pendulum
 world.addVisualisation.Box(pend, length=0.1, width=0.1, height=1.0)
@@ -33,4 +33,4 @@ world.addVisualisation.Box(pend, length=0.1, width=0.1, height=1.0)
 world.genEquations.Recursive()
 
 # Show model
-world.show('simple_pendulum')
+world.show("simple_pendulum")
