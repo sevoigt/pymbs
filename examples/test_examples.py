@@ -1,5 +1,5 @@
 """
-Call several example scripts to test wether generation of equations works.
+Call several example scripts to test whether generation of equations works.
 """
 
 import unittest
