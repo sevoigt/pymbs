@@ -91,7 +91,7 @@ class pymbsMainWindow(object):
 
         # slider group
         self.kintestSliderGroup = QWidget(self.kintestScrollArea)
-        self.kintestSliderGroup.setFixedWidth(194)  # TODO: should expand automatically!?
+        self.kintestSliderGroup.setFixedWidth(182)  # TODO: should expand automatically!?
         self.kintestSliderGroupLayout = QVBoxLayout(self.kintestSliderGroup)
 
 
@@ -103,11 +103,9 @@ class pymbsMainWindow(object):
 
         # buttons for simulate and compile
         self.simulateButton = SimButton()
-        self.compileF90Button = CompileF90Button()
         self.compileCButton = CompileCButton()
 
         self.simulationLayout.addWidget(self.simulateButton)
-        self.simulationLayout.addWidget(self.compileF90Button)
         self.simulationLayout.addWidget(self.compileCButton)
 
         # scroll area
@@ -116,7 +114,7 @@ class pymbsMainWindow(object):
 
         # slider group
         self.simulationSliderGroup = QWidget(self.simulationScrollArea)
-        self.simulationSliderGroup.setFixedWidth(174)
+        self.simulationSliderGroup.setFixedWidth(182)
         self.simulationSliderGroupLayout = QVBoxLayout(self.simulationSliderGroup)
 
 
@@ -949,8 +947,6 @@ class Gui(QMainWindow, pymbsMainWindow):
         self.showsensorButton.clicked.connect(self.showSensors)
 
         self.simulateButton.clicked.connect(self.runSimulation)
-
-        self.compileF90Button.clicked.connect(self.compileModelF90)
 
         self.compileCButton.clicked.connect(self.compileModelC)
 
