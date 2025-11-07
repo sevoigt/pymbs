@@ -18,8 +18,8 @@ Copyright © 2005 Florent Rougon, 2006 Darren Dale
 
 __version__ = "1.0.0"
 
-from PyQt6.QtWidgets import QSizePolicy
-from PyQt6.QtCore import QSize
+from PySide6.QtWidgets import QSizePolicy
+from PySide6.QtCore import QSize
 
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
@@ -97,7 +97,7 @@ class MatplotlibWidget(Canvas):
 #===============================================================================
 if __name__ == '__main__':
     import sys
-    from PyQt6.QtWidgets import QMainWindow, QApplication
+    from PySide6.QtWidgets import QMainWindow, QApplication
     from numpy import linspace
 
     class ApplicationWindow(QMainWindow):

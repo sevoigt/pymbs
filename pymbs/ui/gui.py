@@ -7,12 +7,12 @@ import vtk  # vtk widget remains blank without this?!
 import numpy as np
 from numpy import zeros
 
-from PyQt6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, \
+from PySide6.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QScrollArea, \
                             QLabel, QHBoxLayout, QCheckBox, QLineEdit, \
                             QPushButton, QSlider, QDialog, QMainWindow, \
-                            QFileDialog, QApplication
-from PyQt6.QtGui import QDoubleValidator, QIcon, QPixmap
-from PyQt6.QtCore import Qt, QSize, QMetaObject, QTimer
+                            QFileDialog, QApplication, QSizePolicy
+from PySide6.QtGui import QDoubleValidator, QIcon, QPixmap
+from PySide6.QtCore import Qt, QSize, QMetaObject, QTimer
 
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from vtkmodules.util.colors import light_grey
@@ -91,7 +91,7 @@ class pymbsMainWindow(object):
 
         # slider group
         self.kintestSliderGroup = QWidget(self.kintestScrollArea)
-        self.kintestSliderGroup.setFixedWidth(174)
+        self.kintestSliderGroup.setFixedWidth(194)  # TODO: should expand automatically!?
         self.kintestSliderGroupLayout = QVBoxLayout(self.kintestSliderGroup)
 
 
@@ -708,7 +708,7 @@ class Gui(QMainWindow, pymbsMainWindow):
     '''
 
     def __init__(self, grList, graph, modelName, state, options, **kwargs):
-        QDialog.__init__(self)
+        QMainWindow.__init__(self)
 
         if not grList:
             raise PyMbsError('Cannot show system. There are no visualisation '\

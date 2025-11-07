@@ -27,7 +27,7 @@ Created on 10.08.2009
 '''
 
 
-import PyQt6.QtCore as QtCore
+import PySide6.QtCore as QtCore
 
 import datetime
 import numpy

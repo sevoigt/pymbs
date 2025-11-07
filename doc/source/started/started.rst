@@ -62,7 +62,7 @@ See requirements.txt in the project root folder for all dependencides. The most 
 * scipy
 * vtk
 * matplotlib
-* PyQt6
+* PySide6
 
 Windows
 ^^^^^^^
