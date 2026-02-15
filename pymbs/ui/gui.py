@@ -1305,9 +1305,9 @@ class Gui(QMainWindow, pymbsMainWindow):
 
                 # copy values from T
                 for i in range(3):
-                    poke.SetElement(i,3,r[i])
+                    poke.SetElement(i,3,r[i,0])
                     for j in range(3):
-                        poke.SetElement(i,j,T[i,j])
+                        poke.SetElement(i,j,float(T[i,j]))
 
                 obj.actor.PokeMatrix(poke)
                 obj.actor.SetScale(obj.scale)

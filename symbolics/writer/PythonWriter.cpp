@@ -93,7 +93,7 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 	f << std::endl << std::endl;
 
 	//f << "from numba import njit" << std::endl;
-	f << "from numpy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
+	f << "from numpy import linalg, vstack, asarray, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
 	f << "from numpy import arctan2 as atan2" << std::endl;
 	f << "from numpy import arctan as atan" << std::endl;
 	f << "from numpy import arcsin as asin" << std::endl;
@@ -113,15 +113,15 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 	}
 	f << std::endl << std::endl;
 
-	if (!inputs.empty()) 
+	if (!inputs.empty())
 	{
         // create global inputs dictionary
 		f << "# inputs" << std::endl;
 		f << "_inputs = {" << std::endl;
 		for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
-			f << "           '" << m_p->print(*it) << "' : " << m_p->print(g.getinitVal(*it)) 
+			f << "           '" << m_p->print(*it) << "' : " << m_p->print(g.getinitVal(*it))
 			  << ",   " << m_p->comment2(g,*it) << std::endl;
-		f << "          }" << std::endl;        
+		f << "          }" << std::endl;
 		f << std::endl << std::endl;
 
         // set method for inputs
@@ -139,15 +139,15 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 
 	// extract state from argument
 	f << "    # state" << std::endl;
-	for (Graph::VariableVec::size_type i = 0; i < states.size() ; ++i) 
+	for (Graph::VariableVec::size_type i = 0; i < states.size() ; ++i)
 	{
 		Shape n = states.at(i)->getShape();
 		f << "    " << m_p->print(states[i]) << " = ";
 		if (states[i]->is_Scalar())
 			f << "y[" << str(i) << "]" << std::endl;
 		else
-			f << "matrix(y[" << str(n.getDimension(1) * i) << ":" 
-			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T" 
+			f << "matrix(y[" << str(n.getDimension(1) * i) << ":"
+			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T"
 			  << std::endl;
 	}
 	f << std::endl;
@@ -200,16 +200,16 @@ double PythonWriter::generateStateDerivative(Graph::Graph &g)
 	f << std::endl;
 
 	// write return statement
-	f << "    return " << "vstack((";
+	f << "    return " << "asarray(vstack((";
 	for (Graph::VariableVec::iterator it=states.begin();it!=states.end();++it)
 		f << (it==states.begin() ? "" : ", " ) << "der_" << m_p->print(*it);
-	f << "))" << std::endl;
+	f << "))).ravel()" << std::endl;
 
 	// close file
 	f.close();
 
     if (m_p->getErrorcount())
-        std::cerr << "There have been " << m_p->getErrorcount(true) << " error(s) during generation of " 
+        std::cerr << "There have been " << m_p->getErrorcount(true) << " error(s) during generation of "
                   << m_name << "_der_state.py. Please have a look at that file to see where the error(s) occured." << std::endl;
 	return Util::getTime() - t1;
 }
@@ -251,7 +251,7 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl << std::endl;
 
-	f << "from numpy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
+	f << "from numpy import linalg, vstack, asarray, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
 	f << "from numpy import arctan2 as atan2" << std::endl;
 	f << "from numpy import arctan as atan" << std::endl;
 	f << "from numpy import arcsin as asin" << std::endl;
@@ -266,10 +266,10 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 		f << "_inputs = {" << std::endl;
 		for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		{
-			f << "           '" << m_p->print(*it) << "' : " << m_p->print(g.getinitVal(*it)) 
+			f << "           '" << m_p->print(*it) << "' : " << m_p->print(g.getinitVal(*it))
 			  << ",   " << m_p->comment2(g,*it) << std::endl;
 		}
-		f << "          }" << std::endl;        
+		f << "          }" << std::endl;
 		f << std::endl << std::endl;
 
 		// set method for inputs
@@ -285,15 +285,15 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 
 	// extract state from argument
 	f << "    # state" << std::endl;
-	for (Graph::VariableVec::size_type i = 0; i < states.size() ; ++i) 
+	for (Graph::VariableVec::size_type i = 0; i < states.size() ; ++i)
 	{
 		Shape n = states.at(i)->getShape();
 		f << "    " << m_p->print(states[i]) << " = ";
 		if (states[i]->is_Scalar())
 			f << "y[" << str(i) << "]" << std::endl;
 		else
-			f << "matrix(y[" << str(n.getDimension(1) * i) << ":" 
-			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T" 
+			f << "matrix(y[" << str(n.getDimension(1) * i) << ":"
+			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T"
 			  << std::endl;
 	}
 	f << std::endl;
@@ -305,7 +305,7 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 		f << "    " << m_p->print(*it) << " = _inputs['" << m_p->print(*it) << "']" << m_p->comment2(g,*it) << std::endl;
 	}
 	f << std::endl;
-	
+
 	// write constants
 	f << "    # constants" << std::endl;
 	for (Graph::VariableVec::iterator it=constants.begin();it!=constants.end();++it)
@@ -313,7 +313,7 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 		f << "   " << m_p->print(*it) << " = " << m_p->print(g.getEquation(*it)) << m_p->comment2(g,*it) << std::endl;
 	}
 	f << std::endl;
-	
+
 	// write parameters
 	f << "    # parameter" << std::endl;
 	for (Graph::VariableVec::iterator it=parameter.begin();it!=parameter.end();++it)
@@ -321,7 +321,7 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 		f << "    " << m_p->print(*it) << " = " << m_p->print(g.getEquation(*it)) << m_p->comment2(g,*it) << std::endl;
 	}
 	f << std::endl;
-	
+
 	// write equations
 	f << "    # visual sensor equations" << std::endl;
 	f << writeEquations(equations);
@@ -334,12 +334,12 @@ double PythonWriter::generateVisualSensors(Graph::Graph &g)
 		f << "            '" << m_p->print(*it) << "' : " << m_p->print(*it) << "," << std::endl;
 	}
 	f << "           }" << std::endl;
-	
+
 	// close file
 	f.close();
 
     if (m_p->getErrorcount())
-        std::cerr << "There have been " << m_p->getErrorcount(true) << " error(s) during generation of " 
+        std::cerr << "There have been " << m_p->getErrorcount(true) << " error(s) during generation of "
                   << m_name << "_visual.py. Please have a look at that file to see where the error(s) occured." << std::endl;
 	return Util::getTime() - t1;
 }
@@ -381,7 +381,7 @@ double PythonWriter::generateSensors(Graph::Graph &g)
 	f << "# " << getHeaderLine() << std::endl;
 	f << std::endl << std::endl;
 
-	f << "from numpy import linalg, vstack, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
+	f << "from numpy import linalg, vstack, asarray, sin, cos, pi, sqrt, zeros, bmat, matrix" << std::endl;
 	f << "from numpy import arctan2 as atan2" << std::endl;
 	f << "from numpy import arctan as atan" << std::endl;
 	f << "from numpy import arcsin as asin" << std::endl;
@@ -396,10 +396,10 @@ double PythonWriter::generateSensors(Graph::Graph &g)
 		f << "_inputs = {" << std::endl;
 		for (Graph::VariableVec::iterator it=inputs.begin();it!=inputs.end();++it)
 		{
-			f << "           '" << m_p->print(*it) << "' : " << m_p->print(g.getinitVal(*it)) 
+			f << "           '" << m_p->print(*it) << "' : " << m_p->print(g.getinitVal(*it))
 			  << ",   " << m_p->comment2(g,*it) << std::endl;
 		}
-		f << "          }" << std::endl;        
+		f << "          }" << std::endl;
 		f << std::endl << std::endl;
 
 		// set method for inputs
@@ -415,15 +415,15 @@ double PythonWriter::generateSensors(Graph::Graph &g)
 
 	// extract state from argument
 	f << "    # state" << std::endl;
-	for (Graph::VariableVec::size_type i = 0; i < states.size() ; ++i) 
+	for (Graph::VariableVec::size_type i = 0; i < states.size() ; ++i)
 	{
 		Shape n = states.at(i)->getShape();
 		f << "    " << m_p->print(states[i]) << " = ";
 		if (states[i]->is_Scalar())
 			f << "y[" << str(i) << "]" << std::endl;
 		else
-			f << "matrix(y[" << str(n.getDimension(1) * i) << ":" 
-			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T" 
+			f << "matrix(y[" << str(n.getDimension(1) * i) << ":"
+			  << str(n.getDimension(1) * (i+1)) << "], dtype=float).T"
 			  << std::endl;
 	}
 	f << std::endl;
@@ -470,7 +470,7 @@ double PythonWriter::generateSensors(Graph::Graph &g)
 	f.close();
 
     if (m_p->getErrorcount())
-        std::cerr << "There have been " << m_p->getErrorcount(true) << " error(s) during generation of " 
+        std::cerr << "There have been " << m_p->getErrorcount(true) << " error(s) during generation of "
                   << m_name << "_sensors.py. Please have a look at that file to see where the error(s) occured." << std::endl;
 	return Util::getTime() - t1;
 }
@@ -487,7 +487,7 @@ std::string PythonWriter::writeEquations(std::vector<Graph::Assignment> const& e
 	{
         if (it->implizit)
             throw InternalError("Implicit equations are not yet implemented in Python!");
-		
+
 		// Multi-dimensional equation, i.e. matrix equation (seems to be hardly used)
 		for (size_t i=0; i < it->lhs.size(); ++i)
 		{

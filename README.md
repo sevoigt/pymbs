@@ -23,7 +23,7 @@ The documentation for PyMbs can be found at <http://pymbs.readthedocs.org/>.
 
 ## Installation
 
-PyMbs is developed using Python 3.13. It will most likely work on other 3.x versions too as long as the dependencies (requirements.txt) are met.
+PyMbs is developed using Python 3.14. It will most likely work on other 3.x versions too as long as the dependencies (requirements.txt) are met.
 It has been tested and works on Windows 10/11 including WSL, Fedora Linux and Apple M1.
 
 There is currently no package available since PyMbs comes with a symbolic math
